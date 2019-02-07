@@ -1,12 +1,22 @@
 {
     "name": "hetmech-frontend",
     "version": "0.0.1",
-    "description": "Front-end interface for Hetmec",
+    "description": "Front-end interface for Hetmech",
     "repository": {
         "type": "git",
         "url": "git+https://github.com/greenelab/hetmech-frontend.git"
     },
-    "author": "Vincent Rubinetti",
+    "contributors": [
+        {
+            "name": "Vincent Rubinetti"
+        },
+        {
+            "name": "Daniel Himmelstein"
+        },
+        {
+            "name": "Dongbo Hu"
+        }
+    ],
     "license": "BSD-3-Clause",
     "devDependencies": {
         "@babel/core": "^7.2.2",
