@@ -1,0 +1,25 @@
+{
+    "name": "hetmech-frontend",
+    "version": "0.0.1",
+    "description": "Front-end interface for Hetmec",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/greenelab/hetmech-frontend.git"
+    },
+    "author": "Vincent Rubinetti",
+    "license": "BSD-3-Clause",
+    "devDependencies": {
+        "@babel/core": "^7.2.2",
+        "@babel/preset-react": "^7.0.0",
+        "babel-loader": "^8.0.5",
+        "css-loader": "^2.1.0",
+        "file-loader": "^3.0.1",
+        "style-loader": "^0.23.1",
+        "webpack": "^4.29.3",
+        "webpack-cli": "^3.2.3"
+    },
+    "dependencies": {
+        "react": "^16.8.1",
+        "react-dom": "^16.8.1"
+    }
+}
