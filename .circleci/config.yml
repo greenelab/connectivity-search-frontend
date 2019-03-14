@@ -5,7 +5,7 @@ jobs:
     docker:
       - image: node:8.15.1-stretch
 
-    working_directory: $CIRCLE_PROJECT_REPONAME
+    working_directory: ~/hetmech-frontend
 
     steps:
       - checkout
@@ -19,7 +19,7 @@ jobs:
   deploy:
     docker:
       - image: node:8.15.1-stretch
-    working_directory: $CIRCLE_PROJECT_REPONAME
+    working_directory: ~/hetmech-frontend
     steps:
       - attach_workspace:
           at: build
