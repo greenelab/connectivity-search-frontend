@@ -12,8 +12,8 @@ jobs:
       - run:
           name: Frontend tests
           command: |
-            apt install node.js npm libfontconfig -y
-            npm -g install grunt-cli karma-cli npm
+            apt install nodejs npm --yes
+            npm -g install karma-cli npm
             apt purge npm --yes
             hash -r
             npm install
