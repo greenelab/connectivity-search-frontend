@@ -37,7 +37,9 @@ jobs:
             - "59:f7:cc:2f:9e:bf:97:12:46:a0:16:60:a2:3b:13:2a"
       - run:
           name: Deploy build to gh-pages branch
-          command: gh-pages --dist build
+          command: |
+            echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
+            gh-pages --dist build
 
 workflows:
   version: 2
