@@ -14,7 +14,7 @@ jobs:
           command: |
             apt update && apt upgrade --yes
             apt install nodejs npm --yes
-            npm -g install karma-cli npm
+            npm install karma-cli npm --global
             apt purge npm --yes
             hash -r
             npm install
