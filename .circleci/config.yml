@@ -22,7 +22,7 @@ jobs:
     working_directory: ~/hetmech-frontend
     steps:
       - attach_workspace:
-          at: build
+          at: ~/hetmech-frontend
       - run:
           name: Install and configure dependencies
           command: |
