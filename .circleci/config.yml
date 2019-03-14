@@ -1,0 +1,25 @@
+version: 2
+
+jobs:
+  tests:
+    docker:
+      - image: ubuntu:18.04
+
+    working_directory: ~/hetmech-frontend
+
+    steps:
+      - checkout
+      - run:
+          name: Frontend tests
+          command: |
+            apt install node.js npm libfontconfig -y
+            npm -g install grunt-cli karma-cli npm
+            apt purge npm --yes
+            hash -r
+            npm install
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - tests
