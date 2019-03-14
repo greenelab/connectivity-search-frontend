@@ -1,7 +1,7 @@
 version: 2
 
 jobs:
-  tests:
+  test:
     docker:
       - image: node:8.15.1-stretch
 
@@ -13,9 +13,34 @@ jobs:
           name: Frontend tests
           command: |
             npm install
+            npm test
+            npm build
+
+  deploy:
+    docker:
+      - image: node:8.15.1-stretch
+    steps:
+      - checkout
+      - attach_workspace:
+          at: build
+      - run:
+          name: Install and configure dependencies
+          command: |
+            npm install --global --silent gh-pages@2.0.1
+            git config user.email "ci-build@circleci.com"
+            git config user.name "CircleCI Deploy Job"
+      - run:
+          name: Deploy build to gh-pages branch
+          command: gh-pages --dist build
 
 workflows:
   version: 2
-  test:
+  build:
     jobs:
-      - tests
+      - test
+      - deploy:
+        requires:
+          - test
+        filters:
+          branches:
+            only: master
