@@ -4,9 +4,7 @@ jobs:
   test:
     docker:
       - image: node:8.15.1-stretch
-
     working_directory: ~/hetmech-frontend
-
     steps:
       - checkout
       - run:
@@ -15,6 +13,11 @@ jobs:
             npm install
             npm test
             npm run build
+      - persist_to_workspace:
+          root: ~/hetmech-frontend
+          paths:
+            - .git
+            - build
 
   deploy:
     docker:
