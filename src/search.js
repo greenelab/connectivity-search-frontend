@@ -9,7 +9,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 
 import { MetaTypes } from "./metatypes";
 
-const server = "http://34.233.249.241/api/v1/nodes/?search=";
+const server = "http://34.236.226.254/api/v1/nodes/?search=";
 
 function queryNodes(query) {
   return fetch(server + query)
