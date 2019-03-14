@@ -1,0 +1,21 @@
+version: 2
+
+jobs:
+  tests:
+    docker:
+      - image: node:8.15.1-stretch
+
+    working_directory: ~/hetmech-frontend
+
+    steps:
+      - checkout
+      - run:
+          name: Frontend tests
+          command: |
+            npm install
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - tests
