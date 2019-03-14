@@ -3,7 +3,7 @@ version: 2
 jobs:
   tests:
     docker:
-      - image: ubuntu:18.04
+      - image: node:8.10.0
 
     working_directory: ~/hetmech-frontend
 
@@ -12,11 +12,7 @@ jobs:
       - run:
           name: Frontend tests
           command: |
-            apt update && apt upgrade --yes
-            apt install nodejs npm --yes
-            npm install karma-cli npm --global
-            apt purge npm --yes
-            hash -r
+            npm install karma-cli --global
             npm install
 
 workflows:
