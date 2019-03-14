@@ -19,6 +19,7 @@ jobs:
   deploy:
     docker:
       - image: node:8.15.1-stretch
+    working_directory: ~/hetmech-frontend
     steps:
       - checkout
       - attach_workspace:
