@@ -9,7 +9,7 @@ export class Key extends Component {
         entries = entries.map((entry) => (
             <span class='key_entry'>
                 <span className='metanode_chip' data-metanode={entry.name}>
-                    {entry.initial}
+                    {entry.abbreviation}
                 </span>{' '}
                 {entry.name}
             </span>

@@ -113,7 +113,7 @@ class SearchBox extends Component {
                                                 className='search_results_item_metanode metanode_chip'
                                                 data-metanode={result.metanode}
                                             >
-                                                {MetaTypes.initial(
+                                                {MetaTypes.abbreviation(
                                                     result.metanode
                                                 )}
                                             </span>
