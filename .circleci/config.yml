@@ -13,15 +13,6 @@ jobs:
             npm install
             npm test
             npm run build
-      - run:
-          name: test commit message
-          command: |
-            echo "Deploy webpage on `date --utc --iso-8601`
-            
-            Builds https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1
-            Pushed by $CIRCLE_BUILD_URL
-
-            [skip ci]"
       - persist_to_workspace:
           root: ~/hetmech-frontend
           paths:
@@ -55,7 +46,7 @@ jobs:
             
             Builds https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1
             Pushed by $CIRCLE_BUILD_URL
-            
+
             [skip ci]"
 
 workflows:
