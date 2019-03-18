@@ -10,7 +10,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 
 import { MetaTypes } from './metatypes.js';
 
-const server = 'http://34.236.226.254/api/v1/nodes/?search=';
+const server = 'https://search-api.het.io/api/v1/nodes/?search=';
 
 function queryNodes(query) {
   return fetch(server + query)
