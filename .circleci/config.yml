@@ -13,6 +13,14 @@ jobs:
             npm install
             npm test
             npm run build
+      - run:
+          name: test commit message
+          command: |
+            echo "Deploy webpage on `date --utc --iso-8601`
+            
+            Website build based on $CIRCLE_REPOSITORY_URL/commit/$CIRCLE_SHA1
+            Deployed by $CIRCLE_BUILD_URL
+            [skip ci]"
       - persist_to_workspace:
           root: ~/hetmech-frontend
           paths:
@@ -41,7 +49,12 @@ jobs:
             echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
             touch build/.nojekyll  # Disable Jekyll processing on GitHub Pages
             echo search.het.io > build/CNAME  # set custom GitHub Pages domain
-            gh-pages --dist build
+            gh-pages --dist build --message \
+            "Deploy webpage on `date --utc --iso-8601`
+            
+            Website build based on $CIRCLE_REPOSITORY_URL/commit/$CIRCLE_SHA1
+            Deployed by $CIRCLE_BUILD_URL
+            [skip ci]"
 
 workflows:
   version: 2
