@@ -30,8 +30,6 @@ jobs:
           name: Install and configure dependencies
           command: |
             npm install --global --silent gh-pages@2.0.1
-            git config user.email "ci-build@circleci.com"
-            git config user.name "CircleCI Deploy Job"
       - add_ssh_keys:
           fingerprints:
             - "59:f7:cc:2f:9e:bf:97:12:46:a0:16:60:a2:3b:13:2a"
@@ -41,7 +39,9 @@ jobs:
             echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
             touch build/.nojekyll  # Disable Jekyll processing on GitHub Pages
             echo search.het.io > build/CNAME  # set custom GitHub Pages domain
-            gh-pages --dist build --message \
+            gh-pages --dist build \
+              --user "CircleCI Deploy Job <ci-build@circleci.com>" \
+              --message \
             "Deploy webpage on `date --utc --iso-8601`
             
             Builds https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1
