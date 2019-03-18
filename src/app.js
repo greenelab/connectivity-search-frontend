@@ -6,15 +6,15 @@ import { Key } from './key.js';
 import { Search } from './search.js';
 
 export class App extends Component {
-    render() {
-        return (
-            <div>
-                <Header />
-                <Key />
-                <Search />
-            </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <Header />
+        <Key />
+        <Search />
+      </div>
+    );
+  }
 }
 
 export default App;
