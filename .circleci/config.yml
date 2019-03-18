@@ -18,7 +18,7 @@ jobs:
           command: |
             echo "Deploy webpage on `date --utc --iso-8601`
             
-            Website build based on $CIRCLE_REPOSITORY_URL/commit/$CIRCLE_SHA1
+            Builds https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1
             Deployed by $CIRCLE_BUILD_URL
             [skip ci]"
       - persist_to_workspace:
@@ -52,7 +52,7 @@ jobs:
             gh-pages --dist build --message \
             "Deploy webpage on `date --utc --iso-8601`
             
-            Website build based on $CIRCLE_REPOSITORY_URL/commit/$CIRCLE_SHA1
+            Builds https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1
             Deployed by $CIRCLE_BUILD_URL
             [skip ci]"
 
