@@ -12,7 +12,7 @@
     "curly": ["error", "multi-or-nest"],
     "eqeqeq": ["error", "always"],
     "comma-dangle": ["error", "never"],
-    "indent": ["error", 2],
+    "indent": ["error", 2, { "SwitchCase": 1 }],
     "keyword-spacing": ["error"],
     "one-var": ["off"],
     "space-in-parens": ["error"],

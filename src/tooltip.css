@@ -1,0 +1,19 @@
+.tooltip {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  min-height: 30px;
+  padding: 5px;
+  background: #000000;
+  color: #fafafa;
+  font-size: 0.75em;
+  transform: translate(0, -125%);
+  user-select: none;
+  pointer-events: none;
+  transition: opacity 1s ease;
+}
+.tooltip_overlay:hover {
+  cursor: default;
+}

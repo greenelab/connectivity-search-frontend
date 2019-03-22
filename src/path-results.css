@@ -1,0 +1,39 @@
+.path_results_table {
+  text-align: center;
+}
+.path_results_show_columns_button {
+  display: inline-block;
+  margin: 10px 0;
+}
+.metapath_part > .metanode_chip {
+  margin: 0;
+}
+.metaedge_chip {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  min-height: 20px;
+  max-height: 20px;
+  vertical-align: top;
+  line-height: -10px;
+  position: relative;
+  color: #757575;
+}
+.metaedge_chip > svg {
+  width: 15px;
+  height: 15px;
+  margin: 0 2px;
+}
+.metaedge_chip:after {
+  content: attr(data-metaedge);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: -5px;
+  right: 0;
+  font-family: 'Work Sans';
+  font-size: 0.75em;
+}
