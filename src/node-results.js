@@ -123,18 +123,16 @@ class NodeCard extends Component {
           </tr>
           {this.state.showData && sortedData}
           <tr>
-            <td className='center' colSpan='2'>
-              <a
-                tabIndex='0'
-                className='col_m small'
+            <td className='col_m center' colSpan='2'>
+              <button
+                className='link_button small'
                 onClick={this.toggleShowData}
-                onKeyPress={this.toggleShowData}
               >
                 {this.state.showData ? 'show less ' : 'show more '}
                 <FontAwesomeIcon
                   icon={this.state.showData ? faAngleUp : faAngleDown}
                 />
-              </a>
+              </button>
             </td>
           </tr>
         </tbody>

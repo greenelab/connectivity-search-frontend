@@ -67,6 +67,15 @@ button:hover {
   background: #b2ebf2;
   cursor: pointer;
 }
+.link_button {
+  display: inline;
+  background: none;
+  color: #00bcd4;
+  margin: 10px 0;
+}
+.link_button:hover {
+  background: #e0f7fa;
+}
 textarea {
   font-size: 1em;
 }

@@ -217,17 +217,15 @@ export class PathResults extends Component {
   }
   render() {
     const showMoreButton = (
-      <a
-        tabIndex='0'
-        className='small path_results_show_columns_button'
+      <button
+        className='link_button small'
         onClick={this.toggleAllColumns}
-        onKeyPress={this.toggleAllColumns}
       >
         {this.state.showAllColumns ? 'show less ' : 'show more '}
         <FontAwesomeIcon
           icon={this.state.showAllColumns ? faAngleLeft : faAngleRight}
         />
-      </a>
+      </button>
     );
     return (
       <section>

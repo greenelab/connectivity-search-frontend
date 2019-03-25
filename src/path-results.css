@@ -1,10 +1,6 @@
 .path_results_table {
   text-align: center;
 }
-.path_results_show_columns_button {
-  display: inline-block;
-  margin: 10px 0;
-}
 .metapath_part > .metanode_chip {
   margin: 0;
 }
