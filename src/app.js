@@ -1,88 +1,154 @@
 import React from 'react';
 import { Component } from 'react';
+import { connect } from 'react-redux';
 
-import { Metatypes } from './metatypes.js';
 import { Header } from './header.js';
-import { MetatypeFilters } from './filters.js';
 import { NodeSearch } from './node-search.js';
 import { NodeResults } from './node-results.js';
-import { PathResults } from './path-results.js';
+import { MetapathResults } from './metapath-results.js';
+import { lookupNodeById } from './backend-query.js';
+import { searchMetapaths } from './backend-query.js';
+import { updateSourceTargetNodes } from './actions.js';
+import { updateMetapaths } from './actions.js';
 import './styles.css';
-import './metanode-chips.css';
 
-export class App extends Component {
-  constructor() {
-    super();
-    this.state = {};
-    this.state.sourceNode = {};
-    this.state.targetNode = {};
+// main app component
+class App extends Component {
+  // initialize component
+  constructor(props) {
+    super(props);
 
-    this.state.metatypeFilters = {};
-    for (const metatype of Metatypes.nodes)
-      this.state.metatypeFilters[metatype] = true;
+    this.updateNodesFromUrl = this.updateNodesFromUrl.bind(this);
+    this.updateMetapaths = this.updateMetapaths.bind(this);
+    this.updateHistory = this.updateHistory.bind(this);
+    this.updateTitle = this.updateTitle.bind(this);
 
-    this.updateSourceTargetNode = this.updateSourceTargetNode.bind(this);
-    this.swapSourceTargetNodes = this.swapSourceTargetNodes.bind(this);
-    this.toggleMetatypeFilter = this.toggleMetatypeFilter.bind(this);
+    // get parameters from url when page first loads
+    this.updateNodesFromUrl();
+    // listen for back/forward navigation (history)
+    window.addEventListener('popstate', this.updateNodesFromUrl);
   }
-  updateSourceTargetNode(newState) {
-    this.setState(newState);
+
+  // when component changes
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.sourceNode !== this.props.sourceNode ||
+      prevProps.targetNode !== this.props.targetNode
+    )
+      this.onNodeChange();
   }
-  swapSourceTargetNodes() {
-    this.setState({
-      sourceNode: this.state.targetNode,
-      targetNode: this.state.sourceNode
+
+  // update source/target nodes from url
+  updateNodesFromUrl() {
+    this.props.dispatch((dispatch) => {
+      const params = new URLSearchParams(window.location.search);
+      const sourceNodeId = params.get('source');
+      const targetNodeId = params.get('target');
+
+      // wait until both node searches return to update state
+      const promises = [
+        lookupNodeById(sourceNodeId),
+        lookupNodeById(targetNodeId)
+      ];
+      Promise.all(promises).then((results) => {
+        dispatch(
+          updateSourceTargetNodes({
+            sourceNode: results[0],
+            targetNode: results[1]
+          })
+        );
+      });
     });
   }
-  toggleMetatypeFilter(metatype, event) {
-    const newFilters = this.state.metatypeFilters;
-    if (event && event.ctrlKey) {
-      let allOthersOff = true;
-      for (const key of Object.keys(newFilters)) {
-        if (key !== metatype && newFilters[key]) {
-          allOthersOff = false;
-          break;
-        }
-      }
-      for (const key of Object.keys(newFilters)) newFilters[key] = allOthersOff;
 
-      newFilters[metatype] = true;
-    } else newFilters[metatype] = !newFilters[metatype];
-    this.setState({ metatypeFilters: newFilters });
+  // when source/target node change
+  onNodeChange() {
+    // update history url before title to make sure title gets changed for
+    // correct page
+    this.updateMetapaths();
+    this.updateHistory();
+    this.updateTitle();
   }
+
+  // update metapaths (node pair query results) when source/target node change
+  updateMetapaths() {
+    this.props.dispatch((dispatch) => {
+      if (this.props.sourceNode.id && this.props.targetNode.id) {
+        searchMetapaths(
+          this.props.sourceNode.id,
+          this.props.targetNode.id
+        ).then((results) =>
+          dispatch(
+            updateMetapaths({
+              metapaths: results
+            })
+          )
+        );
+      } else {
+        dispatch(
+          updateMetapaths({
+            metapaths: []
+          })
+        );
+      }
+    });
+  }
+
+  // add history entry for source/target node without navigating page
+  updateHistory() {
+    const oldParams = new URLSearchParams(window.location.search);
+    const newParams = new URLSearchParams();
+
+    if (this.props.sourceNode.id)
+      newParams.set('source', this.props.sourceNode.id);
+    if (this.props.targetNode.id)
+      newParams.set('target', this.props.targetNode.id);
+
+    // if url already matches source/target nodes, don't update.
+    // will prevent extra history entry from getting source/target from url on
+    // page load
+    if (
+      (oldParams.get('source') === newParams.get('source')) &
+      (oldParams.get('target') === newParams.get('target'))
+    )
+      return;
+
+    let search = newParams.toString();
+    if (search.length > 0)
+      search = '?' + search;
+
+    const url = window.location.origin + window.location.pathname + search;
+    window.history.pushState({}, '', url);
+  }
+
+  // update page title based on source/target node
+  updateTitle() {
+    if (!this.props.sourceNode.id && !this.props.targetNode.id)
+      return;
+    const title =
+      'hetmech · ' +
+      (this.props.sourceNode.name || '___') +
+      ' → ' +
+      (this.props.targetNode.name || '___');
+    document.title = title;
+  }
+
+  // display component
   render() {
     return (
       <>
         <Header />
-        <MetatypeFilters
-          metatypeFilters={this.state.metatypeFilters}
-          toggleMetatypeFilter={this.toggleMetatypeFilter}
-        />
-        <NodeSearch
-          swapSourceTargetNodes={this.swapSourceTargetNodes}
-          updateSourceTargetNode={this.updateSourceTargetNode}
-          sourceNode={this.state.sourceNode}
-          targetNode={this.state.targetNode}
-          metatypeFilters={this.state.metatypeFilters}
-        />
-        <NodeResults
-          sourceNode={this.state.sourceNode}
-          targetNode={this.state.targetNode}
-        />
-        <PathResults
-          sourceNode={this.state.sourceNode}
-          targetNode={this.state.targetNode}
-        />
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim
-        veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-        commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-        velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt
-        mollit anim id est laborum.
+        <NodeSearch />
+        <NodeResults />
+        <MetapathResults />
       </>
     );
   }
 }
+// connect component to global state
+App = connect((state) => ({
+  sourceNode: state.sourceNode,
+  targetNode: state.targetNode
+}))(App);
 
-export default App;
+export { App };

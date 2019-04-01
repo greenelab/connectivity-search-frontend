@@ -1,0 +1,21 @@
+.metapath_results_table {
+  text-align: center;
+}
+.sort_button {
+  background: none;
+  width: 100%;
+  height: 100%;
+  text-align: unset;
+}
+.sort_button:hover {
+  background: #e0f7fa;
+}
+.sort_button > svg {
+  margin-left: 5px;
+}
+.sort_button .fa-sort {
+  color: #bdbdbd;
+}
+.metapath_results_table .metanode_chip {
+  margin: 0;
+}

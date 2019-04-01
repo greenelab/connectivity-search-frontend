@@ -5,45 +5,57 @@ import Fade from '@material-ui/core/Fade';
 
 import './tooltip.css';
 
+// tooltip (helper text) popup component
 export class Tooltip extends Component {
+  // initialize component
   constructor() {
     super();
+
     this.state = {};
     this.state.open = false;
     this.state.x = 0;
     this.state.y = 0;
     this.state.opacity = 0;
 
-    this.anchor = React.createRef();
+    // a surrounding element that acts as detection box for mouse hover
+    this.hitbox = React.createRef();
 
     this.onMouseOver = this.onMouseOver.bind(this);
-    this.onMouseOut = this.onMouseOut.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
   }
-  onMouseOver() {
-    const left =
-      this.anchor.current.getBoundingClientRect().left + window.scrollX;
-    const top =
-      this.anchor.current.getBoundingClientRect().top + window.scrollY;
 
-    this.setState({ open: true, x: left, y: top, opacity: 0.75 });
+  // when mouse enters hitbox
+  onMouseOver() {
+    // get x/y position of hitbox to pass to tooltip popup
+    const left =
+      this.hitbox.current.getBoundingClientRect().left;
+    const top =
+      this.hitbox.current.getBoundingClientRect().top;
+
+    // open tooltip and update x/y position
+    this.setState({ open: true, x: left, y: top });
   }
-  onMouseOut() {
-    this.setState({ open: false, opacity: 0 });
+
+  // when mouse leaves hitbox
+  onMouseLeave() {
+    this.setState({ open: false });
   }
+
+  // display component
   render() {
     return (
       <>
         <span
-          ref={this.anchor}
-          className='tooltip_overlay'
+          ref={this.hitbox}
+          className='tooltip_hitbox'
           onMouseOver={this.onMouseOver}
-          onMouseOut={this.onMouseOut}
+          onMouseLeave={this.onMouseLeave}
         >
           {this.props.children}
         </span>
-        {this.state.open && this.props.value && (
-          <Portal
-            value={this.props.value}
+        {this.state.open && this.props.text && (
+          <Popup
+            text={this.props.text}
             open={this.state.open}
             x={this.state.x}
             y={this.state.y}
@@ -53,19 +65,22 @@ export class Tooltip extends Component {
     );
   }
 }
-class Portal extends Component {
+
+// popup component to display tooltip and text
+// make React 'portal' to append tooltip to body instead of parent
+// (allows tooltip to pop out of containing elements like tables)
+class Popup extends Component {
   render() {
     return ReactDOM.createPortal(
       <Fade in={this.props.open}>
         <div
-          key='really_unique_key'
           className='tooltip'
           style={{
             left: this.props.x + 'px',
             top: this.props.y + 'px'
           }}
         >
-          {this.props.value}
+          {this.props.text}
         </div>
       </Fade>,
       document.body

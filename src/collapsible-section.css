@@ -4,9 +4,10 @@
 .collapsible_section_header {
   width: 100%;
   text-align: left;
+  font-weight: 500;
 }
 .collapsible_section[data-collapsed='true']
-  > *:not(.collapsible_section_header) {
+  > *:not(:first-child) {
   display: none;
 }
 .collapsible_section_header {

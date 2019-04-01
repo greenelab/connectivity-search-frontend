@@ -3,47 +3,74 @@ import { Component } from 'react';
 
 import './dynamic-field.css';
 
+// expandable textbox-like component, similar to excel spreadsheet cell
+// when focused, field expands nad prop 'fullValue' displayed,
+// otherwise, prop 'value' displayed (often 'fullValue' rounded off)
 export class DynamicField extends Component {
+  // initialize component
   constructor() {
     super();
+
     this.state = {};
     this.state.focused = false;
+    this.field = React.createRef();
 
-    this.expand = this.expand.bind(this);
-    this.collapse = this.collapse.bind(this);
+    this.onClick = this.onClick.bind(this);
+    this.onBlur = this.onBlur.bind(this);
+    this.onFocus = this.onFocus.bind(this);
   }
-  expand(event) {
-    if (event && event.target)
+
+  // when field is clicked or touched
+  onClick(event) {
+    // force click on link in field if link was target of click
+    if (event && event.target && event.target.tagName.toLowerCase() === 'a')
       event.target.click();
-
-    this.setState({ focused: true }, this.selectFocusedElement);
+    // force focus on field
+    this.field.current.focus();
   }
-  collapse(event) {
-    if (
-      event &&
-      event.relatedTarget &&
-      event.target &&
-      event.target.contains(event.relatedTarget)
-    )
-      event.relatedTarget.click();
 
-    this.setState({ focused: false });
+  // when field loses focus
+  onBlur() {
+    this.setState({ focused: false }, this.deselectAll);
   }
-  selectFocusedElement() {
-    if (document.activeElement.matches('.dynamic_field'))
+
+  // when field is focused (tabbed to, clicked, etc)
+  onFocus(event) {
+    this.setState({ focused: true }, this.selectAll);
+  }
+
+  // deselect any selected text in window
+  deselectAll() {
+    window.getSelection().empty();
+  }
+
+  // select contents of field
+  selectAll() {
+    // set delay for select to make sure component has rendered
+    window.setTimeout(function() {
       window.getSelection().selectAllChildren(document.activeElement);
+    }, 10);
   }
+
+  // display component
   render() {
+    let displayValue;
+    if (this.state.focused)
+      displayValue = this.props.fullValue || this.props.value;
+    else
+      displayValue = this.props.value;
+
     return (
       <div
+        ref={this.field}
         tabIndex='0'
-        onFocus={this.expand}
-        onBlur={this.collapse}
+        onClick={this.onClick}
+        onFocus={this.onFocus}
+        onBlur={this.onBlur}
         className={'dynamic_field ' + (this.props.className || '')}
         data-expanded={this.state.focused}
       >
-        {!this.state.focused && this.props.value}
-        {this.state.focused && (this.props.fullValue || this.props.value)}
+        {displayValue}
       </div>
     );
   }

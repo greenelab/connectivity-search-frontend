@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css?family=Raleway');
-@import url('https://fonts.googleapis.com/css?family=Montserrat&text=0123456789');
-@import url('https://fonts.googleapis.com/css?family=Work+Sans');
+@import url('https://fonts.googleapis.com/css?family=Raleway:400,500,700');
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700&text=0123456789');
+@import url('https://fonts.googleapis.com/css?family=Work+Sans:400,500,700');
 
 * {
   font-family: 'Montserrat', 'Raleway', sans-serif !important;
@@ -57,6 +57,7 @@ sup {
 }
 button {
   background: #e0f7fa;
+  color: unset;
   border: none;
   padding: 5px;
   font-size: 1em;
@@ -138,18 +139,15 @@ td {
 td > * {
   vertical-align: middle;
 }
-table[data-show-all-columns='false'] td[data-hidden-column='true'] {
-  display: none;
-}
-.col_xl {
-  width: 430px;
-}
-.col_l {
-  width: 220px;
-}
-.col_m {
-  width: 120px;
-}
 .col_s {
   width: 75px;
+}
+.col_m {
+  width: 100px;
+}
+.col_l {
+  width: 200px;
+}
+.col_xl {
+  width: 450px;
 }

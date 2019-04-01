@@ -1,6 +1,20 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { createStore } from 'redux';
+import { applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 
-import App from './app.js';
+import { Reducer } from './reducers.js';
+import { App } from './app.js';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+// create global state store
+const store = createStore(Reducer, applyMiddleware(thunk));
+
+// render/run app
+render(
+  <Provider store={store}>
+    <App />
+  </Provider>,
+  document.getElementById('root')
+);
