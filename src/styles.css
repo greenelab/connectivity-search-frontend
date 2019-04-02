@@ -56,6 +56,7 @@ sup {
   position: relative;
 }
 button {
+  box-sizing: border-box;
   background: #e0f7fa;
   color: unset;
   border: none;

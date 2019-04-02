@@ -18,3 +18,11 @@
 .tooltip_hitbox {
   z-index: 99999;
 }
+@media (hover: none) {
+  .tooltip {
+    display: none;
+  }
+  .tooltip_hitbox {
+    pointer-events: none;
+  }
+}

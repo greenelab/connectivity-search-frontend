@@ -30,8 +30,15 @@ export class Tooltip extends Component {
     const left = this.hitbox.current.getBoundingClientRect().left;
     const top = this.hitbox.current.getBoundingClientRect().top;
 
+    let x = left;
+    const y = top;
+
+    // avoid scrunching tooltip too skinny when close to right side of view
+    if (x > window.innerWidth - 200)
+      x = window.innerWidth - 200;
+
     // open tooltip and update x/y position
-    this.setState({ open: true, x: left, y: top });
+    this.setState({ open: true, x: x, y: y });
   }
 
   // when mouse leaves hitbox
