@@ -19,22 +19,6 @@ import './node-search.css';
 // node search section component
 // target and source node search boxes and swap button
 export class NodeSearch extends Component {
-  // display component
-  render() {
-    return (
-      <section className='center'>
-        <Filters />
-        <SourceNodeSearch />
-        <SwapButton />
-        <TargetNodeSearch />
-      </section>
-    );
-  }
-}
-
-// metatype filter component
-// toggle buttons to specify which types of nodes to limit search to
-class Filters extends Component {
   // initialize component
   constructor() {
     super();
@@ -43,13 +27,62 @@ class Filters extends Component {
     this.state.metatypes = [];
     this.state.filterString = '';
 
+    this.updateFilters = this.updateFilters.bind(this);
+  }
+
+  // get filter state from filter child component
+  updateFilters(metatypes, filterString) {
+    this.setState({ metatypes: metatypes, filterString: filterString });
+  }
+
+  // display component
+  render() {
+    return (
+      <section className='center'>
+        <NodeSearchContext.Provider
+          value={{
+            filterString: this.state.filterString
+          }}
+        >
+          <Filters
+            metatypes={this.state.metatypes}
+            filterString={this.state.filterString}
+            updateFilters={this.updateFilters}
+          />
+          <SourceNodeSearch />
+          <SwapButton />
+          <TargetNodeSearch />
+        </NodeSearchContext.Provider>
+      </section>
+    );
+  }
+}
+// allow other components to access component's variables and methods
+const NodeSearchContext = React.createContext({});
+
+// metatype filter component
+// toggle buttons to specify which types of nodes to limit search to
+class Filters extends Component {
+  // initialize component
+  constructor(props) {
+    super(props);
+
+    this.toggle = this.toggle.bind(this);
+    this.solo = this.solo.bind(this);
+
+    // initialize filters
+    const metatypes = [];
+    const filterString = '';
+
     for (const metatype of Metatypes.nodes)
-      this.state.metatypes.push({ name: metatype.name, active: true });
+      metatypes.push({ name: metatype.name, active: true });
+
+    this.props.updateFilters(metatypes, filterString);
   }
 
   // checks whether all filters are active
   allOn() {
-    for (const metatype of this.state.metatypes) {
+    for (const metatype of this.props.metatypes) {
       if (!metatype.active)
         return false;
     }
@@ -58,7 +91,7 @@ class Filters extends Component {
 
   // checks whether all filters besides the specified filter are off
   allOthersOff(type) {
-    for (const metatype of this.state.metatypes) {
+    for (const metatype of this.props.metatypes) {
       if (type !== metatype.name && metatype.active)
         return false;
     }
@@ -67,18 +100,19 @@ class Filters extends Component {
 
   // toggles the specified filters on/off
   toggle(type) {
-    const metatypes = this.state.metatypes;
+    const metatypes = this.props.metatypes;
 
     for (const metatype of metatypes) {
       if (metatype.name === type)
         metatype.active = !metatype.active;
     }
-    this.setState({ metatypes: metatypes }, this.updateString);
+
+    this.props.updateFilters(metatypes, this.toString(metatypes));
   }
 
   // solo' filter (turn all others off)
   solo(type) {
-    const metatypes = this.state.metatypes;
+    const metatypes = this.props.metatypes;
     const allOthersOff = this.allOthersOff(type);
 
     for (const metatype of metatypes) {
@@ -92,16 +126,16 @@ class Filters extends Component {
       }
     }
 
-    this.setState({ metatypes: metatypes }, this.updateString);
+    this.props.updateFilters(metatypes, this.toString(metatypes));
   }
 
   // turn state of filters into string query list of metanode abbreviations
-  getString() {
+  toString(metatypes) {
     if (this.allOn())
       return '';
 
     const list = [];
-    for (const metatype of this.state.metatypes) {
+    for (const metatype of metatypes) {
       if (metatype.active)
         list.push(Metatypes.lookup(metatype.name).abbreviation);
     }
@@ -109,15 +143,10 @@ class Filters extends Component {
     return list.join(',');
   }
 
-  // pass updated metatype filter string query to parent component
-  updateString() {
-    this.setState({ filterString: this.getString() });
-  }
-
   // display component
   render() {
     // make list of filter buttons
-    const buttons = this.state.metatypes.map((metatype, index) => (
+    const buttons = this.props.metatypes.map((metatype, index) => (
       <button
         key={index}
         className='node_search_filter_button'
@@ -134,20 +163,9 @@ class Filters extends Component {
       </button>
     ));
 
-    return (
-      <FiltersContext.Provider
-        value={{
-          filterString: this.state.string
-        }}
-      >
-        {buttons}
-      </FiltersContext.Provider>
-    );
+    return <>{buttons}</>;
   }
 }
-// allow other components to access component's variables and methods
-const FiltersContext = React.createContext({});
-
 // source node search box component
 class SourceNodeSearch extends Component {
   // initialize component
@@ -284,7 +302,7 @@ class SearchBox extends Component {
   }
 }
 // connect component to context component
-SearchBox.contextType = FiltersContext;
+SearchBox.contextType = NodeSearchContext;
 
 // text box sub-component of search box component
 class TextBox extends Component {
