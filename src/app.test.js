@@ -1,10 +1,23 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { render } from 'react-dom';
+import { unmountComponentAtNode } from 'react-dom';
+import { createStore } from 'redux';
+import { applyMiddleware } from 'redux';
+import thunk from 'redux-thunk';
+import { Provider } from 'react-redux';
 
-import App from './app.js';
+import { Reducer } from './reducers.js';
+import { App } from './app.js';
 
 it('renders without crashing', () => {
   const div = document.createElement('div');
-  ReactDOM.render(<App />, div);
-  ReactDOM.unmountComponentAtNode(div);
+  const store = createStore(Reducer, applyMiddleware(thunk));
+  div.id = 'root';
+  render(
+    <Provider store={store}>
+      <App />
+    </Provider>,
+    div
+  );
+  unmountComponentAtNode(div);
 });
