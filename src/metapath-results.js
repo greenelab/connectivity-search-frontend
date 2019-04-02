@@ -16,7 +16,7 @@ import { CollapsibleSection } from './collapsible-section.js';
 import './metapath-results.css';
 import './metanode-chip.css';
 
-// helper text for when user hovers over given field
+// helper text when user hovers over given field
 const tooltipText = {
   metapath: `The type of path (metapath) connecting the source node to the
     target node`,
@@ -106,7 +106,18 @@ class TableFull extends Component {
 
   // compare numbers (for sorting)
   compareNumbers(a, b, key) {
-    return Number(a[key]) - Number(b[key]) || a[key] - b[key];
+    // parse as numbers
+    const comparison = Number(a[key]) - Number(b[key]);
+    if (comparison)
+      return comparison;
+
+    // otherwise parse as strings and compare alphabetically
+    if (a[key] < b[key])
+      return -1;
+    else if (a[key] > b[key])
+      return 1;
+    else
+      return 0;
   }
 
   // compare metapaths (for sorting)
@@ -447,10 +458,8 @@ function metapathChips(edges) {
     return (
       <React.Fragment key={index}>
         <MetanodeChip type={entry[0]} />
-        <MetaedgeChip type={entry[2]} direction={entry[3]}/>
-        {index === edges.length - 1 && (
-          <MetanodeChip type={entry[1]} />
-        )}
+        <MetaedgeChip type={entry[2]} direction={entry[3]} />
+        {index === edges.length - 1 && <MetanodeChip type={entry[1]} />}
       </React.Fragment>
     );
   });

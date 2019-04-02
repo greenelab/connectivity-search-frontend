@@ -6,8 +6,7 @@
   text-align: left;
   font-weight: 500;
 }
-.collapsible_section[data-collapsed='true']
-  > *:not(:first-child) {
+.collapsible_section[data-collapsed='true'] > *:not(:first-child) {
   display: none;
 }
 .collapsible_section_header {

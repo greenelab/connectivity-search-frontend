@@ -11,7 +11,7 @@ import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
 import './node-results.css';
 
-// helper text for when user hovers over given field
+// helper text when user hovers over given field
 const tooltipText = {
   name: 'The name of the node',
   metanode: 'The type of the node',

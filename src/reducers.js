@@ -37,7 +37,7 @@ export function Reducer(previousState = {}, action) {
   if (!newState.targetNode)
     newState.targetNode = {};
   if (!newState.metapaths)
-    newState.metapaths = {};
+    newState.metapaths = [];
 
   // set new state
   return newState;

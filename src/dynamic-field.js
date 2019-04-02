@@ -4,7 +4,7 @@ import { Component } from 'react';
 import './dynamic-field.css';
 
 // expandable textbox-like component, similar to excel spreadsheet cell
-// when focused, field expands nad prop 'fullValue' displayed,
+// when focused, field expands and prop 'fullValue' displayed,
 // otherwise, prop 'value' displayed (often 'fullValue' rounded off)
 export class DynamicField extends Component {
   // initialize component

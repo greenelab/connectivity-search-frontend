@@ -62,7 +62,6 @@
   border-radius: 20px;
   margin: 0 auto !important;
   padding: 0 !important;
-  vertical-align: bottom !important;
 }
 .node_search_swap_button > svg {
   transform: rotate(90deg);

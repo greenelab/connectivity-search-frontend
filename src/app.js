@@ -72,26 +72,16 @@ class App extends Component {
 
   // update metapaths (node pair query results) when source/target node change
   updateMetapaths() {
-    this.props.dispatch((dispatch) => {
-      if (this.props.sourceNode.id && this.props.targetNode.id) {
-        searchMetapaths(
-          this.props.sourceNode.id,
-          this.props.targetNode.id
-        ).then((results) =>
+    this.props.dispatch((dispatch) =>
+      searchMetapaths(this.props.sourceNode.id, this.props.targetNode.id).then(
+        (results) =>
           dispatch(
             updateMetapaths({
               metapaths: results
             })
           )
-        );
-      } else {
-        dispatch(
-          updateMetapaths({
-            metapaths: []
-          })
-        );
-      }
-    });
+      )
+    );
   }
 
   // add history entry for source/target node without navigating page

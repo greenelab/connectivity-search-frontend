@@ -86,6 +86,8 @@ class Filters extends Component {
       if (!metatype.active)
         return false;
     }
+
+
     return true;
   }
 
@@ -95,6 +97,8 @@ class Filters extends Component {
       if (type !== metatype.name && metatype.active)
         return false;
     }
+
+
     return true;
   }
 
@@ -106,6 +110,7 @@ class Filters extends Component {
       if (metatype.name === type)
         metatype.active = !metatype.active;
     }
+
 
     this.props.updateFilters(metatypes, this.toString(metatypes));
   }
@@ -242,12 +247,9 @@ class SearchBox extends Component {
 
   // when user types into or modifies text in text box
   onInput(searchString) {
-    if (searchString) {
-      searchNodes(searchString, this.context.filterString).then(
-        (searchResults) => this.setState({ searchResults: searchResults })
-      );
-    } else
-      this.setState({ searchResults: [] });
+    searchNodes(searchString, this.context.filterString).then((results) =>
+      this.setState({ searchResults: results || [] })
+    );
   }
 
   // convert result/selection item to string to display in text box

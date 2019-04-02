@@ -9,14 +9,13 @@ export function lookupNodeById(id) {
     return null;
   const query = nodeSearchServer + id;
   return fetch(query)
-    .then((response) => {
-      if (response.ok)
-        return response.json();
-      else
-        return null;
-    })
+    .then((response) => response.json())
     .then((data) => {
       return data;
+    })
+    .catch((error) => {
+      console.log(error);
+      return null;
     });
 }
 
@@ -33,6 +32,10 @@ export function searchNodes(searchString, metatypes) {
     .then((response) => response.json())
     .then((data) => {
       return data.results;
+    })
+    .catch((error) => {
+      console.log(error);
+      return null;
     });
 }
 
@@ -46,5 +49,9 @@ export function searchMetapaths(sourceId, targetId) {
     .then((response) => response.json())
     .then((data) => {
       return data.path_counts;
+    })
+    .catch((error) => {
+      console.log(error);
+      return null;
     });
 }

@@ -27,10 +27,8 @@ export class Tooltip extends Component {
   // when mouse enters hitbox
   onMouseOver() {
     // get x/y position of hitbox to pass to tooltip popup
-    const left =
-      this.hitbox.current.getBoundingClientRect().left;
-    const top =
-      this.hitbox.current.getBoundingClientRect().top;
+    const left = this.hitbox.current.getBoundingClientRect().left;
+    const top = this.hitbox.current.getBoundingClientRect().top;
 
     // open tooltip and update x/y position
     this.setState({ open: true, x: left, y: top });
