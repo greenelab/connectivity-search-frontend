@@ -20,12 +20,12 @@ export class Tooltip extends Component {
     // a surrounding element that acts as detection box for mouse hover
     this.hitbox = React.createRef();
 
-    this.onMouseOver = this.onMouseOver.bind(this);
+    this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
   // when mouse enters hitbox
-  onMouseOver() {
+  onMouseEnter() {
     // get x/y position of hitbox to pass to tooltip popup
     const left = this.hitbox.current.getBoundingClientRect().left;
     const top = this.hitbox.current.getBoundingClientRect().top;
@@ -53,7 +53,7 @@ export class Tooltip extends Component {
         <span
           ref={this.hitbox}
           className='tooltip_hitbox'
-          onMouseOver={this.onMouseOver}
+          onMouseEnter={this.onMouseEnter}
           onMouseLeave={this.onMouseLeave}
         >
           {this.props.children}
