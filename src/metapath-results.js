@@ -108,7 +108,7 @@ class TableFull extends Component {
   compareNumbers(a, b, key) {
     // parse as numbers
     const comparison = Number(a[key]) - Number(b[key]);
-    if (comparison)
+    if (!Number.isNaN(comparison))
       return comparison;
 
     // otherwise parse as strings and compare alphabetically
