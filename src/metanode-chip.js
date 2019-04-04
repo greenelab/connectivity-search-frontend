@@ -64,6 +64,8 @@ export class MetanodeChip extends Component {
       case 'Pharmacologic Class':
         icon = <PharmacologicClass />;
         break;
+      default:
+        break;
     }
 
     return <div className='metanode_chip'>{icon}</div>;
