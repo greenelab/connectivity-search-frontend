@@ -12,40 +12,6 @@
   position: relative;
   top: -1px;
 }
-.metanode_chip:after {
-  content: attr(data-abbreviation);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  width: 100%;
-  height: 100%;
-  font-family: 'Work Sans';
-  font-weight: 500;
-}
-/* adjustments to bad font rendering to precisely center letters */
-.metanode_chip[data-abbreviation='G']:after {
-  left: -0.5px;
-  top: -0.5px;
-}
-.metanode_chip[data-abbreviation='C']:after {
-  left: -0.5px;
-}
-.metanode_chip[data-abbreviation='A']:after {
-  top: -0.5px;
-}
-.metanode_chip[data-abbreviation='D']:after {
-  top: -0.5px;
-}
-.metanode_chip[data-abbreviation='S']:after {
-  top: -0.2px;
-}
-.metanode_chip[data-abbreviation='CC']:after {
-  left: -0.5px;
-}
-.metanode_chip[data-abbreviation='PC']:after {
-  left: -0.5px;
-}
 .metaedge_chip {
   display: inline-flex;
   justify-content: center;
