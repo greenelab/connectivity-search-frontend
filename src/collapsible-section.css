@@ -1,0 +1,21 @@
+.collapsible_section {
+  margin: 10px auto;
+}
+.collapsible_section_header {
+  width: 100%;
+  text-align: left;
+  font-weight: 500;
+}
+.collapsible_section[data-collapsed='true'] > *:not(:first-child) {
+  display: none;
+}
+.collapsible_section_header {
+  display: flex;
+  align-items: center;
+}
+.collapsible_section_header > div {
+  flex-grow: 1;
+}
+.collapsible_section_header > svg {
+  margin-right: 5px;
+}

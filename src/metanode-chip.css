@@ -1,0 +1,43 @@
+.metanode_chip {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
+  max-width: 20px;
+  max-height: 20px;
+  margin-right: 5px;
+  border-radius: 15px;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+}
+.metaedge_chip {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
+  min-height: 20px;
+  max-height: 20px;
+  vertical-align: top;
+  line-height: -10px;
+  position: relative;
+  color: #757575;
+}
+.metaedge_chip:after {
+  content: attr(data-abbreviation);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  left: 0;
+  top: -5px;
+  right: 0;
+  font-family: 'Work Sans';
+  font-size: 0.75em;
+}
+.metaedge_chip > svg {
+  width: 15px;
+  height: 15px;
+  margin: 0 2px;
+}

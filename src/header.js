@@ -1,7 +1,9 @@
 import React from 'react';
 import { Component } from 'react';
 
+// page header display component
 export class Header extends Component {
+  // display component
   render() {
     return (
       <header>

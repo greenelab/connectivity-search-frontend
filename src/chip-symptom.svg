@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+    <circle
+        cx="50"
+        cy="50"
+        r="50"
+        fill="#a5abb6"
+    >
+    </circle>
+    <path
+        transform="translate(50,50) scale(0.5) translate(-50,-50)"
+        fill="none"
+        stroke="#ffffff"
+        stroke-width="20"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="
+            M 80 10
+            C 75 5 65 0 50 0
+            C 40 0 15 5 15 25
+            C 15 45 35 48 50 50
+            C 65 52 85 55 85 75
+            C 85 95 60 100 50 100
+            C 35 100 25 95 20 90
+        "
+    >
+    </path>
+</svg>
