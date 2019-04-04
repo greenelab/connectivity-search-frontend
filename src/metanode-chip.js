@@ -19,6 +19,7 @@ import { ReactComponent as CellularComponent } from './chip-cellular-component.s
 import { ReactComponent as MolecularFunction } from './chip-molecular-function.svg';
 import { ReactComponent as Pathway } from './chip-pathway.svg';
 import { ReactComponent as PharmacologicClass } from './chip-pharmacologic-class.svg';
+import { ReactComponent as Unknown } from './chip-unknown.svg';
 
 // metanode 'chip' component
 // colored circle with abbreviation text in middle
@@ -65,6 +66,7 @@ export class MetanodeChip extends Component {
         icon = <PharmacologicClass />;
         break;
       default:
+        icon = <Unknown />;
         break;
     }
 
