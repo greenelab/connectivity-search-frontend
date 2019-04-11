@@ -10,13 +10,11 @@
   text-align: unset;
 }
 .sort_button:hover {
-  background: #e0f7fa;
+  background: #e1f6fc;
 }
 .sort_button > svg {
   margin-left: 5px;
-}
-.sort_button .fa-sort {
-  color: #bdbdbd;
+  color: #757575;
 }
 .metapath_results_table .metanode_chip {
   margin: 0;

@@ -11,7 +11,11 @@ body {
   padding: 0;
   min-width: 320px;
   background: #fafafa;
+  color: #424242;
   font-size: 16px;
+}
+input {
+  color: #424242 !important;
 }
 #root {
   box-sizing: border-box;
@@ -30,7 +34,7 @@ section {
   margin: 20px auto;
 }
 h1 {
-  font-size: 50px;
+  font-size: 30pt;
   font-weight: normal;
   letter-spacing: 5px;
   margin: 0;
@@ -38,14 +42,18 @@ h1 {
 h2 {
   font-weight: normal;
   margin: 0;
-  font-size: 16px;
+  font-size: 10pt;
   font-style: italic;
 }
 h3 {
   margin: 10px 0;
 }
+.logo {
+  width: 48px;
+  height: 48px;
+}
 a {
-  color: #00bcd4;
+  color: #02b3e4;
 }
 a:hover {
   cursor: pointer;
@@ -57,7 +65,7 @@ sup {
 }
 button {
   box-sizing: border-box;
-  background: #e0f7fa;
+  background: #e1f6fc;
   color: unset;
   border: none;
   padding: 5px;
@@ -66,17 +74,17 @@ button {
   transition: background 0.1s ease;
 }
 button:hover {
-  background: #b2ebf2;
+  background: #b3e8f7;
   cursor: pointer;
 }
 .link_button {
   display: inline;
   background: none;
-  color: #00bcd4;
+  color: #02b3e4;
   margin: 10px 0;
 }
 .link_button:hover {
-  background: #e0f7fa;
+  background: #e1f6fc;
 }
 textarea {
   font-size: 1em;

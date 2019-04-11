@@ -9,7 +9,6 @@ import { MetanodeChip } from './metanode-chip.js';
 import { Tooltip } from './tooltip.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
-import './node-results.css';
 
 // helper text when user hovers over given field
 const tooltipText = {
