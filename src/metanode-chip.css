@@ -9,8 +9,6 @@
   margin-right: 5px;
   border-radius: 15px;
   vertical-align: middle;
-  position: relative;
-  top: -1px;
 }
 .metaedge_chip {
   display: inline-flex;
