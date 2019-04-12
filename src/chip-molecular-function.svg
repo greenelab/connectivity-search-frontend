@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="50" fill="#fa750f"></circle>
+  <circle cx="50" cy="50" r="49" fill="#fa750f"></circle>
   <clipPath id="clip">
     <rect x="-10" y="-10" width="120" height="120"></rect>
   </clipPath>
@@ -29,7 +29,7 @@
       M 80 0
       L 20 0
       L 20 100
-      M 20 50
+      M 22 50
       L 65 50
     "
   ></path>

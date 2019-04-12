@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="50" fill="#02b3e4"></circle>
+  <circle cx="50" cy="50" r="49" fill="#02b3e4"></circle>
   <path
     transform="translate(50,50) scale(0.45) translate(-50,-50)"
     fill="none"

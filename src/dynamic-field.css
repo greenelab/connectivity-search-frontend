@@ -1,5 +1,8 @@
 .dynamic_field {
   box-sizing: border-box;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   min-width: 100%;
   max-width: 100%;

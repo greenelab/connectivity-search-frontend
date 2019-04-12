@@ -1,5 +1,5 @@
 .metanode_chip {
-  display: inline-block;
+  display: inline-flex;
   width: 20px;
   height: 20px;
   min-width: 20px;
@@ -8,7 +8,12 @@
   max-height: 20px;
   margin-right: 5px;
   border-radius: 15px;
-  vertical-align: middle;
+  justify-content: center;
+  align-items: center;
+}
+.metanode_chip > svg {
+  width: 20px;
+  height: 20px;
 }
 .metaedge_chip {
   display: inline-flex;

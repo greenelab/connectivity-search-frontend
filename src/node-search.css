@@ -1,5 +1,4 @@
 .node_search_filter_button {
-  display: inline-block;
   padding: 5px;
   background: none;
   border: none;
@@ -22,7 +21,7 @@
   position: relative;
 }
 .node_search_form:first-of-type {
-  margin-top: 20px !important;
+  margin-top: 40px !important;
 }
 .node_search_form_label {
   margin-bottom: 5px;
