@@ -1,5 +1,4 @@
 .node_search_filter_button {
-  display: inline-block;
   padding: 5px;
   background: none;
   border: none;
@@ -16,21 +15,33 @@
 .node_search_form {
   display: block;
   width: 100%;
+  height: 40px !important;
   margin: 0 auto !important;
   text-align: left;
   position: relative;
 }
 .node_search_form:first-of-type {
-  margin-top: 20px !important;
+  margin-top: 40px !important;
 }
-.node_search_label {
-  display: block;
+.node_search_form_label {
   margin-bottom: 5px;
 }
 .node_search_field_container {
   width: 100% !important;
-  margin: 5px 0 !important;
+  height: 100% !important;
   position: relative;
+}
+.node_search_field_overlay {
+  display: flex;
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 10px !important;
+  pointer-events: none;
 }
 .node_search_form_label {
   position: absolute;
@@ -38,7 +49,8 @@
 }
 .node_search_field {
   background: #eeeeee;
-  height: 40px !important;
+  width: 100% !important;
+  height: 100% !important;
   transition: background 0.25s ease;
 }
 .node_search_field_focused {
@@ -54,13 +66,16 @@
 .node_search_input {
   padding: 10px !important;
 }
+.node_search_input_blank {
+  color: transparent !important;
+}
 .node_search_swap_button {
   display: block !important;
   width: 40px;
   height: 40px;
   background: #eeeeee;
   border-radius: 20px;
-  margin: 0 auto !important;
+  margin: 5px auto !important;
   padding: 0 !important;
 }
 .node_search_swap_button > svg {
@@ -82,10 +97,13 @@
   font-size: 16px !important;
 }
 .node_search_results_item_selected {
-  background: #e0f7fa !important;
+  background: #e1f6fc !important;
 }
 .node_search_results_item_name {
-  font-weight: 600;
+  font-weight: 500;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .node_search_results_item_identifier {
   margin-left: auto;

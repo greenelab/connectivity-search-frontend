@@ -53,7 +53,7 @@ export class MetapathResults extends Component {
     return (
       <section>
         <CollapsibleSection
-          label='Paths'
+          label='Metapaths'
           tooltipText='metapath results with p-value <= 0.1'
           className='right'
         >
@@ -226,6 +226,7 @@ class TableHead extends Component {
       <>
         <TableHeadCell
           className='col_l left'
+          buttonClass='left'
           fieldName='metaedges'
           tooltipText={tooltipText['metapath']}
           text='metapath'
@@ -311,7 +312,10 @@ class TableHeadCell extends Component {
   render() {
     return (
       <td className={this.props.className}>
-        <SortButton fieldName={this.props.fieldName}>
+        <SortButton
+          fieldName={this.props.fieldName}
+          className={this.props.buttonClass}
+        >
           <Tooltip text={this.props.tooltipText}>{this.props.text}</Tooltip>
         </SortButton>
       </td>
@@ -325,7 +329,7 @@ class SortButton extends Component {
   render() {
     return (
       <button
-        className='sort_button'
+        className={'sort_button ' + (this.props.className || '')}
         onClick={() => this.context.changeSort(this.props.fieldName)}
       >
         {this.props.children}
@@ -378,6 +382,7 @@ class TableBodyRow extends Component {
       <>
         <TableBodyCell
           className='left'
+          fieldClass='left'
           value={metapathChips(node.metaedges)}
           fullValue={node.metapath_name}
         />
@@ -430,6 +435,7 @@ class TableBodyCell extends Component {
         <DynamicField
           value={this.props.value}
           fullValue={this.props.fullValue}
+          className={this.props.fieldClass}
         />
       </td>
     );

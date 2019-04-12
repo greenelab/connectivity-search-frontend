@@ -1,25 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-    <circle
-        cx="50"
-        cy="50"
-        r="50"
-        fill="#8e4f00"
-    >
-    </circle>
-    <path
-        transform="translate(50,50) scale(0.5) translate(-50,-50)"
-        fill="none"
-        stroke="#ffffff"
-        stroke-width="20"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="
-            M 15 0
-            L 50 0
-            A 50 50 0 0 1 50 100
-            L 15 100
-            Z
-        "
-    >
-    </path>
+  <circle cx="50" cy="50" r="49" fill="#875442"></circle>
+  <path
+    transform="translate(50,50) scale(0.45) translate(-50,-50)"
+    fill="none"
+    stroke="#fafafa"
+    stroke-width="20"
+    d="
+      M 15 0
+      L 50 0
+      A 50 50 0 0 1 50 100
+      L 15 100
+      Z
+    "
+  ></path>
 </svg>

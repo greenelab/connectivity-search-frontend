@@ -212,6 +212,7 @@ class TargetNodeSearch extends Component {
   // when user makes a new node selection
   onChange(value) {
     this.props.dispatch(updateSourceTargetNodes({ targetNode: value }));
+    document.activeElement.blur();
   }
 
   // display component
@@ -286,6 +287,7 @@ class SearchBox extends Component {
               inputRef={this.inputRef}
               getInputProps={getInputProps}
               clearSelection={clearSelection}
+              selectedItem={selectedItem}
             />
             <Dropdown
               isOpen={isOpen}
@@ -312,7 +314,12 @@ class TextBox extends Component {
   constructor() {
     super();
 
+    this.state = {};
+    this.state.focused = false;
+
     this.onInput = this.onInput.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
   }
 
   // when user types into text box
@@ -321,24 +328,58 @@ class TextBox extends Component {
       this.props.clearSelection();
   }
 
+  // when user focuses text box
+  onFocus() {
+    this.setState({ focused: true });
+  }
+
+  // when user unfocuses text box
+  onBlur() {
+    this.setState({ focused: false });
+  }
+
   // display component
   render() {
+    let overlay = <></>;
+
+    const showOverlay =
+      !this.state.focused &&
+      this.props.selectedItem.metanode &&
+      this.props.selectedItem.name;
+
+    if (showOverlay) {
+      overlay = (
+        <div className='node_search_field_overlay'>
+          <MetanodeChip type={this.props.selectedItem.metanode} />
+          <span className='node_search_results_item_name'>
+            {this.props.selectedItem.name}
+          </span>
+        </div>
+      );
+    }
     return (
-      <TextField
-        {...this.props.getInputProps({
-          onChange: this.onInput
-        })}
-        inputRef={this.props.inputRef}
-        placeholder='id, name, or metanode'
-        classes={{ root: 'node_search_field_container' }}
-        InputProps={{
-          classes: {
-            root: 'node_search_field',
-            focused: 'node_search_field_focused',
-            input: 'node_search_input'
-          }
-        }}
-      />
+      <>
+        <TextField
+          {...this.props.getInputProps({
+            onChange: this.onInput
+          })}
+          inputRef={this.props.inputRef}
+          placeholder='id, name, or metanode'
+          classes={{ root: 'node_search_field_container' }}
+          InputProps={{
+            classes: {
+              root: 'node_search_field',
+              focused: 'node_search_field_focused',
+              input: showOverlay
+                ? 'node_search_input_blank'
+                : 'node_search_input'
+            }
+          }}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+        />
+        {overlay}
+      </>
     );
   }
 }

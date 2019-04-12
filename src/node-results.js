@@ -9,7 +9,6 @@ import { MetanodeChip } from './metanode-chip.js';
 import { Tooltip } from './tooltip.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
-import './node-results.css';
 
 // helper text when user hovers over given field
 const tooltipText = {
@@ -61,9 +60,9 @@ class NodeCard extends Component {
         tooltipText={'details about the ' + this.props.label.toLowerCase()}
       >
         {this.props.node.name ? (
-          <TableFull {...this.props} />
+          <TableFull node={this.props.node} />
         ) : (
-          <TableEmpty {...this.props} />
+          <TableEmpty label={this.props.label} />
         )}
       </CollapsibleSection>
     );
@@ -134,11 +133,11 @@ class TableFull extends Component {
       // return row entry
       return (
         <tr key={index}>
-          <td className='col_s small light_text'>
+          <td className='col_s small light_text left'>
             <Tooltip text={tooltipText[field]}>{firstCol}</Tooltip>
           </td>
           <td>
-            <DynamicField value={secondCol} />
+            <DynamicField value={secondCol} className='left'/>
           </td>
         </tr>
       );

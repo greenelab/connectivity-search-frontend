@@ -1,44 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-    <circle
-        cx="50"
-        cy="50"
-        r="50"
-        fill="#ff9300"
-    >
-    </circle>
-    <path
-        transform="translate(-20,0) translate(50,50) scale(0.4) translate(-50,-50)"
-        fill="none"
-        stroke="#ffffff"
-        stroke-width="20"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="
-            M 20 0
-            L 60 0
-            A 25 25 0 0 1 60 50
-            A 25 25 0 0 1 60 100
-            L 20 100
-            Z
-            M 20 50
-            L 60 50
-        "
-    >
-    </path>
-    <path
-        transform="translate(20,0) translate(50,50) scale(0.4) translate(-50,-50)"
-        fill="none"
-        stroke="#ffffff"
-        stroke-width="20"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="
-            M 20 100
-            L 20 0
-            L 60 0
-            A 25 25 0 0 1 60 50
-            L 20 50
-        "
-    >
-    </path>
+  <circle cx="50" cy="50" r="49" fill="#fa750f"></circle>
+  <path
+    transform="translate(-16,0) translate(50,50) scale(0.3) translate(-50,-50)"
+    fill="none"
+    stroke="#fafafa"
+    stroke-width="24"
+    d="
+      M 20 0
+      L 60 0
+      A 25 25 0 0 1 60 50
+      A 25 25 0 0 1 60 100
+      L 22 100
+      Z
+      M 20 50
+      L 60 50
+    "
+  ></path>
+  <path
+    transform="translate(16,0) translate(50,50) scale(0.3) translate(-50,-50)"
+    fill="none"
+    stroke="#fafafa"
+    stroke-width="24"
+    stroke-linecap="square"
+    d="
+      M 20 100
+      L 20 0
+      L 60 0
+      A 25 25 0 0 1 60 50
+      L 22 50
+    "
+  ></path>
 </svg>
