@@ -16,6 +16,7 @@
   transition: opacity 1s ease;
 }
 .tooltip_hitbox {
+  /* display: inline-block; */
   z-index: 99999;
 }
 @media (hover: none) {

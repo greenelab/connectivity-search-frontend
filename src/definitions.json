@@ -1,0 +1,13 @@
+{
+  "id": "The unique integer id of the node used internally by Hetmech (but not in Hetionet v1.0)",
+  "metapath": "The type of path (metapath) connecting the source node to the target node",
+  "path_count": "The number of paths between the source and target node of the specified metapath (path type)",
+  "p_value": "A measure of the significance of the DWPC that indicates whether more paths were observed than expected due to random chance. Compares the DWPC to a null distribution of DWPCs generated from degree-preserving permuted networks.",
+  "dwpc": "Degree-Weighted Path Count — Measures the extent of connectivity between the source and target node for the given metapath. Like the path count, but with less weight given to paths along high-degree nodes.",
+  "source_degree": "The number of edges from the source node that are of the same type as the initial metaedge of the metapath",
+  "target_degree": "The number of edges from the target node that are of the same type as the final metaedge of the metapath",
+  "n_dwpcs": "The number of DWPCs calculated on permuted networks used to generate a null distribution for the DWPC from the real network. Permuted DWPCs are aggregated for all permuted node pairs with the same degrees as the source and target node.",
+  "n_nonzero_dwpcs": "The number of permuted DWPCs from '# of DWPCs' column that were nonzero. Nonzero DWPCs indicate at least one path between the source and target node existed in the permuted network.",
+  "nonzero_mean": "The mean of nonzero permuted DWPCs. Used to generate the gamma-hurdle model of the null DWPC distribution.",
+  "nonzero_sd": "The standard deviation of nonzero permuted DWPCs. Used to generate the gamma-hurdle model of the null DWPC distribution."
+}

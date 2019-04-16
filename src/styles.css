@@ -84,13 +84,18 @@ button:hover {
   display: inline;
   background: none;
   color: #02b3e4;
-  margin: 10px 0;
+  margin: 5px 0;
 }
 .link_button:hover {
   background: #e1f6fc;
 }
 textarea {
   font-size: 1em;
+}
+.nowrap {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .left {
   text-align: left;

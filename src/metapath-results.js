@@ -10,41 +10,12 @@ import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 
 import { MetanodeChip } from './metanode-chip.js';
 import { MetaedgeChip } from './metanode-chip.js';
+import { DownloadCsv } from './download-metapaths.js';
 import { Tooltip } from './tooltip.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
 import './metapath-results.css';
 import './metanode-chip.css';
-
-// helper text when user hovers over given field
-const tooltipText = {
-  metapath: `The type of path (metapath) connecting the source node to the
-    target node`,
-  path_count: `The number of paths between the source and target node of the
-    specified metapath (path type)`,
-  p_value: `A measure of the significance of the DWPC that indicates whether
-    more paths were observed than expected due to random chance. Compares the
-    DWPC to a null distribution of DWPCs generated from degree-preserving
-    permuted networks.`,
-  dwpc: `Degree-Weighted Path Count — Measures the extent of connectivity
-    between the source and target node for the given metapath. Like the path
-    count, but with less weight given to paths along high-degree nodes.`,
-  source_degree: `The number of edges from the source node that are of the same
-    type as the initial metaedge of the metapath`,
-  target_degree: `The number of edges from the target node that are of the same
-    type as the final metaedge of the metapath`,
-  n_dwpcs: `The number of DWPCs calculated on permuted networks used to
-    generate a null distribution for the DWPC from the real network. Permuted
-    DWPCs are aggregated for all permuted node pairs with the same degrees as
-    the source and target node.`,
-  n_nonzero_dwpcs: `The number of permuted DWPCs from "# of DWPCs" column that
-    were nonzero. Nonzero DWPCs indicate at least one path between the source
-    and target node existed in the permuted network.`,
-  nonzero_mean: `The mean of nonzero permuted DWPCs. Used to generate the
-    gamma-hurdle model of the null DWPC distribution.`,
-  nonzero_sd: `The standard deviation of nonzero permuted DWPCs. Used to
-  generate the gamma-hurdle model of the null DWPC distribution.`
-};
 
 // path results section component
 export class MetapathResults extends Component {
@@ -54,7 +25,7 @@ export class MetapathResults extends Component {
       <section>
         <CollapsibleSection
           label='Metapaths'
-          tooltipText='metapath results with p-value <= 0.1'
+          tooltipText='Metapath results with p-value <= 0.1'
           className='right'
         >
           {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
@@ -140,6 +111,15 @@ class TableFull extends Component {
     }
   }
 
+  // display download buttons
+  downloadButtons() {
+    return (
+      <>
+        <DownloadCsv />
+      </>
+    );
+  }
+
   // display show more/less button
   showMoreLessButton() {
     return (
@@ -180,10 +160,11 @@ class TableFull extends Component {
           changeSort: this.changeSort
         }}
       >
+        {this.downloadButtons()}
         {this.showMoreLessButton()}
         <div
           className='table_container'
-          data-expanded={this.context.showExtraColumns}
+          data-expanded={this.state.showExtraColumns}
         >
           <table className='metapath_results_table'>
             <TableHead />
@@ -220,6 +201,17 @@ class TableHead extends Component {
         </td>
       </tr>
     );
+
+    // helper text when user hovers over given field
+    let tooltipText = {};
+    if (this.props.hetioDefinitions.properties) {
+      tooltipText = {
+        ...tooltipText,
+        ...this.props.hetioDefinitions.properties.common,
+        ...this.props.hetioDefinitions.properties.nodes
+      };
+    }
+    tooltipText = { ...tooltipText, ...this.props.hetmechDefinitions };
 
     // primary columns
     const cols = (
@@ -305,6 +297,11 @@ class TableHead extends Component {
 }
 // connect component to context component
 TableHead.contextType = TableContext;
+// connect component to global state
+TableHead = connect((state) => ({
+  hetioDefinitions: state.hetioDefinitions,
+  hetmechDefinitions: state.hetmechDefinitions
+}))(TableHead);
 
 // table header cell component
 class TableHeadCell extends Component {

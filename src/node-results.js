@@ -10,26 +10,6 @@ import { Tooltip } from './tooltip.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
 
-// helper text when user hovers over given field
-const tooltipText = {
-  name: 'The name of the node',
-  metanode: 'The type of the node',
-  identifier: `The indentifier for accessing the node from its particular
-    source`,
-  source: 'The database from which the node and its properties were gathered',
-  id: `The unique integer id of the node used internally by Hetmech (but not
-    in Hetionet v1.0)`,
-  description: 'Additional information about the node',
-  license: `The license governing usage of the information as per its source
-    database`,
-  class_type: 'The FDA class type of the pharmacologic class',
-  chromosome: 'Which chromosome the gene is on',
-  inchi: 'The IUPAC International Chemical Identifier (InChI) for the compound',
-  inchikey: 'A condensed representation of the InChI',
-  bto_id: 'The BRENDA Tissue Ontology (BTO) identifier for the node',
-  mesh_id: 'The Medical Subject Headings (MeSH) identifier for the node'
-};
-
 // node results section component
 // details about source/target nodes
 export class NodeResults extends Component {
@@ -57,7 +37,7 @@ class NodeCard extends Component {
     return (
       <CollapsibleSection
         label={this.props.label}
-        tooltipText={'details about the ' + this.props.label.toLowerCase()}
+        tooltipText={'Details about the ' + this.props.label.toLowerCase()}
       >
         {this.props.node.name ? (
           <TableFull node={this.props.node} />
@@ -119,7 +99,7 @@ class TableFull extends Component {
         secondCol = (
           <>
             <MetanodeChip type={this.props.node[field]} />
-            {this.props.node[field]}
+            <span className='nowrap'>{this.props.node[field]}</span>
           </>
         );
       } else if (field === 'source') {
@@ -127,8 +107,23 @@ class TableFull extends Component {
         const linkUrl = this.props.node.url || this.props.node.data.url || '';
         let linkText = this.props.node.data.source || linkUrl;
         linkText = shortenUrl(linkText);
-        secondCol = <a href={linkUrl}>{linkText}</a>;
+        secondCol = (
+          <a className='nowrap' href={linkUrl}>
+            {linkText}
+          </a>
+        );
       }
+
+      // helper text when user hovers over given field
+      let tooltipText = {};
+      if (this.props.hetioDefinitions.properties) {
+        tooltipText = {
+          ...tooltipText,
+          ...this.props.hetioDefinitions.properties.common,
+          ...this.props.hetioDefinitions.properties.nodes
+        };
+      }
+      tooltipText = { ...tooltipText, ...this.props.hetmechDefinitions };
 
       // return row entry
       return (
@@ -137,7 +132,7 @@ class TableFull extends Component {
             <Tooltip text={tooltipText[field]}>{firstCol}</Tooltip>
           </td>
           <td>
-            <DynamicField value={secondCol} className='left'/>
+            <DynamicField value={secondCol} className='left' />
           </td>
         </tr>
       );
@@ -175,6 +170,11 @@ class TableFull extends Component {
     );
   }
 }
+// connect component to global state
+TableFull = connect((state) => ({
+  hetioDefinitions: state.hetioDefinitions,
+  hetmechDefinitions: state.hetmechDefinitions
+}))(TableFull);
 
 // table with no results component
 class TableEmpty extends Component {

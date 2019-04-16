@@ -5,6 +5,16 @@ export function Reducer(previousState = {}, action) {
 
   // detect action type and set new state accordingly
   switch (action.type) {
+    // set definitions
+    case 'set_definitions':
+      if (action.payload.metagraph !== undefined)
+        newState.metagraph = action.payload.metagraph;
+      if (action.payload.hetioDefinitions !== undefined)
+        newState.hetioDefinitions = action.payload.hetioDefinitions;
+      if (action.payload.hetmechDefinitions !== undefined)
+        newState.hetmechDefinitions = action.payload.hetmechDefinitions;
+      break;
+
     // update source and/or target node
     case 'update_source_target_nodes':
       if (action.payload.sourceNode !== undefined)
@@ -32,6 +42,12 @@ export function Reducer(previousState = {}, action) {
   }
 
   // make sure critical variables defined
+  if (!newState.metagraph)
+    newState.metagraph = {};
+  if (!newState.hetioDefinitions)
+    newState.hetioDefinitions = {};
+  if (!newState.hetmechDefinitions)
+    newState.hetmechDefinitions = {};
   if (!newState.sourceNode)
     newState.sourceNode = {};
   if (!newState.targetNode)
