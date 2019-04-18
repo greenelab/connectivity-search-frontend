@@ -25,10 +25,10 @@ export class DownloadCsv extends Component {
 
     const tableData = makeMetapathsTable(this.props.metapaths);
     const filename = [
-      'hetio-metapaths',
+      'metapaths',
       makeFilenameFriendly(this.props.sourceNode.name),
       makeFilenameFriendly(this.props.targetNode.name)
-    ].join(' ');
+    ].join('_');
     downloadCsv(tableData, filename);
   }
   // display component
