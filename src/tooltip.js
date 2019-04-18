@@ -5,6 +5,9 @@ import Fade from '@material-ui/core/Fade';
 
 import './tooltip.css';
 
+// open delay in ms
+const delay = 500;
+
 // tooltip (helper text) popup component
 export class Tooltip extends Component {
   // initialize component
@@ -21,11 +24,24 @@ export class Tooltip extends Component {
     this.hitbox = React.createRef();
 
     this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.openTooltip = this.openTooltip.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
   // when mouse enters hitbox
   onMouseEnter() {
+    // delay opening tooltip
+    window.setTimeout(this.openTooltip, delay);
+    // track hover state
+    this.setState({ hover: true });
+  }
+
+  // open tooltip
+  openTooltip() {
+    // if hitbox not being hovered anymore, cancel open
+    if (!this.state.hover)
+      return;
+
     // get x/y position of hitbox to pass to tooltip popup
     const left = this.hitbox.current.getBoundingClientRect().left;
     const top = this.hitbox.current.getBoundingClientRect().top;
@@ -43,7 +59,7 @@ export class Tooltip extends Component {
 
   // when mouse leaves hitbox
   onMouseLeave() {
-    this.setState({ open: false });
+    this.setState({ hover: false, open: false });
   }
 
   // display component

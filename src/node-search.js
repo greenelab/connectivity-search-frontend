@@ -8,9 +8,10 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-import { Metatypes } from './metatypes.js';
 import { MetanodeChip } from './metanode-chip.js';
+import { Tooltip } from './tooltip.js';
 import { searchNodes } from './backend-query.js';
 import { updateSourceTargetNodes } from './actions.js';
 import { swapSourceTargetNodes } from './actions.js';
@@ -24,15 +25,15 @@ export class NodeSearch extends Component {
     super();
 
     this.state = {};
-    this.state.metatypes = [];
+    this.state.filters = [];
     this.state.filterString = '';
 
     this.updateFilters = this.updateFilters.bind(this);
   }
 
   // get filter state from filter child component
-  updateFilters(metatypes, filterString) {
-    this.setState({ metatypes: metatypes, filterString: filterString });
+  updateFilters(filters, filterString) {
+    this.setState({ filters: filters, filterString: filterString });
   }
 
   // display component
@@ -45,7 +46,7 @@ export class NodeSearch extends Component {
           }}
         >
           <Filters
-            metatypes={this.state.metatypes}
+            filters={this.state.filters}
             filterString={this.state.filterString}
             updateFilters={this.updateFilters}
           />
@@ -60,7 +61,7 @@ export class NodeSearch extends Component {
 // allow other components to access component's variables and methods
 const NodeSearchContext = React.createContext({});
 
-// metatype filter component
+// filter filter component
 // toggle buttons to specify which types of nodes to limit search to
 class Filters extends Component {
   // initialize component
@@ -69,80 +70,110 @@ class Filters extends Component {
 
     this.toggle = this.toggle.bind(this);
     this.solo = this.solo.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (
+      prevProps.metagraph.metanode_kinds === this.props.metagraph.metanode_kinds
+    )
+      return;
 
     // initialize filters
-    const metatypes = [];
+    let filters = [];
     const filterString = '';
 
-    for (const metatype of Metatypes.nodes)
-      metatypes.push({ name: metatype.name, active: true });
+    for (const filter of this.props.metagraph.metanode_kinds)
+      filters.push({ name: filter, active: true });
 
-    this.props.updateFilters(metatypes, filterString);
+    // display filters in custom order
+    const order = {
+      'Gene': 1,
+      'Compound': 2,
+      'Anatomy': 3,
+      'Disease': 4,
+      'Symptom': 5,
+      'Side Effect': 6,
+      'Biological Process': 7,
+      'Cellular Component': 8,
+      'Molecular Function': 9,
+      'Pathway': 10,
+      'Pharmacolocic Class': 11
+    };
+
+    filters = filters.sort((a, b) => {
+      if (order[a.name] && order[b.name])
+        return order[a.name] - order[b.name];
+      else if (order[a.name])
+        return -1;
+      else if (order[b.name])
+        return 1;
+      else
+        return b.name - a.name;
+    });
+
+    this.props.updateFilters(filters, filterString);
   }
 
   // checks whether all filters are active
   allOn() {
-    for (const metatype of this.props.metatypes) {
-      if (!metatype.active)
+    for (const filter of this.props.filters) {
+      if (!filter.active)
         return false;
     }
-
 
     return true;
   }
 
   // checks whether all filters besides the specified filter are off
   allOthersOff(type) {
-    for (const metatype of this.props.metatypes) {
-      if (type !== metatype.name && metatype.active)
+    for (const filter of this.props.filters) {
+      if (type !== filter.name && filter.active)
         return false;
     }
-
 
     return true;
   }
 
   // toggles the specified filters on/off
   toggle(type) {
-    const metatypes = this.props.metatypes;
+    const filters = this.props.filters;
 
-    for (const metatype of metatypes) {
-      if (metatype.name === type)
-        metatype.active = !metatype.active;
+    for (const filter of filters) {
+      if (filter.name === type)
+        filter.active = !filter.active;
     }
 
-
-    this.props.updateFilters(metatypes, this.toString(metatypes));
+    this.props.updateFilters(filters, this.toString(filters));
   }
 
   // solo' filter (turn all others off)
   solo(type) {
-    const metatypes = this.props.metatypes;
+    const filters = this.props.filters;
     const allOthersOff = this.allOthersOff(type);
 
-    for (const metatype of metatypes) {
+    for (const filter of filters) {
       if (allOthersOff)
-        metatype.active = true;
+        filter.active = true;
       else {
-        if (type === metatype.name)
-          metatype.active = true;
+        if (type === filter.name)
+          filter.active = true;
         else
-          metatype.active = false;
+          filter.active = false;
       }
     }
 
-    this.props.updateFilters(metatypes, this.toString(metatypes));
+    this.props.updateFilters(filters, this.toString(filters));
   }
 
-  // turn state of filters into string query list of metanode abbreviations
-  toString(metatypes) {
+  // turn state of filters into string query list of metanode metagraph
+  toString(filters) {
     if (this.allOn())
       return '';
 
     const list = [];
-    for (const metatype of metatypes) {
-      if (metatype.active)
-        list.push(Metatypes.lookup(metatype.name).abbreviation);
+    for (const filter of filters) {
+      if (filter.active)
+        list.push(this.props.metagraph.kind_to_abbrev[filter.name]);
     }
 
     return list.join(',');
@@ -151,26 +182,36 @@ class Filters extends Component {
   // display component
   render() {
     // make list of filter buttons
-    const buttons = this.props.metatypes.map((metatype, index) => (
-      <button
+    const buttons = this.props.filters.map((filter, index) => (
+      <Tooltip
         key={index}
-        className='node_search_filter_button'
-        data-active={metatype.active}
-        onClick={(event) => {
-          if (event.ctrlKey)
-            this.solo(metatype.name);
-          else
-            this.toggle(metatype.name);
-        }}
+        text={this.props.hetioDefinitions.metanodes[filter.name]}
       >
-        <MetanodeChip type={metatype.name} />
-        {metatype.name}
-      </button>
+        <button
+          className='node_search_filter_button'
+          data-active={filter.active}
+          onClick={(event) => {
+            if (event.ctrlKey)
+              this.solo(filter.name);
+            else
+              this.toggle(filter.name);
+          }}
+        >
+          <MetanodeChip type={filter.name} />
+          {filter.name}
+        </button>
+      </Tooltip>
     ));
 
     return <>{buttons}</>;
   }
 }
+// connect component to global state
+Filters = connect((state) => ({
+  metagraph: state.metagraph,
+  hetioDefinitions: state.hetioDefinitions
+}))(Filters);
+
 // source node search box component
 class SourceNodeSearch extends Component {
   // initialize component
@@ -190,6 +231,7 @@ class SourceNodeSearch extends Component {
     return (
       <SearchBox
         label='Source Node'
+        tooltipText='The starting node of the paths'
         value={this.props.node}
         onChange={this.onChange}
       />
@@ -212,7 +254,8 @@ class TargetNodeSearch extends Component {
   // when user makes a new node selection
   onChange(value) {
     this.props.dispatch(updateSourceTargetNodes({ targetNode: value }));
-    document.activeElement.blur();
+    if (value)
+      document.activeElement.blur();
   }
 
   // display component
@@ -220,6 +263,7 @@ class TargetNodeSearch extends Component {
     return (
       <SearchBox
         label='Target Node'
+        tooltipText='The ending node of the paths'
         value={this.props.node}
         onChange={this.onChange}
       />
@@ -281,7 +325,9 @@ class SearchBox extends Component {
         }) => (
           <div className='node_search_form' ref={this.formRef}>
             <span className='small light_text node_search_form_label'>
-              {this.props.label}
+              <Tooltip text={this.props.tooltipText}>
+                {this.props.label}
+              </Tooltip>
             </span>
             <TextBox
               inputRef={this.inputRef}
@@ -351,7 +397,7 @@ class TextBox extends Component {
       overlay = (
         <div className='node_search_field_overlay'>
           <MetanodeChip type={this.props.selectedItem.metanode} />
-          <span className='node_search_results_item_name'>
+          <span className='node_search_results_item_name nowrap'>
             {this.props.selectedItem.name}
           </span>
         </div>
@@ -379,6 +425,9 @@ class TextBox extends Component {
           onBlur={this.onBlur}
         />
         {overlay}
+        <div className='node_search_icon'>
+          <FontAwesomeIcon icon={faSearch} />
+        </div>
       </>
     );
   }
@@ -449,7 +498,9 @@ class SwapButton extends Component {
   render() {
     return (
       <button className='node_search_swap_button' onClick={this.onClick}>
-        <FontAwesomeIcon icon={faExchangeAlt} />
+        <Tooltip text='Swap source and target node'>
+          <FontAwesomeIcon icon={faExchangeAlt} />
+        </Tooltip>
       </button>
     );
   }

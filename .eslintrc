@@ -20,6 +20,7 @@
     "no-var": ["off"],
     "require-jsdoc": ["off"],
     "nonblock-statement-body-position": ["error", "below"],
+    "no-multiple-empty-lines": ["error", { "max": 1 }],
     "quotes": ["error", "single", { "avoidEscape": true }],
     "object-curly-spacing": ["error", "always"],
     "react/jsx-uses-vars": ["error"],

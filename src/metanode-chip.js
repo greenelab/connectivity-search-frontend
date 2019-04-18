@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
+import { connect } from 'react-redux';
 
-import { Metatypes } from './metatypes.js';
 import './metanode-chip.css';
 
 import { ReactComponent as ArrowBoth } from './arrow-icon-both.svg';
@@ -27,11 +27,9 @@ import { ReactComponent as Unknown } from './chip-unknown.svg';
 export class MetanodeChip extends Component {
   // display component
   render() {
-    const node = Metatypes.lookup(this.props.type);
-
     // get icon
     let icon;
-    switch (node.name) {
+    switch (this.props.type) {
       case 'Gene':
         icon = <Gene />;
         break;
@@ -93,15 +91,22 @@ export class MetaedgeChip extends Component {
         break;
     }
 
-    const node = Metatypes.lookup(this.props.type);
+    let abbreviation = '';
+    if (this.props.metagraph.kind_to_abbrev)
+      abbreviation = this.props.metagraph.kind_to_abbrev[this.props.type];
+
     return (
       <div
         className='metaedge_chip'
-        data-name={node.name}
-        data-abbreviation={node.abbreviation}
+        data-name={this.props.type}
+        data-abbreviation={abbreviation}
       >
         {icon}
       </div>
     );
   }
 }
+// connect component to global state
+MetaedgeChip = connect((state) => ({
+  metagraph: state.metagraph
+}))(MetaedgeChip);

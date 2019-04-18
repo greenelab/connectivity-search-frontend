@@ -7,15 +7,12 @@
   min-width: 100%;
   max-width: 100%;
   padding: 3px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  word-break: break-all;
-  word-break: break-word;
 }
-.dynamic_field[data-expanded='true'] {
-  overflow-y: auto;
-  white-space: normal;
+.dynamic_field[data-expanded='true'],
+.dynamic_field[data-expanded='true'] .nowrap {
+  overflow: unset !important;
+  white-space: normal !important;
+  text-overflow: unset !important;
 }
 .dynamic_field:hover {
   cursor: text;

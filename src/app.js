@@ -6,8 +6,12 @@ import { Header } from './header.js';
 import { NodeSearch } from './node-search.js';
 import { NodeResults } from './node-results.js';
 import { MetapathResults } from './metapath-results.js';
+import { getMetagraph } from './backend-query.js';
+import { getHetioDefinitions } from './backend-query.js';
+import { getHetmechDefinitions } from './backend-query.js';
 import { lookupNodeById } from './backend-query.js';
 import { searchMetapaths } from './backend-query.js';
+import { setDefinitions } from './actions.js';
 import { updateSourceTargetNodes } from './actions.js';
 import { updateMetapaths } from './actions.js';
 import './styles.css';
@@ -18,11 +22,14 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    this.fetchDefinitions = this.fetchDefinitions.bind(this);
     this.updateNodesFromUrl = this.updateNodesFromUrl.bind(this);
     this.updateMetapaths = this.updateMetapaths.bind(this);
     this.updateHistory = this.updateHistory.bind(this);
     this.updateTitle = this.updateTitle.bind(this);
 
+    // fetch definitions when page first loads
+    this.fetchDefinitions();
     // get parameters from url when page first loads
     this.updateNodesFromUrl();
     // listen for back/forward navigation (history)
@@ -36,6 +43,27 @@ class App extends Component {
       prevProps.targetNode !== this.props.targetNode
     )
       this.onNodeChange();
+  }
+
+  // get metagraph, hetio definitions, and hetmech definitions
+  fetchDefinitions() {
+    this.props.dispatch((dispatch) => {
+      // wait until all fetches return to update state
+      const promises = [
+        getMetagraph(),
+        getHetioDefinitions(),
+        getHetmechDefinitions()
+      ];
+      Promise.all(promises).then((results) => {
+        dispatch(
+          setDefinitions({
+            metagraph: results[0],
+            hetioDefinitions: results[1],
+            hetmechDefinitions: results[2]
+          })
+        );
+      });
+    });
   }
 
   // update source/target nodes from url

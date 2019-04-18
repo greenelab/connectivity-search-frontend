@@ -35,7 +35,7 @@ export class DynamicField extends Component {
   }
 
   // when field is focused (tabbed to, clicked, etc)
-  onFocus(event) {
+  onFocus() {
     this.setState({ focused: true }, this.selectAll);
   }
 
@@ -48,6 +48,7 @@ export class DynamicField extends Component {
   selectAll() {
     // set delay for select to make sure component has rendered
     window.setTimeout(function() {
+      window.getSelection().empty();
       window.getSelection().selectAllChildren(document.activeElement);
     }, 10);
   }
@@ -55,10 +56,16 @@ export class DynamicField extends Component {
   // display component
   render() {
     let displayValue;
+
+    // show full value if focused, or short value if not
     if (this.state.focused)
       displayValue = this.props.fullValue || this.props.value;
     else
       displayValue = this.props.value;
+
+    // if value just text, set 'nowrap' to truncate with ellipsis
+    if (typeof displayValue === 'string')
+      displayValue = <span className='nowrap'>{displayValue}</span>;
 
     return (
       <div

@@ -1,5 +1,21 @@
 // actions to update global state variables
 
+// set definitions
+export function setDefinitions({
+  metagraph,
+  hetioDefinitions,
+  hetmechDefinitions
+}) {
+  return {
+    type: 'set_definitions',
+    payload: {
+      metagraph: metagraph,
+      hetioDefinitions: hetioDefinitions,
+      hetmechDefinitions: hetmechDefinitions
+    }
+  };
+}
+
 // update source and/or target node
 export function updateSourceTargetNodes({ sourceNode, targetNode }) {
   return {
