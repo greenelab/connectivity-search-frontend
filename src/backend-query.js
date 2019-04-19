@@ -2,17 +2,17 @@
 import hetmechDefinitions from './definitions.json';
 // url for metagraph (node and edge metatypes and abbreviations)
 const metagraphUrl =
-  'https://raw.githubusercontent.com/hetio/hetionet/master/hetnet/json/hetionet-v1.0-metagraph.json';
+  'https://raw.githubusercontent.com/hetio/hetionet/0009918ab3ecfe15ef8aeb9437f117e72d96f668/hetnet/json/hetionet-v1.0-metagraph.json';
 // url for hetio definitions (metanodes, properties, etc)
 const hetioDefinitions =
-  'https://raw.githubusercontent.com/hetio/hetionet/master/describe/definitions.json';
+  'https://raw.githubusercontent.com/hetio/hetionet/84aa810d4af88befc0d96d49e325a5c1a77f5995/describe/definitions.json';
 // url for hetio styles (metanode fill/text color, etc)
 const hetioStyles =
-  'https://raw.githubusercontent.com/hetio/hetionet/master/describe/styles.json';
+  'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/describe/styles.json';
 // url for node search
 const nodeSearchServer = 'https://search-api.het.io/v1/nodes/';
-// url for paths search
-const pathSearchServer = 'https://search-api.het.io/v1/querypair/';
+// url for metapaths search
+const metapathSearchServer = 'https://search-api.het.io/v1/querypair/';
 
 // get resource at url and parse as json
 export function fetchJson(url) {
@@ -74,7 +74,7 @@ export function searchMetapaths(sourceId, targetId) {
   const params = new URLSearchParams();
   params.set('source', sourceId || '');
   params.set('target', targetId || '');
-  const query = pathSearchServer + '?' + params.toString();
+  const query = metapathSearchServer + '?' + params.toString();
   return fetchJson(query).then((results) => {
     return results.path_counts;
   });
