@@ -20,15 +20,12 @@ export class Tooltip extends Component {
     this.state.y = 0;
     this.state.opacity = 0;
 
-    // a surrounding element that acts as detection box for mouse hover
-    this.hitbox = React.createRef();
-
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.openTooltip = this.openTooltip.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
-  // when mouse enters hitbox
+  // when mouse enters target
   onMouseEnter(event) {
     const target = event.target;
     // delay opening tooltip
@@ -39,12 +36,12 @@ export class Tooltip extends Component {
 
   // open tooltip
   openTooltip(target) {
-    // if hitbox not being hovered anymore, cancel open
+    // if target not being hovered anymore, cancel open
     // if target not specified, exit
     if (!this.state.hover || !target)
       return;
 
-    // get x/y position of hitbox to pass to tooltip popup
+    // get x/y position of target to pass to tooltip popup
     const left = target.getBoundingClientRect().left;
     const top = target.getBoundingClientRect().top;
 
@@ -56,7 +53,7 @@ export class Tooltip extends Component {
     this.setState({ open: true, x: x, y: y });
   }
 
-  // when mouse leaves hitbox
+  // when mouse leaves target
   onMouseLeave() {
     this.setState({ hover: false, open: false });
   }
