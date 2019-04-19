@@ -196,7 +196,6 @@ class TableHead extends Component {
     // extra 'super-grouping' row at top of table
     const extraRow = (
       <tr>
-        <td className='col_xs' />
         <td className='col_l' />
         <td className='col_s' />
         <td className='col_m' />
