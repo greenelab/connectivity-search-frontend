@@ -10,14 +10,10 @@
   background: #000000;
   color: #fafafa;
   font-size: 0.75em;
-  transform: translate(0, -125%);
+  transform: translate(0, calc(-100% - 5px));
   user-select: none;
   pointer-events: none;
   transition: opacity 1s ease;
-}
-.tooltip_hitbox {
-  /* display: inline-block; */
-  z-index: 99999;
 }
 @media (hover: none) {
   .tooltip {
