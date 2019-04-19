@@ -2,10 +2,10 @@
 import hetmechDefinitions from './definitions.json';
 // url for metagraph (node and edge metatypes and abbreviations)
 const metagraphUrl =
-  'https://raw.githubusercontent.com/hetio/hetionet/0009918ab3ecfe15ef8aeb9437f117e72d96f668/hetnet/json/hetionet-v1.0-metagraph.json';
+  'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/hetnet/json/hetionet-v1.0-metagraph.json';
 // url for hetio definitions (metanodes, properties, etc)
 const hetioDefinitions =
-  'https://raw.githubusercontent.com/hetio/hetionet/84aa810d4af88befc0d96d49e325a5c1a77f5995/describe/definitions.json';
+  'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/describe/definitions.json';
 // url for hetio styles (metanode fill/text color, etc)
 const hetioStyles =
   'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/describe/styles.json';
