@@ -7,7 +7,7 @@
   cursor: pointer;
   background: #eeeeee;
 }
-.node_search_filter_button[data-active='false'] {
+.node_search_filter_button_off {
   opacity: 0.25;
   filter: saturate(0.5);
   text-decoration: line-through;
@@ -84,12 +84,11 @@
   pointer-events: none;
 }
 .node_search_swap_button {
-  display: block !important;
   width: 40px;
   height: 40px;
   background: #eeeeee;
   border-radius: 20px;
-  margin: 5px auto !important;
+  margin: 5px !important;
   padding: 0 !important;
 }
 .node_search_swap_button svg {

@@ -1,12 +1,12 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 import { MetanodeChip } from './metanode-chip.js';
 import { Tooltip } from './tooltip.js';
+import { TextButton } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
 
@@ -144,15 +144,12 @@ class TableFull extends Component {
     return (
       <tr>
         <td className='center' colSpan='2'>
-          <button
+          <TextButton
+            text={this.state.showExtraFields ? 'show less ' : 'show more '}
+            icon={this.state.showExtraFields ? faAngleUp : faAngleDown}
             className='link_button small'
             onClick={this.toggleShowExtraFields}
-          >
-            {this.state.showExtraFields ? 'show less ' : 'show more '}
-            <FontAwesomeIcon
-              icon={this.state.showExtraFields ? faAngleUp : faAngleDown}
-            />
-          </button>
+          />
         </td>
       </tr>
     );

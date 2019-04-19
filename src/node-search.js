@@ -12,6 +12,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { MetanodeChip } from './metanode-chip.js';
 import { Tooltip } from './tooltip.js';
+import { Button } from './buttons.js';
 import { searchNodes } from './backend-query.js';
 import { updateSourceTargetNodes } from './actions.js';
 import { swapSourceTargetNodes } from './actions.js';
@@ -115,8 +116,8 @@ class Filters extends Component {
   }
 
   // checks whether all filters are active
-  allOn() {
-    for (const filter of this.props.filters) {
+  allOn(filters) {
+    for (const filter of filters) {
       if (!filter.active)
         return false;
     }
@@ -125,8 +126,8 @@ class Filters extends Component {
   }
 
   // checks whether all filters besides the specified filter are off
-  allOthersOff(type) {
-    for (const filter of this.props.filters) {
+  allOthersOff(filters, type) {
+    for (const filter of filters) {
       if (type !== filter.name && filter.active)
         return false;
     }
@@ -136,7 +137,7 @@ class Filters extends Component {
 
   // toggles the specified filters on/off
   toggle(type) {
-    const filters = this.props.filters;
+    const filters = this.props.filters.slice();
 
     for (const filter of filters) {
       if (filter.name === type)
@@ -146,10 +147,10 @@ class Filters extends Component {
     this.props.updateFilters(filters, this.toString(filters));
   }
 
-  // solo' filter (turn all others off)
+  // solo filter (turn all others off)
   solo(type) {
-    const filters = this.props.filters;
-    const allOthersOff = this.allOthersOff(type);
+    const filters = this.props.filters.slice();
+    const allOthersOff = this.allOthersOff(filters, type);
 
     for (const filter of filters) {
       if (allOthersOff)
@@ -167,7 +168,7 @@ class Filters extends Component {
 
   // turn state of filters into string query list of metanode metagraph
   toString(filters) {
-    if (this.allOn())
+    if (this.allOn(filters))
       return '';
 
     const list = [];
@@ -183,24 +184,14 @@ class Filters extends Component {
   render() {
     // make list of filter buttons
     const buttons = this.props.filters.map((filter, index) => (
-      <Tooltip
+      <FilterButton
         key={index}
-        text={this.props.hetioDefinitions.metanodes[filter.name]}
-      >
-        <button
-          className='node_search_filter_button'
-          data-active={filter.active}
-          onClick={(event) => {
-            if (event.ctrlKey)
-              this.solo(filter.name);
-            else
-              this.toggle(filter.name);
-          }}
-        >
-          <MetanodeChip type={filter.name} />
-          {filter.name}
-        </button>
-      </Tooltip>
+        name={filter.name}
+        tooltipText={this.props.hetioDefinitions.metanodes[filter.name]}
+        active={filter.active}
+        toggle={this.toggle}
+        solo={this.solo}
+      />
     ));
 
     return <>{buttons}</>;
@@ -211,6 +202,27 @@ Filters = connect((state) => ({
   metagraph: state.metagraph,
   hetioDefinitions: state.hetioDefinitions
 }))(Filters);
+
+// filter button component
+class FilterButton extends Component {
+  // display component
+  render() {
+    return (
+      <Button
+        className={
+          'node_search_filter_button' +
+          (this.props.active ? '' : ' node_search_filter_button_off')
+        }
+        tooltipText={this.props.tooltipText}
+        onClick={() => this.props.toggle(this.props.name)}
+        onCtrlClick={() => this.props.solo(this.props.name)}
+      >
+        <MetanodeChip type={this.props.name} />
+        {this.props.name}
+      </Button>
+    );
+  }
+}
 
 // source node search box component
 class SourceNodeSearch extends Component {
@@ -497,11 +509,13 @@ class SwapButton extends Component {
   // display component
   render() {
     return (
-      <button className='node_search_swap_button' onClick={this.onClick}>
-        <Tooltip text='Swap source and target node'>
-          <FontAwesomeIcon icon={faExchangeAlt} />
-        </Tooltip>
-      </button>
+      <Button
+        tooltipText='Swap source and target node'
+        className='node_search_swap_button'
+        onClick={this.onClick}
+      >
+        <FontAwesomeIcon icon={faExchangeAlt} />
+      </Button>
     );
   }
 }

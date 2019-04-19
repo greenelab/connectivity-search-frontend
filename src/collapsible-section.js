@@ -4,8 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
+import { Button } from './buttons.js';
 import './collapsible-section.css';
-import { Tooltip } from './tooltip.js';
 
 // accordion (collapse/expand) section component
 export class CollapsibleSection extends Component {
@@ -28,17 +28,19 @@ export class CollapsibleSection extends Component {
   render() {
     return (
       <div
-        className={'collapsible_section ' + (this.props.className || '')}
+        className='collapsible_section'
         data-collapsed={this.state.collapsed}
       >
-        <Tooltip text={this.props.tooltipText}>
-          <button className='collapsible_section_header' onClick={this.toggle}>
-            <div>{this.props.label}</div>
-            <FontAwesomeIcon
-              icon={this.state.collapsed ? faAngleDown : faAngleUp}
-            />
-          </button>
-        </Tooltip>
+        <Button
+          tooltipText={this.props.tooltipText}
+          className='collapsible_section_header'
+          onClick={this.toggle}
+        >
+          <div>{this.props.label}</div>
+          <FontAwesomeIcon
+            icon={this.state.collapsed ? faAngleUp : faAngleDown}
+          />
+        </Button>
         {this.props.children}
       </div>
     );
