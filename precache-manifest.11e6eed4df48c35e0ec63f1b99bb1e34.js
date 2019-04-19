@@ -4,8 +4,8 @@ self.__precacheManifest = [
     "url": "./static/media/chip-anatomy.2e979b7d.svg"
   },
   {
-    "revision": "0540b52c94ceff73bf53",
-    "url": "./static/css/main.775f7822.chunk.css"
+    "revision": "1dfc5412131a2d08316a",
+    "url": "./static/css/main.a8f79278.chunk.css"
   },
   {
     "revision": "8c97409f0ee389fe75da",
@@ -40,8 +40,8 @@ self.__precacheManifest = [
     "url": "./static/media/chip-compound.ff2ff641.svg"
   },
   {
-    "revision": "0540b52c94ceff73bf53",
-    "url": "./static/js/main.a4320c72.chunk.js"
+    "revision": "1dfc5412131a2d08316a",
+    "url": "./static/js/main.34f56a89.chunk.js"
   },
   {
     "revision": "0e4f9ac4de385e3aeb06aab4d627ae7b",
@@ -80,7 +80,7 @@ self.__precacheManifest = [
     "url": "./static/media/chip-unknown.513cf530.svg"
   },
   {
-    "revision": "05d52f3b24de523271700611ab1c1aea",
+    "revision": "1b896d87f9e1a049a607d7aa695461eb",
     "url": "./index.html"
   }
 ];
