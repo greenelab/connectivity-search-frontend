@@ -1,5 +1,6 @@
 .metanode_chip {
   display: inline-flex;
+  position: relative;
   width: 20px;
   height: 20px;
   min-width: 20px;
@@ -12,6 +13,9 @@
   align-items: center;
 }
 .metanode_chip > svg {
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 20px;
   height: 20px;
 }

@@ -6,6 +6,9 @@ const metagraphUrl =
 // url for hetio definitions (metanodes, properties, etc)
 const hetioDefinitions =
   'https://raw.githubusercontent.com/hetio/hetionet/master/describe/definitions.json';
+// url for hetio styles (metanode fill/text color, etc)
+const hetioStyles =
+  'https://raw.githubusercontent.com/hetio/hetionet/master/describe/styles.json';
 // url for node search
 const nodeSearchServer = 'https://search-api.het.io/v1/nodes/';
 // url for paths search
@@ -32,6 +35,11 @@ export function getMetagraph() {
 // get hetio definitions
 export function getHetioDefinitions() {
   return fetchJson(hetioDefinitions);
+}
+
+// get hetio styles
+export function getHetioStyles() {
+  return fetchJson(hetioStyles);
 }
 
 // get hetmech definitions

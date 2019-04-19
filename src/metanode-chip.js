@@ -19,7 +19,6 @@ import { ReactComponent as CellularComponent } from './chip-cellular-component.s
 import { ReactComponent as MolecularFunction } from './chip-molecular-function.svg';
 import { ReactComponent as Pathway } from './chip-pathway.svg';
 import { ReactComponent as PharmacologicClass } from './chip-pharmacologic-class.svg';
-import { ReactComponent as Unknown } from './chip-unknown.svg';
 
 // metanode 'chip' component
 // colored circle with abbreviation text in middle
@@ -64,13 +63,31 @@ export class MetanodeChip extends Component {
         icon = <PharmacologicClass />;
         break;
       default:
-        icon = <Unknown />;
         break;
     }
 
-    return <div className='metanode_chip'>{icon}</div>;
+    let fillColor = '#424242';
+    let textColor = '#fafafa';
+    const style = this.props.hetioStyles[this.props.type];
+    if (style && style.fill_color)
+      fillColor = style.fill_color;
+    if (style && style.text_color)
+      textColor = style.text_color;
+
+    return (
+      <div className='metanode_chip' style={{ color: textColor }}>
+        <svg viewBox='0 0 100 100'>
+          <circle cx='50' cy='50' r='49' fill={fillColor} />
+        </svg>
+        {icon}
+      </div>
+    );
   }
 }
+// connect component to global state
+MetanodeChip = connect((state) => ({
+  hetioStyles: state.hetioStyles
+}))(MetanodeChip);
 
 // metaedge 'chip' component
 // svg arrow with abbreviation text above

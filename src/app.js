@@ -9,6 +9,7 @@ import { MetapathResults } from './metapath-results.js';
 import { getMetagraph } from './backend-query.js';
 import { getHetioDefinitions } from './backend-query.js';
 import { getHetmechDefinitions } from './backend-query.js';
+import { getHetioStyles } from './backend-query.js';
 import { lookupNodeById } from './backend-query.js';
 import { searchMetapaths } from './backend-query.js';
 import { setDefinitions } from './actions.js';
@@ -52,6 +53,7 @@ class App extends Component {
       const promises = [
         getMetagraph(),
         getHetioDefinitions(),
+        getHetioStyles(),
         getHetmechDefinitions()
       ];
       Promise.all(promises).then((results) => {
@@ -59,7 +61,8 @@ class App extends Component {
           setDefinitions({
             metagraph: results[0],
             hetioDefinitions: results[1],
-            hetmechDefinitions: results[2]
+            hetioStyles: results[2],
+            hetmechDefinitions: results[3]
           })
         );
       });
