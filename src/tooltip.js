@@ -6,7 +6,7 @@ import Fade from '@material-ui/core/Fade';
 import './tooltip.css';
 
 // open delay in ms
-const delay = 500;
+const delay = 1000;
 
 // tooltip (helper text) popup component
 export class Tooltip extends Component {
@@ -20,60 +20,68 @@ export class Tooltip extends Component {
     this.state.y = 0;
     this.state.opacity = 0;
 
-    // a surrounding element that acts as detection box for mouse hover
-    this.hitbox = React.createRef();
-
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.openTooltip = this.openTooltip.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
-  // when mouse enters hitbox
-  onMouseEnter() {
+  // when mouse enters target
+  onMouseEnter(event) {
+    const target = event.target;
     // delay opening tooltip
-    window.setTimeout(this.openTooltip, delay);
+    window.setTimeout(() => this.openTooltip(target), delay);
     // track hover state
     this.setState({ hover: true });
   }
 
   // open tooltip
-  openTooltip() {
-    // if hitbox not being hovered anymore, cancel open
-    if (!this.state.hover)
+  openTooltip(target) {
+    // if target not being hovered anymore, cancel open
+    // if target not specified, exit
+    if (!this.state.hover || !target)
       return;
 
-    // get x/y position of hitbox to pass to tooltip popup
-    const left = this.hitbox.current.getBoundingClientRect().left;
-    const top = this.hitbox.current.getBoundingClientRect().top;
-
-    let x = left;
-    const y = top;
+    // get x/y position of target to pass to tooltip popup
+    const left = target.getBoundingClientRect().left;
+    const top = target.getBoundingClientRect().top;
 
     // avoid scrunching tooltip too skinny when close to right side of view
-    if (x > window.innerWidth - 200)
-      x = window.innerWidth - 200;
+    const x = Math.min(left, window.innerWidth - 200);
+    const y = top;
 
     // open tooltip and update x/y position
     this.setState({ open: true, x: x, y: y });
   }
 
-  // when mouse leaves hitbox
+  // when mouse leaves target
   onMouseLeave() {
     this.setState({ hover: false, open: false });
   }
 
   // display component
   render() {
+    // mouse handler props to attach to children
+    const props = {
+      onMouseEnter: this.onMouseEnter,
+      onMouseLeave: this.onMouseLeave
+    };
+
+    // attach handler props to children
+    const children = React.Children.map(this.props.children, (element) => {
+      // if element is react element, create clone with attached props
+      if (React.isValidElement(element))
+        return React.cloneElement(element, props);
+      // if element is text node, wrap in span and attach props
+      else if (typeof element === 'string')
+        return <span {...props}>{element}</span>;
+      // otherwise, pass element through untouched
+      else
+        return element;
+    });
+
     return (
       <>
-        <span
-          ref={this.hitbox}
-          className='tooltip_hitbox'
-          onMouseEnter={this.onMouseEnter}
-          onMouseLeave={this.onMouseLeave}
-        >
-          {this.props.children}
-        </span>
+        {children}
         {this.state.open && this.props.text && (
           <Popup
             text={this.props.text}
