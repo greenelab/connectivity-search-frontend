@@ -362,7 +362,6 @@ class TableBody extends Component {
           <TableBodyRow
             key={index}
             metapath={metapath}
-            checked={metapath.checked}
             showExtraColumns={this.props.showExtraColumns}
           />
         ))}
