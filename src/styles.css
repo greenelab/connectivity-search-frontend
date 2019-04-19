@@ -63,32 +63,6 @@ sup {
   top: -2px;
   position: relative;
 }
-button {
-  box-sizing: border-box;
-  display: inline-flex;
-  justify-content: center;
-  align-items: center;
-  background: #e1f6fc;
-  color: unset;
-  border: none;
-  padding: 5px;
-  font-size: 1em;
-  user-select: none;
-  transition: background 0.1s ease;
-}
-button:hover {
-  background: #b3e8f7;
-  cursor: pointer;
-}
-.link_button {
-  display: inline;
-  background: none;
-  color: #02b3e4;
-  margin: 5px 0;
-}
-.link_button:hover {
-  background: #e1f6fc;
-}
 textarea {
   font-size: 1em;
 }

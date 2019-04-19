@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faSort } from '@fortawesome/free-solid-svg-icons';
@@ -10,8 +11,8 @@ import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 
 import { MetanodeChip } from './metanode-chip.js';
 import { MetaedgeChip } from './metanode-chip.js';
-import { DownloadCsv } from './download-metapaths.js';
-import { Tooltip } from './tooltip.js';
+import { Button } from './buttons.js';
+import { TextButton } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
 import './metapath-results.css';
@@ -26,7 +27,6 @@ export class MetapathResults extends Component {
         <CollapsibleSection
           label='Metapaths'
           tooltipText='Metapath results with p-value <= 0.1'
-          className='right'
         >
           {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
         </CollapsibleSection>
@@ -52,6 +52,7 @@ class TableFull extends Component {
 
     this.toggleShowExtraColumns = this.toggleShowExtraColumns.bind(this);
     this.changeSort = this.changeSort.bind(this);
+    this.downloadCsv = this.downloadCsv.bind(this);
   }
 
   // toggle show/hide extra columns
@@ -111,45 +112,38 @@ class TableFull extends Component {
     }
   }
 
-  // display download buttons
-  downloadButtons() {
-    return (
-      <>
-        <DownloadCsv />
-      </>
-    );
-  }
+  downloadCsv() {
+    if (
+      !this.props.metapaths.length ||
+      !this.props.sourceNode.name ||
+      !this.props.targetNode.name
+    )
+      return;
 
-  // display show more/less button
-  showMoreLessButton() {
-    return (
-      <button
-        className='link_button small'
-        onClick={this.toggleShowExtraColumns}
-      >
-        {this.state.showExtraColumns ? 'show less ' : 'show more '}
-        <FontAwesomeIcon
-          icon={this.state.showExtraColumns ? faAngleLeft : faAngleRight}
-        />
-      </button>
-    );
+    const tableData = makeMetapathsTable(this.props.metapaths);
+    const filename = [
+      'metapaths',
+      makeFilenameFriendly(this.props.sourceNode.name),
+      makeFilenameFriendly(this.props.targetNode.name)
+    ].join('_');
+    downloadCsv(tableData, filename);
   }
 
   // display component
   render() {
     // sort metapaths by specified column
-    const metapaths = this.props.metapaths;
+    const sortedMetapaths = this.props.metapaths;
     const sortColumn = this.state.sortColumn;
 
     // sort by appropriate field
     if (sortColumn === 'metaedges')
-      metapaths.sort((a, b) => this.compareMetapaths(a, b, sortColumn));
+      sortedMetapaths.sort((a, b) => this.compareMetapaths(a, b, sortColumn));
     else
-      metapaths.sort((a, b) => this.compareNumbers(a, b, sortColumn));
+      sortedMetapaths.sort((a, b) => this.compareNumbers(a, b, sortColumn));
 
     // reverse sort direction
     if (this.state.sortUp)
-      metapaths.reverse();
+      sortedMetapaths.reverse();
 
     return (
       <TableContext.Provider
@@ -160,15 +154,25 @@ class TableFull extends Component {
           changeSort: this.changeSort
         }}
       >
-        {this.downloadButtons()}
-        {this.showMoreLessButton()}
+        <TextButton
+          text='.csv'
+          icon={faDownload}
+          className='link_button small'
+          onClick={this.downloadCsv}
+        />
+        <TextButton
+          text={this.state.showExtraColumns ? 'show less ' : 'show more '}
+          icon={this.state.showExtraColumns ? faAngleLeft : faAngleRight}
+          className='link_button small'
+          onClick={this.toggleShowExtraColumns}
+        />
         <div
           className='table_container'
           data-expanded={this.state.showExtraColumns}
         >
           <table className='metapath_results_table'>
             <TableHead />
-            <TableBody sortedMetapaths={metapaths} />
+            <TableBody sortedMetapaths={sortedMetapaths} />
           </table>
         </div>
       </TableContext.Provider>
@@ -310,11 +314,11 @@ class TableHeadCell extends Component {
     return (
       <td className={this.props.className}>
         <SortButton
+          text={this.props.text}
+          tooltipText={this.props.tooltipText}
           fieldName={this.props.fieldName}
           className={this.props.buttonClass}
-        >
-          <Tooltip text={this.props.tooltipText}>{this.props.text}</Tooltip>
-        </SortButton>
+        />
       </td>
     );
   }
@@ -325,11 +329,12 @@ class SortButton extends Component {
   // display component
   render() {
     return (
-      <button
+      <Button
+        tooltipText={this.props.tooltipText}
         className={'sort_button ' + (this.props.className || '')}
         onClick={() => this.context.changeSort(this.props.fieldName)}
       >
-        {this.props.children}
+        {this.props.text}
         <FontAwesomeIcon
           icon={
             this.props.fieldName === this.context.sortColumn
@@ -339,7 +344,7 @@ class SortButton extends Component {
               : faSort
           }
         />
-      </button>
+      </Button>
     );
   }
 }
@@ -353,10 +358,10 @@ class TableBody extends Component {
   render() {
     return (
       <tbody>
-        {this.props.sortedMetapaths.map((node, index) => (
+        {this.props.sortedMetapaths.map((metapath, index) => (
           <TableBodyRow
             key={index}
-            node={node}
+            metapath={metapath}
             showExtraColumns={this.props.showExtraColumns}
           />
         ))}
@@ -366,13 +371,17 @@ class TableBody extends Component {
 }
 // connect component to context component
 TableBody.contextType = TableContext;
+// connect component to global state
+TableBody = connect((state) => ({
+  metapaths: state.metapaths
+}))(TableBody);
 
 // table body row component
 // contains column data for one metapath
 class TableBodyRow extends Component {
   // display component
   render() {
-    const node = this.props.node;
+    const metapath = this.props.metapath;
 
     // primary columns
     const cols = (
@@ -380,15 +389,15 @@ class TableBodyRow extends Component {
         <TableBodyCell
           className='left'
           fieldClass='left'
-          value={metapathChips(node.metaedges)}
-          fullValue={node.metapath_name}
+          value={metapathChips(metapath.metaedges)}
+          fullValue={metapath.metapath_name}
         />
-        <TableBodyCell value={node.path_count} />
+        <TableBodyCell value={metapath.path_count} />
         <TableBodyCell
           className='right'
-          style={{ backgroundColor: toGradient(node.p_value) }}
-          value={toExponential(node.p_value)}
-          fullValue={node.p_value}
+          style={{ backgroundColor: toGradient(metapath.p_value) }}
+          value={toExponential(metapath.p_value)}
+          fullValue={metapath.p_value}
         />
       </>
     );
@@ -396,18 +405,21 @@ class TableBodyRow extends Component {
     // extra columns
     const extraCols = (
       <>
-        <TableBodyCell value={toFixed(node.dwpc)} fullValue={node.dwpc} />
-        <TableBodyCell value={node.source_degree} />
-        <TableBodyCell value={node.target_degree} />
-        <TableBodyCell value={node.n_dwpcs} />
-        <TableBodyCell value={node.n_nonzero_dwpcs} />
         <TableBodyCell
-          value={toFixed(node.nonzero_mean)}
-          fullValue={node.nonzero_mean}
+          value={toFixed(metapath.dwpc)}
+          fullValue={metapath.dwpc}
+        />
+        <TableBodyCell value={metapath.source_degree} />
+        <TableBodyCell value={metapath.target_degree} />
+        <TableBodyCell value={metapath.n_dwpcs} />
+        <TableBodyCell value={metapath.n_nonzero_dwpcs} />
+        <TableBodyCell
+          value={toFixed(metapath.nonzero_mean)}
+          fullValue={metapath.nonzero_mean}
         />
         <TableBodyCell
-          value={toFixed(node.nonzero_sd)}
-          fullValue={node.nonzero_sd}
+          value={toFixed(metapath.nonzero_sd)}
+          fullValue={metapath.nonzero_sd}
         />
       </>
     );
@@ -554,4 +566,79 @@ function toGradient(number) {
 
   // return color
   return color || '#ffffff';
+}
+
+// make table array out of metapaths results object
+function makeMetapathsTable(metapaths) {
+  let headers = [];
+  for (const field of Object.keys(metapaths[0])) {
+    if (
+      typeof metapaths[0][field] === 'number' ||
+      typeof metapaths[0][field] === 'string'
+    )
+      headers.push(field);
+  }
+
+  // sort headers in custom order
+  const order = {
+    id: 1,
+    metapath_name: 2,
+    metapath_abbreviation: 3,
+    path_count: 4,
+    p_value: 5,
+    dwpc: 6,
+    source_degree: 7,
+    target_degree: 8,
+    n_dwpcs: 9,
+    n_nonzero_dwpcs: 10,
+    nonzero_mean: 11,
+    nonzero_sd: 12
+  };
+  headers = headers.sort((a, b) => {
+    if (order[a] && order[b])
+      return order[a] - order[b];
+    else if (order[a])
+      return -1;
+    else if (order[b])
+      return 1;
+    else
+      return b - a;
+  });
+
+  const table = [];
+  table.push(headers);
+  for (const result of metapaths) {
+    const row = [];
+    for (const header of headers)
+      row.push(result[header]);
+    table.push(row);
+  }
+
+  return table;
+}
+
+// downloads provided data as csv file
+// data in format [ [A1, B1] , [A2, B2] ]
+function downloadCsv(data, filename) {
+  const fileContent = data.map((cell) => cell.join(',')).join('\n');
+  const blob = new Blob([fileContent], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  document.body.appendChild(link);
+  link.href = url;
+  link.download = (filename || 'data') + '.csv';
+  link.click();
+  window.URL.revokeObjectURL(url);
+  link.remove();
+}
+
+// make OS-friendly filename
+function makeFilenameFriendly(string) {
+  // remove leading and trailing whitespace
+  string = string.trim();
+  // replace special characters with dashes
+  string = string.replace(/[^0-9A-Za-z]/gi, '-');
+  // shorten if too long
+  string = string.substring(0, 15);
+  return string;
 }
