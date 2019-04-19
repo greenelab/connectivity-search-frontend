@@ -4,6 +4,7 @@
 export function setDefinitions({
   metagraph,
   hetioDefinitions,
+  hetioStyles,
   hetmechDefinitions
 }) {
   return {
@@ -11,6 +12,7 @@ export function setDefinitions({
     payload: {
       metagraph: metagraph,
       hetioDefinitions: hetioDefinitions,
+      hetioStyles: hetioStyles,
       hetmechDefinitions: hetmechDefinitions
     }
   };

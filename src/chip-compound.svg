@@ -1,13 +1,12 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
-  <circle cx="50" cy="50" r="49" fill="#e91e63"></circle>
   <path
-    transform="translate(50,50) scale(0.45) translate(-50,-50)"
     fill="none"
-    stroke="#fafafa"
+    stroke="currentColor"
     stroke-width="20"
+    transform="translate(50,50) scale(0.5) translate(-50,-50)"
     d="
-      M 85.355339059 14.644660941
-      A 50 50 0 1 0 85.355339059 85.355339059
+      M 78.2842706364495 21.7157281415257
+      A 40 40 0 1 0 78.2842755245486 78.2842669703746
     "
   ></path>
 </svg>

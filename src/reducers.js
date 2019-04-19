@@ -11,6 +11,8 @@ export function Reducer(previousState = {}, action) {
         newState.metagraph = action.payload.metagraph;
       if (action.payload.hetioDefinitions !== undefined)
         newState.hetioDefinitions = action.payload.hetioDefinitions;
+      if (action.payload.hetioStyles !== undefined)
+        newState.hetioStyles = action.payload.hetioStyles;
       if (action.payload.hetmechDefinitions !== undefined)
         newState.hetmechDefinitions = action.payload.hetmechDefinitions;
       break;
@@ -46,6 +48,8 @@ export function Reducer(previousState = {}, action) {
     newState.metagraph = {};
   if (!newState.hetioDefinitions)
     newState.hetioDefinitions = {};
+  if (!newState.hetioStyles)
+    newState.hetioStyles = {};
   if (!newState.hetmechDefinitions)
     newState.hetmechDefinitions = {};
   if (!newState.sourceNode)
