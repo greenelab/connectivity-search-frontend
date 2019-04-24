@@ -12,7 +12,7 @@ const hetioStyles =
 // url for node search
 const nodeSearchServer = 'https://search-api.het.io/v1/nodes/';
 // url for metapaths search
-const metapathSearchServer = 'https://search-api.het.io/v1/querypair/';
+const metapathSearchServer = 'https://search-api.het.io/v1/query-metapaths/';
 
 // get resource at url and parse as json
 export function fetchJson(url) {
