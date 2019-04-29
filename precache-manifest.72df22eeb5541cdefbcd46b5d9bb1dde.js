@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "./static/media/chip-anatomy.b055d214.svg"
   },
   {
-    "revision": "c23c0392a2cda79b6906",
+    "revision": "3b35ea9e9d33a3df0348",
     "url": "./static/css/main.a8bdcded.chunk.css"
   },
   {
@@ -40,8 +40,8 @@ self.__precacheManifest = [
     "url": "./static/media/chip-compound.90909a37.svg"
   },
   {
-    "revision": "c23c0392a2cda79b6906",
-    "url": "./static/js/main.6a3772a6.chunk.js"
+    "revision": "3b35ea9e9d33a3df0348",
+    "url": "./static/js/main.24cc67f5.chunk.js"
   },
   {
     "revision": "1a26261b63fd2e2cc6cd68ea8a9ad59e",
@@ -76,7 +76,7 @@ self.__precacheManifest = [
     "url": "./static/media/chip-pharmacologic-class.b1fbdc49.svg"
   },
   {
-    "revision": "1dde831cd966ef3f31875a3386b49ba5",
+    "revision": "41fc641666bc14bbed8c1313cb2d7138",
     "url": "./index.html"
   }
 ];
