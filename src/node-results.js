@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
-import { MetanodeChip } from './metanode-chip.js';
+import { MetanodeChip } from './chips.js';
 import { Tooltip } from './tooltip.js';
 import { TextButton } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';

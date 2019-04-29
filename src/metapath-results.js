@@ -9,7 +9,7 @@ import { faSort } from '@fortawesome/free-solid-svg-icons';
 import { faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 
-import { metapathChips } from './metanode-chip.js';
+import { metapathChips } from './chips.js';
 import { Button } from './buttons.js';
 import { TextButton } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
@@ -19,9 +19,7 @@ import { downloadCsv } from './util.js';
 import { toFixed } from './util.js';
 import { toExponential } from './util.js';
 import { toGradient } from './util.js';
-import { updateMetapaths } from './actions.js';
 import './metapath-results.css';
-import './metanode-chip.css';
 
 // path results section component
 export class MetapathResults extends Component {

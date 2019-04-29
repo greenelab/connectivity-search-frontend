@@ -10,7 +10,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-import { MetanodeChip } from './metanode-chip.js';
+import { MetanodeChip } from './chips.js';
 import { Tooltip } from './tooltip.js';
 import { Button } from './buttons.js';
 import { searchNodes } from './backend-query.js';
