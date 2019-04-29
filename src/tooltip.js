@@ -42,8 +42,10 @@ export class Tooltip extends Component {
       return;
 
     // get x/y position of target to pass to tooltip popup
-    const left = target.getBoundingClientRect().left;
-    const top = target.getBoundingClientRect().top;
+    const left =
+      target.getBoundingClientRect().left + document.documentElement.scrollLeft;
+    const top =
+      target.getBoundingClientRect().top + document.documentElement.scrollTop;
 
     // avoid scrunching tooltip too skinny when close to right side of view
     const x = Math.min(left, window.innerWidth - 200);
@@ -60,6 +62,10 @@ export class Tooltip extends Component {
 
   // display component
   render() {
+    // if no specified text, skip attaching events and render
+    if (!this.props.text)
+      return <>{this.props.children}</>;
+
     // mouse handler props to attach to children
     const props = {
       onMouseEnter: this.onMouseEnter,

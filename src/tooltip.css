@@ -3,7 +3,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  position: fixed;
+  position: absolute;
   max-width: 320px;
   min-height: 30px;
   padding: 5px;
@@ -13,6 +13,7 @@
   transform: translate(0, calc(-100% - 5px));
   user-select: none;
   pointer-events: none;
+  z-index: 99999;
   transition: opacity 1s ease;
 }
 @media (hover: none) {
