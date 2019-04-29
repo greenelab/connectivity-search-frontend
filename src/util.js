@@ -141,5 +141,4 @@ export function debug(...args) {
   }
   div.innerHTML += args.join(' | ');
   div.innerHTML += '<br>';
-  document.body.appendChild(div);
 }
