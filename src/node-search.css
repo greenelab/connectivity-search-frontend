@@ -64,12 +64,13 @@
 .node_search_field:after {
   border-bottom-color: #00bcd4 !important;
 }
-.node_search_input {
+.node_search_input, .node_search_input_blank {
   padding: 10px !important;
   padding-right: 35px !important;
 }
 .node_search_input_blank {
-  color: transparent !important;
+  color: #eeeeee !important;
+  overflow: hidden;
 }
 .node_search_icon {
   display: flex;
