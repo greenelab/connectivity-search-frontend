@@ -3,7 +3,7 @@
 @import url('https://fonts.googleapis.com/css?family=Work+Sans:400,500,700');
 
 * {
-  font-family: 'Montserrat', 'Raleway', sans-serif !important;
+  font-family: 'Montserrat', 'Raleway', sans-serif;
 }
 body {
   box-sizing: border-box;
@@ -16,6 +16,7 @@ body {
 }
 input {
   color: #424242 !important;
+  font-family: 'Montserrat', 'Raleway', sans-serif !important;
 }
 #root {
   box-sizing: border-box;
@@ -111,13 +112,16 @@ textarea {
   margin-left: 10px;
 }
 .table_container {
+  text-align: center;
   box-sizing: border-box;
-  overflow-x: auto;
+  max-height: 50vh;
+  overflow: auto;
+  border: solid #eeeeee 1px;
 }
-@media screen and (min-width: 680px) {
+@media screen and (min-width: 320px) {
   .table_container[data-expanded='true'] {
-    width: 1050px;
-    max-width: calc(100vw - 20px - 20px);
+    overflow-x: auto;
+    width: calc(100vw - 20px - 20px);
     position: relative;
     left: 50%;
     transform: translateX(-50%);
@@ -127,6 +131,13 @@ table {
   border-collapse: collapse;
   width: 100%;
   table-layout: fixed;
+  margin: 0 auto;
+}
+table thead td {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background: #fafafa;
 }
 td {
   box-sizing: border-box;
@@ -135,6 +146,9 @@ td {
 }
 td > * {
   vertical-align: middle;
+}
+.col_xs {
+  width: 30px;
 }
 .col_s {
   width: 75px;
@@ -146,5 +160,8 @@ td > * {
   width: 200px;
 }
 .col_xl {
+  width: 300px;
+}
+.col_xxl {
   width: 450px;
 }
