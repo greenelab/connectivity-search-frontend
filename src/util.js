@@ -138,6 +138,7 @@ export function debug(...args) {
     div.style.fontSize = '10px';
     div.style.color = '#ff00ff';
     div.style.zIndex = 99999;
+    document.body.appendChild(div);
   }
   div.innerHTML += args.join(' | ');
   div.innerHTML += '<br>';
