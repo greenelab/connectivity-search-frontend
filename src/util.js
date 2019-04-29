@@ -14,10 +14,7 @@ export function toExponential(number) {
 
 // get html of number in regular form, rounded to 1 decimal digit
 export function toFixed(number) {
-  number = parseFloat(number).toFixed(1);
-  if (!number)
-    return <span>NaN</span>;
-  return <span>{number}</span>;
+  return <span>{parseFloat(number).toFixed(1)}</span>;
 }
 
 // map number to css color (rgba or hex) based on specified gradient
