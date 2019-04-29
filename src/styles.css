@@ -90,7 +90,7 @@ textarea {
 .small {
   font-size: 0.75em;
 }
-.light_text {
+.light {
   color: #757575;
 }
 .divider {
@@ -110,6 +110,14 @@ textarea {
 }
 .divider:after {
   margin-left: 10px;
+}
+.table_attic {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.table_attic > div:last-child {
+  flex-grow: 1;
 }
 .table_container {
   text-align: center;

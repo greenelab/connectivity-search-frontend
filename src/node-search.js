@@ -336,7 +336,7 @@ class SearchBox extends Component {
           clearSelection
         }) => (
           <div className='node_search_form' ref={this.formRef}>
-            <span className='small light_text node_search_form_label'>
+            <span className='small light node_search_form_label'>
               <Tooltip text={this.props.tooltipText}>
                 {this.props.label}
               </Tooltip>

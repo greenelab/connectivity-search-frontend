@@ -127,3 +127,19 @@ export class MetaedgeChip extends Component {
 MetaedgeChip = connect((state) => ({
   metagraph: state.metagraph
 }))(MetaedgeChip);
+
+// get html of metapath in form of visualization chips
+export function metapathChips(edges) {
+  const path = edges.map((entry, index) => {
+    return (
+      <React.Fragment key={index}>
+        <MetanodeChip type={entry[0]} />
+        <MetaedgeChip type={entry[2]} direction={entry[3]} />
+        {index === edges.length - 1 && <MetanodeChip type={entry[1]} />}
+      </React.Fragment>
+    );
+  });
+
+  return path;
+}
+
