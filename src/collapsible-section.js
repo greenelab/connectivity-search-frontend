@@ -30,10 +30,7 @@ export class CollapsibleSection extends Component {
   // load collapsed state from local storage if exists
   loadState() {
     const key = this.props.label;
-    if (key && window.localStorage.getItem(key) === 'true')
-      return true;
-    else
-      return false;
+    return key && window.localStorage.getItem(key) === 'true';
   }
 
   // save collapse state to local storage
