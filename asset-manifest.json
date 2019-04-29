@@ -1,5 +1,5 @@
 {
-  "main.css": "./static/css/main.74f1b937.chunk.css",
+  "main.css": "./static/css/main.be313484.chunk.css",
   "main.js": "./static/js/main.f9c2ea4d.chunk.js",
   "main.js.map": "./static/js/main.f9c2ea4d.chunk.js.map",
   "runtime~main.js": "./static/js/runtime~main.d653cc00.js",
@@ -7,9 +7,9 @@
   "static/js/2.04349a4b.chunk.js": "./static/js/2.04349a4b.chunk.js",
   "static/js/2.04349a4b.chunk.js.map": "./static/js/2.04349a4b.chunk.js.map",
   "index.html": "./index.html",
-  "precache-manifest.e1f5b4ef73643bba96d3834f2ffbb8db.js": "./precache-manifest.e1f5b4ef73643bba96d3834f2ffbb8db.js",
+  "precache-manifest.1f19a86ad3ed0ef0f82ceeefbb7aac96.js": "./precache-manifest.1f19a86ad3ed0ef0f82ceeefbb7aac96.js",
   "service-worker.js": "./service-worker.js",
-  "static/css/main.74f1b937.chunk.css.map": "./static/css/main.74f1b937.chunk.css.map",
+  "static/css/main.be313484.chunk.css.map": "./static/css/main.be313484.chunk.css.map",
   "static/media/arrow-icon-backward.c6a85500.svg": "./static/media/arrow-icon-backward.c6a85500.svg",
   "static/media/arrow-icon-both.5f01d574.svg": "./static/media/arrow-icon-both.5f01d574.svg",
   "static/media/arrow-icon-forward.43aa27a1.svg": "./static/media/arrow-icon-forward.43aa27a1.svg",
