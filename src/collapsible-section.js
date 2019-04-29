@@ -10,18 +10,43 @@ import './collapsible-section.css';
 // accordion (collapse/expand) section component
 export class CollapsibleSection extends Component {
   // initialize component
-  constructor(props) {
+  constructor() {
     super();
 
     this.state = {};
     this.state.collapsed = false;
 
+    this.loadState = this.loadState.bind(this);
+    this.saveState = this.saveState.bind(this);
     this.toggle = this.toggle.bind(this);
+  }
+
+  // when component mounts
+  componentDidMount() {
+    if (this.loadState())
+      this.setState({ collapsed: true });
+  }
+
+  // load collapsed state from local storage if exists
+  loadState() {
+    const key = this.props.label;
+    if (key && window.localStorage.getItem(key) === 'true')
+      return true;
+    else
+      return false;
+  }
+
+  // save collapse state to local storage
+  saveState(collapsed) {
+    const key = this.props.label;
+    if (key)
+      window.localStorage.setItem(key, String(String(collapsed) === 'true'));
   }
 
   // toggle collapse/expand
   toggle() {
     this.setState({ collapsed: !this.state.collapsed });
+    this.saveState(!this.state.collapsed);
   }
 
   // display component
