@@ -23,8 +23,7 @@ export class Button extends Component {
             } else if (event.shiftKey) {
               if (this.props.onShiftClick)
                 this.props.onShiftClick();
-            } else
-            if (this.props.onClick)
+            } else if (this.props.onClick)
               this.props.onClick();
           }}
         >
@@ -110,4 +109,3 @@ export class HighlighterCheckbox extends Component {
     );
   }
 }
-

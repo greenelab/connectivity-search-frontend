@@ -657,4 +657,3 @@ function makeMetapathsTable(metapaths) {
 
   return table;
 }
-

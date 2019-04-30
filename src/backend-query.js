@@ -24,7 +24,7 @@ export function fetchJson(url) {
       return results || {};
     })
     .catch((error) => {
-      console.log(error)
+      console.log(error);
       return {};
     });
 }
@@ -93,4 +93,3 @@ export function searchPaths(sourceId, targetId, metapath) {
     return results;
   });
 }
-
