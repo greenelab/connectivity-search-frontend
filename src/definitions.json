@@ -9,5 +9,8 @@
   "n_dwpcs": "The number of DWPCs calculated on permuted networks used to generate a null distribution for the DWPC from the real network. Permuted DWPCs are aggregated for all permuted node pairs with the same degrees as the source and target node.",
   "n_nonzero_dwpcs": "The number of permuted DWPCs from '# of DWPCs' column that were nonzero. Nonzero DWPCs indicate at least one path between the source and target node existed in the permuted network.",
   "nonzero_mean": "The mean of nonzero permuted DWPCs. Used to generate the gamma-hurdle model of the null DWPC distribution.",
-  "nonzero_sd": "The standard deviation of nonzero permuted DWPCs. Used to generate the gamma-hurdle model of the null DWPC distribution."
+  "nonzero_sd": "The standard deviation of nonzero permuted DWPCs. Used to generate the gamma-hurdle model of the null DWPC distribution.",
+  "path": "The sequence of edges in the network connecting the source node to the target node. Duplicate nodes are not permitted in paths.",
+  "score": "A metric of how meaningful the path is in describing the connectivity between the source and target node. The score combines the magnitude of the metapath's p-value with the percent of the DWPC contributed by the path.",
+  "percent_of_DWPC": "The contribution of the path to the DWPC for its metapath. This metric compares the importance of all paths of the same metapath from the source node to the target node."
 }

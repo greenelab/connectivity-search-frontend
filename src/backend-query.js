@@ -13,6 +13,8 @@ const hetioStyles =
 const nodeSearchServer = 'https://search-api.het.io/v1/nodes/';
 // url for metapaths search
 const metapathSearchServer = 'https://search-api.het.io/v1/query-metapaths/';
+// url for paths search
+const pathSearchServer = 'https://search-api.het.io/v1/query-paths/';
 
 // get resource at url and parse as json
 export function fetchJson(url) {
@@ -79,3 +81,16 @@ export function searchMetapaths(sourceId, targetId) {
     return results.path_counts;
   });
 }
+
+// search for paths by metapaths
+export function searchPaths(sourceId, targetId, metapath) {
+  const params = new URLSearchParams();
+  params.set('source', sourceId || '');
+  params.set('target', targetId || '');
+  params.set('metapath', metapath || '');
+  const query = pathSearchServer + '?' + params.toString();
+  return fetchJson(query).then((results) => {
+    return results;
+  });
+}
+

@@ -1,6 +1,9 @@
 import React from 'react';
 import { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faEye } from '@fortawesome/free-solid-svg-icons';
+import { faHighlighter } from '@fortawesome/free-solid-svg-icons';
 
 import { Tooltip } from './tooltip.js';
 import './buttons.css';
@@ -17,7 +20,11 @@ export class Button extends Component {
             if (event.ctrlKey) {
               if (this.props.onCtrlClick)
                 this.props.onCtrlClick();
-            } else if (this.props.onClick)
+            } else if (event.shiftKey) {
+              if (this.props.onShiftClick)
+                this.props.onShiftClick();
+            } else
+            if (this.props.onClick)
               this.props.onClick();
           }}
         >
@@ -46,3 +53,61 @@ export class TextButton extends Component {
     );
   }
 }
+
+// checkbox button component
+export class Checkbox extends Component {
+  // display component
+  render() {
+    return (
+      <Button
+        className='checkbox_button'
+        tooltipText={this.props.tooltipText}
+        onClick={this.props.onClick}
+        onCtrlClick={this.props.onCtrlClick}
+      >
+        {this.props.checked && (
+          <FontAwesomeIcon className='fa-xs' icon={faCheck} />
+        )}
+      </Button>
+    );
+  }
+}
+
+// eye checkbox button component
+export class EyeCheckbox extends Component {
+  // display component
+  render() {
+    return (
+      <Button
+        className='checkbox_button'
+        tooltipText={this.props.tooltipText}
+        onClick={this.props.onClick}
+        onCtrlClick={this.props.onCtrlClick}
+      >
+        {this.props.checked && (
+          <FontAwesomeIcon className='fa-xs' icon={faEye} />
+        )}
+      </Button>
+    );
+  }
+}
+
+// highlighter checkbox button component
+export class HighlighterCheckbox extends Component {
+  // display component
+  render() {
+    return (
+      <Button
+        className='checkbox_button'
+        tooltipText={this.props.tooltipText}
+        onClick={this.props.onClick}
+        onCtrlClick={this.props.onCtrlClick}
+      >
+        {this.props.checked && (
+          <FontAwesomeIcon className='fa-xs' icon={faHighlighter} />
+        )}
+      </Button>
+    );
+  }
+}
+

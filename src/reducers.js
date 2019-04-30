@@ -39,6 +39,12 @@ export function Reducer(previousState = {}, action) {
         newState.metapaths = action.payload.metapaths;
       break;
 
+    // update path queries
+    case 'update_path_queries':
+      if (action.payload.pathQueries !== undefined)
+        newState.pathQueries = action.payload.pathQueries;
+      break;
+
     default:
       break;
   }
@@ -58,6 +64,8 @@ export function Reducer(previousState = {}, action) {
     newState.targetNode = {};
   if (!newState.metapaths)
     newState.metapaths = [];
+  if (!newState.pathQueries)
+    newState.pathQueries = [];
 
   // set new state
   return newState;
