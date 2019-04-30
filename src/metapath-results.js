@@ -29,7 +29,7 @@ export class MetapathResults extends Component {
       <section>
         <CollapsibleSection
           label='Metapaths'
-          tooltipText='Metapath results with p-value <= 0.1'
+          tooltipText='Metapath results with p-value <= 0.1 and length (# of edges) <= 3'
         >
           {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
         </CollapsibleSection>
@@ -206,7 +206,9 @@ class TableHead extends Component {
         <td className='col_s' />
         <td className='col_m' />
         <td className='col_s' />
-        <td className='col_xl center' colSpan='6'>
+        <td className='col_s' />
+        <td className='col_s' />
+        <td className='col_xxl center' colSpan='4'>
           <div className='divider'>Null DWPC distribution information</div>
         </td>
       </tr>

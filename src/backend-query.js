@@ -19,11 +19,11 @@ export function fetchJson(url) {
   return fetch(url)
     .then((response) => response.json())
     .then((results) => {
-      return results;
+      return results || {};
     })
     .catch((error) => {
-      console.log(error);
-      return null;
+      console.log(error)
+      return {};
     });
 }
 
