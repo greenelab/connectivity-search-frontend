@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
-import { MetanodeChip } from './metanode-chip.js';
+import { MetanodeChip } from './chips.js';
 import { Tooltip } from './tooltip.js';
 import { TextButton } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
@@ -56,14 +56,14 @@ class TableFull extends Component {
     super();
 
     this.state = {};
-    this.state.showExtraFields = false;
+    this.state.showMore = false;
 
-    this.toggleShowExtraFields = this.toggleShowExtraFields.bind(this);
+    this.toggleShowMore = this.toggleShowMore.bind(this);
   }
 
   // toggle show/hide extra fields
-  toggleShowExtraFields() {
-    this.setState({ showExtraFields: !this.state.showExtraFields });
+  toggleShowMore() {
+    this.setState({ showMore: !this.state.showMore });
   }
 
   // display row entries
@@ -71,7 +71,7 @@ class TableFull extends Component {
     // explicitly specify and order primary fields
     let fields = ['name', 'metanode', 'identifier', 'source'];
 
-    if (this.state.showExtraFields) {
+    if (this.state.showMore) {
       // get 'extra fields' from node 'data' field
       let extraFields = Object.keys(this.props.node.data);
       // remove unnecessary fields
@@ -128,7 +128,7 @@ class TableFull extends Component {
       // return row entry
       return (
         <tr key={index}>
-          <td className='col_s small light_text left'>
+          <td className='col_s small light left'>
             <Tooltip text={tooltipText[field]}>{firstCol}</Tooltip>
           </td>
           <td>
@@ -139,29 +139,23 @@ class TableFull extends Component {
     });
   }
 
-  // display show more/less button
-  showMoreLessButton() {
-    return (
-      <tr>
-        <td className='center' colSpan='2'>
-          <TextButton
-            text={this.state.showExtraFields ? 'show less ' : 'show more '}
-            icon={this.state.showExtraFields ? faAngleUp : faAngleDown}
-            className='link_button small'
-            onClick={this.toggleShowExtraFields}
-          />
-        </td>
-      </tr>
-    );
-  }
-
   // display component
   render() {
     return (
       <table className='node_results_table'>
         <tbody>
           {this.rows()}
-          {this.showMoreLessButton()}
+          <tr>
+            <td className='center' colSpan='2'>
+              <TextButton
+                text={this.state.showMore ? 'show less ' : 'show more '}
+                icon={this.state.showMore ? faAngleUp : faAngleDown}
+                className='link_button small'
+                onClick={this.toggleShowMore}
+                tooltipText='Show more information about the node'
+              />
+            </td>
+          </tr>
         </tbody>
       </table>
     );
@@ -180,7 +174,7 @@ class TableEmpty extends Component {
       <table className='node_results_table'>
         <tbody>
           <tr>
-            <td className='center light_text'>
+            <td className='center light'>
               select a {this.props.label.toLowerCase()}
             </td>
           </tr>

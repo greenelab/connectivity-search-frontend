@@ -9,14 +9,17 @@ import { faSort } from '@fortawesome/free-solid-svg-icons';
 import { faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 
-import { MetanodeChip } from './metanode-chip.js';
-import { MetaedgeChip } from './metanode-chip.js';
+import { metapathChips } from './chips.js';
 import { Button } from './buttons.js';
 import { TextButton } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
+import { makeFilenameFriendly } from './util.js';
+import { downloadCsv } from './util.js';
+import { toFixed } from './util.js';
+import { toExponential } from './util.js';
+import { toGradient } from './util.js';
 import './metapath-results.css';
-import './metanode-chip.css';
 
 // path results section component
 export class MetapathResults extends Component {
@@ -46,21 +49,21 @@ class TableFull extends Component {
     super(props);
 
     this.state = {};
-    this.state.showExtraColumns = false;
+    this.state.showMore = false;
     this.state.sortColumn = 'p_value';
     this.state.sortUp = false;
 
-    this.toggleShowExtraColumns = this.toggleShowExtraColumns.bind(this);
+    this.toggleShowMore = this.toggleShowMore.bind(this);
     this.changeSort = this.changeSort.bind(this);
     this.downloadCsv = this.downloadCsv.bind(this);
   }
 
-  // toggle show/hide extra columns
-  toggleShowExtraColumns(event) {
+  // toggle show more/less
+  toggleShowMore(event) {
     if (event)
       event.preventDefault();
 
-    this.setState({ showExtraColumns: !this.state.showExtraColumns });
+    this.setState({ showMore: !this.state.showMore });
   }
 
   // change which column table is sorted by
@@ -112,6 +115,7 @@ class TableFull extends Component {
     }
   }
 
+  // download table data as .csv file
   downloadCsv() {
     if (
       !this.props.metapaths.length ||
@@ -148,31 +152,33 @@ class TableFull extends Component {
     return (
       <TableContext.Provider
         value={{
-          showExtraColumns: this.state.showExtraColumns,
+          sortedMetapaths: sortedMetapaths,
+          showMore: this.state.showMore,
           sortColumn: this.state.sortColumn,
           sortUp: this.state.sortUp,
           changeSort: this.changeSort
         }}
       >
-        <TextButton
-          text='.csv'
-          icon={faDownload}
-          className='link_button small'
-          onClick={this.downloadCsv}
-        />
-        <TextButton
-          text={this.state.showExtraColumns ? 'show less ' : 'show more '}
-          icon={this.state.showExtraColumns ? faAngleLeft : faAngleRight}
-          className='link_button small'
-          onClick={this.toggleShowExtraColumns}
-        />
-        <div
-          className='table_container'
-          data-expanded={this.state.showExtraColumns}
-        >
+        <div className='table_attic'>
+          <TextButton
+            text='.csv'
+            icon={faDownload}
+            className='link_button small'
+            onClick={this.downloadCsv}
+            tooltipText='Download table as .csv file'
+          />
+          <TextButton
+            text={this.state.showMore ? 'show less ' : 'show more '}
+            icon={this.state.showMore ? faAngleLeft : faAngleRight}
+            className='link_button small'
+            onClick={this.toggleShowMore}
+            tooltipText='Expand table and show more columns'
+          />
+        </div>
+        <div className='table_container' data-expanded={this.state.showMore}>
           <table className='metapath_results_table'>
             <TableHead />
-            <TableBody sortedMetapaths={sortedMetapaths} />
+            <TableBody />
           </table>
         </div>
       </TableContext.Provider>
@@ -289,11 +295,11 @@ class TableHead extends Component {
     );
 
     return (
-      <thead className='small light_text'>
-        {this.context.showExtraColumns && extraRow}
+      <thead className='small light'>
+        {this.context.showMore && extraRow}
         <tr>
           {cols}
-          {this.context.showExtraColumns && extraCols}
+          {this.context.showMore && extraCols}
         </tr>
       </thead>
     );
@@ -358,11 +364,12 @@ class TableBody extends Component {
   render() {
     return (
       <tbody>
-        {this.props.sortedMetapaths.map((metapath, index) => (
+        {this.context.sortedMetapaths.map((metapath, index) => (
           <TableBodyRow
             key={index}
             metapath={metapath}
-            showExtraColumns={this.props.showExtraColumns}
+            checked={metapath.checked}
+            showMore={this.props.showMore}
           />
         ))}
       </tbody>
@@ -371,10 +378,6 @@ class TableBody extends Component {
 }
 // connect component to context component
 TableBody.contextType = TableContext;
-// connect component to global state
-TableBody = connect((state) => ({
-  metapaths: state.metapaths
-}))(TableBody);
 
 // table body row component
 // contains column data for one metapath
@@ -427,7 +430,7 @@ class TableBodyRow extends Component {
     return (
       <tr>
         {cols}
-        {this.context.showExtraColumns && extraCols}
+        {this.context.showMore && extraCols}
       </tr>
     );
   }
@@ -459,113 +462,12 @@ class TableEmpty extends Component {
       <table className='metapath_results_table'>
         <tbody>
           <tr>
-            <td className='center light_text'>no results to show</td>
+            <td className='center light'>no results to show</td>
           </tr>
         </tbody>
       </table>
     );
   }
-}
-
-// get html of metapath in form of visualization chips
-function metapathChips(edges) {
-  const path = edges.map((entry, index) => {
-    return (
-      <React.Fragment key={index}>
-        <MetanodeChip type={entry[0]} />
-        <MetaedgeChip type={entry[2]} direction={entry[3]} />
-        {index === edges.length - 1 && <MetanodeChip type={entry[1]} />}
-      </React.Fragment>
-    );
-  });
-
-  return path;
-}
-
-// get html of number in exponential form
-function toExponential(number) {
-  number = parseFloat(number).toExponential(1);
-  const mantissa = parseFloat(number.split('e')[0]).toFixed(1);
-  const exponent = parseInt(number.split('e')[1]);
-  return (
-    <span>
-      {mantissa} &times; 10<sup>{exponent}</sup>
-    </span>
-  );
-}
-
-// get html of number in regular form, rounded to 1 decimal digit
-function toFixed(number) {
-  number = parseFloat(number).toFixed(1);
-  if (!number)
-    return <span>NaN</span>;
-  return <span>{number}</span>;
-}
-
-// map number to css color (rgba or hex) based on specified gradient
-function toGradient(number) {
-  // pretty gradient
-  let gradient = [
-    'rgba(255, 255, 255, 0)',
-    'rgba(255, 249, 196, 1)',
-    'rgba(255, 236, 179, 1)',
-    'rgba(255, 224, 178, 1)',
-    'rgba(255, 204, 188, 1)',
-    'rgba(248, 187, 208, 1)'
-  ];
-
-  // split each gradient color into component rgba values
-  gradient = gradient.map((color) => {
-    color = color.split(/[^0-9,]/).join('');
-    color = {
-      r: parseInt(color.split(',')[0]),
-      g: parseInt(color.split(',')[1]),
-      b: parseInt(color.split(',')[2]),
-      a: parseFloat(color.split(',')[3])
-    };
-    return color;
-  });
-
-  // take log of number
-  // (equivalent of getting exponent of number in exponential notation)
-  number = Math.log10(number);
-
-  // start/end cutoffs for exponent
-  const rangeStart = -1;
-  const rangeEnd = -10;
-
-  // get percent that number is through range
-  let percent = (number - rangeStart) / (rangeEnd - rangeStart);
-  percent = Math.min(Math.max(0, percent), 1);
-
-  // map percent to float gradient index
-  const gradientIndex = (gradient.length - 1) * percent;
-  // get integer indices below/above float index
-  const lowerColor = gradient[Math.floor(gradientIndex)];
-  const higherColor = gradient[Math.ceil(gradientIndex)];
-  // get percent that float index is between nearest integer indices
-  const percentBetween = gradientIndex % 1;
-
-  // interpolate color between gradient colors below/above float index
-  let color = {
-    r: lowerColor.r + (higherColor.r - lowerColor.r) * percentBetween,
-    g: lowerColor.g + (higherColor.g - lowerColor.g) * percentBetween,
-    b: lowerColor.b + (higherColor.b - lowerColor.b) * percentBetween,
-    a: lowerColor.a + (higherColor.a - lowerColor.a) * percentBetween
-  };
-
-  // clean rgba values
-  color.r = Math.floor(color.r);
-  color.g = Math.floor(color.g);
-  color.b = Math.floor(color.b);
-  color.a = color.a.toFixed(3);
-
-  // convert color in rgba format to css color string
-  color =
-    'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')';
-
-  // return color
-  return color || '#ffffff';
 }
 
 // make table array out of metapaths results object
@@ -617,28 +519,3 @@ function makeMetapathsTable(metapaths) {
   return table;
 }
 
-// downloads provided data as csv file
-// data in format [ [A1, B1] , [A2, B2] ]
-function downloadCsv(data, filename) {
-  const fileContent = data.map((cell) => cell.join(',')).join('\n');
-  const blob = new Blob([fileContent], { type: 'text/csv' });
-  const url = window.URL.createObjectURL(blob);
-  const link = document.createElement('a');
-  document.body.appendChild(link);
-  link.href = url;
-  link.download = (filename || 'data') + '.csv';
-  link.click();
-  window.URL.revokeObjectURL(url);
-  link.remove();
-}
-
-// make OS-friendly filename
-function makeFilenameFriendly(string) {
-  // remove leading and trailing whitespace
-  string = string.trim();
-  // replace special characters with dashes
-  string = string.replace(/[^0-9A-Za-z]/gi, '-');
-  // shorten if too long
-  string = string.substring(0, 15);
-  return string;
-}
