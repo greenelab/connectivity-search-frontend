@@ -556,6 +556,7 @@ class TableBodyRow extends Component {
     const extraCols = (
       <>
         <TableBodyCell
+          style={{ backgroundColor: toGradient(metapath.p_value) }}
           value={toExponential(metapath.p_value)}
           fullValue={metapath.p_value}
         />
