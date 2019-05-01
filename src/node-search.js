@@ -16,6 +16,7 @@ import { Button } from './buttons.js';
 import { searchNodes } from './backend-query.js';
 import { updateSourceTargetNodes } from './actions.js';
 import { swapSourceTargetNodes } from './actions.js';
+import { sortCustom } from './util.js';
 import './node-search.css';
 
 // node search section component
@@ -87,30 +88,20 @@ class Filters extends Component {
       filters.push({ name: filter, active: true });
 
     // display filters in custom order
-    const order = {
-      'Gene': 1,
-      'Compound': 2,
-      'Anatomy': 3,
-      'Disease': 4,
-      'Symptom': 5,
-      'Side Effect': 6,
-      'Biological Process': 7,
-      'Cellular Component': 8,
-      'Molecular Function': 9,
-      'Pathway': 10,
-      'Pharmacolocic Class': 11
-    };
-
-    filters = filters.sort((a, b) => {
-      if (order[a.name] && order[b.name])
-        return order[a.name] - order[b.name];
-      else if (order[a.name])
-        return -1;
-      else if (order[b.name])
-        return 1;
-      else
-        return b.name - a.name;
-    });
+    const order = [
+      'Gene',
+      'Compound',
+      'Anatomy',
+      'Disease',
+      'Symptom',
+      'Side Effect',
+      'Biological Process',
+      'Cellular Component',
+      'Molecular Function',
+      'Pathway',
+      'Pharmacolocic Class'
+    ];
+    filters = sortCustom(filters, order, 'name');
 
     this.props.updateFilters(filters, filterString);
   }

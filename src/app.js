@@ -126,9 +126,9 @@ class App extends Component {
     const oldParams = new URLSearchParams(window.location.search);
     const newParams = new URLSearchParams();
 
-    if (this.props.sourceNode.id)
+    if (this.props.sourceNode.id !== undefined)
       newParams.set('source', this.props.sourceNode.id);
-    if (this.props.targetNode.id)
+    if (this.props.targetNode.id !== undefined)
       newParams.set('target', this.props.targetNode.id);
 
     // if url already matches source/target nodes, don't update.
@@ -160,12 +160,12 @@ class App extends Component {
     document.title = title;
   }
 
-  // when checked metapaths changes
+  // when checked metapaths change
   onMetapathChange() {
     this.updatePaths();
   }
 
-  // update paths when checked metapaths changes
+  // update paths when checked metapaths change
   updatePaths() {
     this.props.dispatch((dispatch) => {
       // fetch paths for all checked metapaths

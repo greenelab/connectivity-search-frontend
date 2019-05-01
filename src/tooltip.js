@@ -38,8 +38,10 @@ export class Tooltip extends Component {
   openTooltip(target) {
     // if target not being hovered anymore, cancel open
     // if target not specified, exit
-    if (!this.state.hover || !target)
+    if (!this.state.hover || !target) {
+      this.setState({ open: false });
       return;
+    }
 
     // get x/y position of target to pass to tooltip popup
     const left =
@@ -88,7 +90,7 @@ export class Tooltip extends Component {
     return (
       <>
         {children}
-        {this.state.open && this.props.text && (
+        {this.state.open && (
           <Popup
             text={this.props.text}
             open={this.state.open}

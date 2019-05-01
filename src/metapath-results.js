@@ -20,6 +20,7 @@ import { downloadCsv } from './util.js';
 import { toFixed } from './util.js';
 import { toExponential } from './util.js';
 import { toGradient } from './util.js';
+import { sortCustom } from './util.js';
 import { updateMetapaths } from './actions.js';
 import './metapath-results.css';
 
@@ -31,7 +32,7 @@ export class MetapathResults extends Component {
       <section>
         <CollapsibleSection
           label='Metapaths'
-          tooltipText='Metapath results with p-value <= 0.1 and length (# of edges) <= 3'
+          tooltipText='Metapaths of length <= 3 between the source and target node'
         >
           {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
         </CollapsibleSection>
@@ -53,7 +54,7 @@ class TableFull extends Component {
     this.state = {};
     this.state.showMore = false;
     this.state.allChecked = false;
-    this.state.sortColumn = 'p_value';
+    this.state.sortColumn = 'adjusted_p_value';
     this.state.sortUp = false;
 
     this.toggleShowMore = this.toggleShowMore.bind(this);
@@ -248,6 +249,7 @@ class TableFull extends Component {
     if (this.state.sortUp)
       sortedMetapaths.reverse();
 
+    // count metapaths
     const metapathCount = sortedMetapaths.length;
     let metapathSelectedCount = 0;
     for (const metapath of sortedMetapaths) {
@@ -319,10 +321,9 @@ class TableHead extends Component {
         <td className='col_l' />
         <td className='col_s' />
         <td className='col_m' />
+        <td className='col_m' />
         <td className='col_s' />
-        <td className='col_s' />
-        <td className='col_s' />
-        <td className='col_xxl center' colSpan='4'>
+        <td className='col_xxl center' colSpan='6'>
           <div className='divider'>Null DWPC distribution information</div>
         </td>
       </tr>
@@ -351,7 +352,7 @@ class TableHead extends Component {
           />
         </td>
         <TableHeadCell
-          className='col_l left'
+          className='col_l'
           buttonClass='left'
           fieldName='metapath_metaedges'
           tooltipText={tooltipText['metapath']}
@@ -365,12 +366,14 @@ class TableHead extends Component {
         />
         <TableHeadCell
           className='col_m'
-          fieldName='p_value'
-          tooltipText={tooltipText['p_value']}
+          fieldName='adjusted_p_value'
+          tooltipText={tooltipText['adjusted_p_value']}
           text={
-            <>
+            <span>
+              adjusted
+              <br />
               <i>p</i>-value
-            </>
+            </span>
           }
         />
       </>
@@ -379,6 +382,16 @@ class TableHead extends Component {
     // extra columns
     const extraCols = (
       <>
+        <TableHeadCell
+          className='col_m'
+          fieldName='p_value'
+          tooltipText={tooltipText['p_value']}
+          text={
+            <>
+              <i>p</i>-value
+            </>
+          }
+        />
         <TableHeadCell
           className='col_s'
           fieldName='dwpc'
@@ -526,17 +539,15 @@ class TableBodyRow extends Component {
           />
         </td>
         <TableBodyCell
-          className='left'
           fieldClass='left'
           value={metapathChips(metapath.metapath_metaedges)}
           fullValue={metapath.metapath_name}
         />
         <TableBodyCell value={metapath.path_count} />
         <TableBodyCell
-          className='right'
-          style={{ backgroundColor: toGradient(metapath.p_value) }}
-          value={toExponential(metapath.p_value)}
-          fullValue={metapath.p_value}
+          style={{ backgroundColor: toGradient(metapath.adjusted_p_value) }}
+          value={toExponential(metapath.adjusted_p_value)}
+          fullValue={metapath.adjusted_p_value}
         />
       </>
     );
@@ -544,6 +555,11 @@ class TableBodyRow extends Component {
     // extra columns
     const extraCols = (
       <>
+        <TableBodyCell
+          style={{ backgroundColor: toGradient(metapath.p_value) }}
+          value={toExponential(metapath.p_value)}
+          fullValue={metapath.p_value}
+        />
         <TableBodyCell
           value={toFixed(metapath.dwpc)}
           fullValue={metapath.dwpc}
@@ -618,30 +634,22 @@ function makeMetapathsTable(metapaths) {
   }
 
   // sort headers in custom order
-  const order = {
-    id: 1,
-    metapath_name: 2,
-    metapath_abbreviation: 3,
-    path_count: 4,
-    p_value: 5,
-    dwpc: 6,
-    dgp_source_degree: 7,
-    dgp_target_degree: 8,
-    dgp_n_dwpcs: 9,
-    dgp_n_nonzero_dwpcs: 10,
-    dgp_nonzero_mean: 11,
-    dgp_nonzero_sd: 12
-  };
-  headers = headers.sort((a, b) => {
-    if (order[a] && order[b])
-      return order[a] - order[b];
-    else if (order[a])
-      return -1;
-    else if (order[b])
-      return 1;
-    else
-      return b - a;
-  });
+  const order = [
+    'id',
+    'metapath_name',
+    'metapath_abbreviation',
+    'path_count',
+    'adjusted_p_value',
+    'p_value',
+    'dwpc',
+    'dgp_source_degree',
+    'dgp_target_degree',
+    'dgp_n_dwpcs',
+    'dgp_n_nonzero_dwpcs',
+    'dgp_nonzero_mean',
+    'dgp_nonzero_sd'
+  ];
+  headers = sortCustom(headers, order);
 
   const table = [];
   table.push(headers);
