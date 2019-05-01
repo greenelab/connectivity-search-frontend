@@ -143,3 +143,56 @@ export function metapathChips(edges) {
   return path;
 }
 
+// get html of path in form of visualization chips
+export function pathChips(path, expanded) {
+  return path.map((entry, index) => {
+    if (entry.element === 'node') {
+      return (
+        <NodeChip
+          key={index}
+          type={entry.type}
+          name={entry.name}
+          expanded={expanded}
+        />
+      );
+    }
+    if (entry.element === 'edge') {
+      return (
+        <MetaedgeChip
+          key={index}
+          type={entry.type}
+          direction={entry.direction}
+        />
+      );
+    }
+    return '';
+  });
+}
+
+// node 'chip' component
+export class NodeChip extends Component {
+  // display component
+  render() {
+    let fillColor = '#424242';
+    let textColor = '#fafafa';
+    const style = this.props.hetioStyles[this.props.type];
+    if (style && style.fill_color)
+      fillColor = style.fill_color;
+    if (style && style.text_color)
+      textColor = style.text_color;
+
+    return (
+      <span
+        className='node_chip'
+        style={{ background: fillColor, color: textColor }}
+        data-expanded={this.props.expanded}
+      >
+        {this.props.name}
+      </span>
+    );
+  }
+}
+// connect component to global state
+NodeChip = connect((state) => ({
+  hetioStyles: state.hetioStyles
+}))(NodeChip);

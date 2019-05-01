@@ -6,15 +6,18 @@ import { Header } from './header.js';
 import { NodeSearch } from './node-search.js';
 import { NodeResults } from './node-results.js';
 import { MetapathResults } from './metapath-results.js';
+import { PathResults } from './path-results.js';
 import { getMetagraph } from './backend-query.js';
 import { getHetioDefinitions } from './backend-query.js';
-import { getHetmechDefinitions } from './backend-query.js';
 import { getHetioStyles } from './backend-query.js';
+import { getHetmechDefinitions } from './backend-query.js';
 import { lookupNodeById } from './backend-query.js';
 import { searchMetapaths } from './backend-query.js';
+import { searchPaths } from './backend-query.js';
 import { setDefinitions } from './actions.js';
 import { updateSourceTargetNodes } from './actions.js';
 import { updateMetapaths } from './actions.js';
+import { updatePathQueries } from './actions.js';
 import './styles.css';
 
 // main app component
@@ -28,6 +31,7 @@ class App extends Component {
     this.updateMetapaths = this.updateMetapaths.bind(this);
     this.updateHistory = this.updateHistory.bind(this);
     this.updateTitle = this.updateTitle.bind(this);
+    this.updatePaths = this.updatePaths.bind(this);
 
     // fetch definitions when page first loads
     this.fetchDefinitions();
@@ -44,6 +48,8 @@ class App extends Component {
       prevProps.targetNode !== this.props.targetNode
     )
       this.onNodeChange();
+    if (prevProps.metapaths !== this.props.metapaths)
+      this.onMetapathChange();
   }
 
   // get metagraph, hetio definitions, and hetmech definitions
@@ -154,6 +160,39 @@ class App extends Component {
     document.title = title;
   }
 
+  // when checked metapaths changes
+  onMetapathChange() {
+    this.updatePaths();
+  }
+
+  // update paths when checked metapaths changes
+  updatePaths() {
+    this.props.dispatch((dispatch) => {
+      // fetch paths for all checked metapaths
+      const promises = [];
+      for (const metapath of this.props.metapaths) {
+        if (metapath.checked) {
+          promises.push(
+            searchPaths(
+              this.props.sourceNode.id,
+              this.props.targetNode.id,
+              metapath.metapath_abbreviation
+            )
+          );
+        }
+      }
+
+      // update path queries when all queries have returned
+      Promise.all(promises).then((results) => {
+        dispatch(
+          updatePathQueries({
+            pathQueries: results
+          })
+        );
+      });
+    });
+  }
+
   // display component
   render() {
     return (
@@ -162,6 +201,7 @@ class App extends Component {
         <NodeSearch />
         <NodeResults />
         <MetapathResults />
+        <PathResults />
       </>
     );
   }
@@ -169,7 +209,8 @@ class App extends Component {
 // connect component to global state
 App = connect((state) => ({
   sourceNode: state.sourceNode,
-  targetNode: state.targetNode
+  targetNode: state.targetNode,
+  metapaths: state.metapaths
 }))(App);
 
 export { App };

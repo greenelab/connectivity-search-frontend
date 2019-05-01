@@ -12,6 +12,7 @@ import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 import { metapathChips } from './chips.js';
 import { Button } from './buttons.js';
 import { TextButton } from './buttons.js';
+import { Checkbox } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
 import { makeFilenameFriendly } from './util.js';
@@ -19,6 +20,7 @@ import { downloadCsv } from './util.js';
 import { toFixed } from './util.js';
 import { toExponential } from './util.js';
 import { toGradient } from './util.js';
+import { updateMetapaths } from './actions.js';
 import './metapath-results.css';
 
 // path results section component
@@ -50,12 +52,34 @@ class TableFull extends Component {
 
     this.state = {};
     this.state.showMore = false;
+    this.state.allChecked = false;
     this.state.sortColumn = 'p_value';
     this.state.sortUp = false;
 
     this.toggleShowMore = this.toggleShowMore.bind(this);
+    this.toggleAllChecked = this.toggleAllChecked.bind(this);
+    this.allChecked = this.allChecked.bind(this);
+    this.checkAll = this.checkAll.bind(this);
+    this.uncheckAll = this.uncheckAll.bind(this);
+    this.allOthersUnchecked = this.allOthersUnchecked.bind(this);
+    this.toggleChecked = this.toggleChecked.bind(this);
+    this.soloChecked = this.soloChecked.bind(this);
     this.changeSort = this.changeSort.bind(this);
     this.downloadCsv = this.downloadCsv.bind(this);
+  }
+
+  // when component updates
+  componentDidUpdate(prevProps) {
+    if (this.props.metapaths !== prevProps.metapaths)
+      this.updateAllChecked();
+  }
+
+  // checks if all rows checked and updates state
+  updateAllChecked() {
+    if (this.allChecked())
+      this.setState({ allChecked: true });
+    else
+      this.setState({ allChecked: false });
   }
 
   // toggle show more/less
@@ -64,6 +88,81 @@ class TableFull extends Component {
       event.preventDefault();
 
     this.setState({ showMore: !this.state.showMore });
+  }
+
+  // toggle check/uncheck all
+  toggleAllChecked() {
+    if (this.allChecked())
+      this.uncheckAll();
+    else
+      this.checkAll();
+  }
+
+  // checks whether all metapaths are checked
+  allChecked() {
+    for (const metapath of this.props.metapaths) {
+      if (!metapath.checked)
+        return false;
+    }
+
+    return true;
+  }
+
+  // makes all metapaths checked
+  checkAll() {
+    const metapaths = this.props.metapaths.slice();
+
+    for (const metapath of this.props.metapaths)
+      metapath.checked = true;
+
+    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+  }
+
+  // makes all metapaths unchecked
+  uncheckAll() {
+    const metapaths = this.props.metapaths.slice();
+
+    for (const metapath of this.props.metapaths)
+      metapath.checked = false;
+
+    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+  }
+
+  // checks whether all metapaths besides the specified are unchecked
+  allOthersUnchecked(id) {
+    for (const metapath of this.props.metapaths) {
+      if (id !== metapath.id && metapath.checked)
+        return false;
+    }
+
+    return true;
+  }
+
+  // toggles the specified metapaths on/off
+  toggleChecked(id) {
+    const metapaths = this.props.metapaths.slice();
+
+    for (const metapath of metapaths) {
+      if (metapath.id === id)
+        metapath.checked = !metapath.checked;
+    }
+
+    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+  }
+
+  // solo metapath (turn all others off)
+  soloChecked(id) {
+    const metapaths = this.props.metapaths.slice();
+    const allOthersUnchecked = this.allOthersUnchecked(id);
+
+    for (const metapath of metapaths) {
+      if (allOthersUnchecked || id === metapath.id)
+        metapath.checked = true;
+      else
+        metapath.checked = false;
+    }
+
+    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
   }
 
   // change which column table is sorted by
@@ -149,11 +248,22 @@ class TableFull extends Component {
     if (this.state.sortUp)
       sortedMetapaths.reverse();
 
+    const metapathCount = sortedMetapaths.length;
+    let metapathSelectedCount = 0;
+    for (const metapath of sortedMetapaths) {
+      if (metapath.checked)
+        metapathSelectedCount++;
+    }
+
     return (
       <TableContext.Provider
         value={{
           sortedMetapaths: sortedMetapaths,
           showMore: this.state.showMore,
+          allChecked: this.state.allChecked,
+          toggleAllChecked: this.toggleAllChecked,
+          toggleChecked: this.toggleChecked,
+          soloChecked: this.soloChecked,
           sortColumn: this.state.sortColumn,
           sortUp: this.state.sortUp,
           changeSort: this.changeSort
@@ -174,6 +284,9 @@ class TableFull extends Component {
             onClick={this.toggleShowMore}
             tooltipText='Expand table and show more columns'
           />
+          <div className='small light right'>
+            {metapathCount} results, {metapathSelectedCount} selected
+          </div>
         </div>
         <div className='table_container' data-expanded={this.state.showMore}>
           <table className='metapath_results_table'>
@@ -202,6 +315,7 @@ class TableHead extends Component {
     // extra 'super-grouping' row at top of table
     const extraRow = (
       <tr>
+        <td className='col_xs' />
         <td className='col_l' />
         <td className='col_s' />
         <td className='col_m' />
@@ -228,6 +342,14 @@ class TableHead extends Component {
     // primary columns
     const cols = (
       <>
+        <td className='col_xs'>
+          <Checkbox
+            checked={this.context.allChecked}
+            onClick={() => this.context.toggleAllChecked()}
+            onCtrlClick={() => this.context.toggleAllChecked()}
+            tooltipText='Show all paths'
+          />
+        </td>
         <TableHeadCell
           className='col_l left'
           buttonClass='left'
@@ -391,6 +513,18 @@ class TableBodyRow extends Component {
     // primary columns
     const cols = (
       <>
+        <td>
+          <Checkbox
+            checked={this.props.checked}
+            onClick={() => this.context.toggleChecked(this.props.metapath.id)}
+            onCtrlClick={() => this.context.soloChecked(this.props.metapath.id)}
+            tooltipText={
+              'Show these ' +
+              (this.props.metapath.path_count || '') +
+              ' paths in the paths table'
+            }
+          />
+        </td>
         <TableBodyCell
           className='left'
           fieldClass='left'
@@ -520,4 +654,3 @@ function makeMetapathsTable(metapaths) {
 
   return table;
 }
-

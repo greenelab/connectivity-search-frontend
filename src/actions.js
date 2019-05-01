@@ -40,3 +40,11 @@ export function updateMetapaths({ metapaths }) {
     payload: { metapaths: metapaths }
   };
 }
+
+// update path queries
+export function updatePathQueries({ pathQueries }) {
+  return {
+    type: 'update_path_queries',
+    payload: { pathQueries: pathQueries }
+  };
+}

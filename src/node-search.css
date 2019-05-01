@@ -64,7 +64,8 @@
 .node_search_field:after {
   border-bottom-color: #00bcd4 !important;
 }
-.node_search_input, .node_search_input_blank {
+.node_search_input,
+.node_search_input_blank {
   padding: 10px !important;
   padding-right: 35px !important;
 }
