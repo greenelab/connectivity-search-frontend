@@ -109,6 +109,7 @@ export function makeFilenameFriendly(string) {
   return string;
 }
 
+// downloads provided data as svg file
 export function downloadSvg(data, filename) {
   const fileContent = new XMLSerializer().serializeToString(data);
   const blob = new Blob([fileContent], { type: 'image/svg+xml' });
@@ -122,6 +123,8 @@ export function downloadSvg(data, filename) {
   link.remove();
 }
 
+// show debug message on screen
+// useful for mobile debugging where no dev console available
 export function debug(...args) {
   let div = document.getElementById('_debug');
   if (!div) {
@@ -139,4 +142,26 @@ export function debug(...args) {
   }
   div.innerHTML += args.join(' | ');
   div.innerHTML += '<br>';
+}
+
+// sort array in custom order
+export function sortCustom(array, order, key) {
+  return array.sort((a, b) => {
+    if (key) {
+      a = a[key];
+      b = b[key];
+    }
+
+    a = order.indexOf(a);
+    b = order.indexOf(b);
+
+    if (a !== -1 && b !== -1)
+      return a - b;
+    else if (a !== -1)
+      return -1;
+    else if (b !== -1)
+      return 1;
+    else
+      return b - a;
+  });
 }

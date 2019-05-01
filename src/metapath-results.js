@@ -20,6 +20,7 @@ import { downloadCsv } from './util.js';
 import { toFixed } from './util.js';
 import { toExponential } from './util.js';
 import { toGradient } from './util.js';
+import { sortCustom } from './util.js';
 import { updateMetapaths } from './actions.js';
 import './metapath-results.css';
 
@@ -31,7 +32,7 @@ export class MetapathResults extends Component {
       <section>
         <CollapsibleSection
           label='Metapaths'
-          tooltipText='Metapath results with p-value <= 0.1 and length (# of edges) <= 3'
+          tooltipText='Metapaths of length <= 3 between the source and target node'
         >
           {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
         </CollapsibleSection>
@@ -322,9 +323,7 @@ class TableHead extends Component {
         <td className='col_m' />
         <td className='col_m' />
         <td className='col_s' />
-        <td className='col_s' />
-        <td className='col_s' />
-        <td className='col_xxl center' colSpan='4'>
+        <td className='col_xxl center' colSpan='6'>
           <div className='divider'>Null DWPC distribution information</div>
         </td>
       </tr>
@@ -634,31 +633,22 @@ function makeMetapathsTable(metapaths) {
   }
 
   // sort headers in custom order
-  const order = {
-    id: 1,
-    metapath_name: 2,
-    metapath_abbreviation: 3,
-    path_count: 4,
-    adjusted_p_value: 5,
-    p_value: 6,
-    dwpc: 7,
-    dgp_source_degree: 8,
-    dgp_target_degree: 9,
-    dgp_n_dwpcs: 10,
-    dgp_n_nonzero_dwpcs: 11,
-    dgp_nonzero_mean: 12,
-    dgp_nonzero_sd: 13
-  };
-  headers = headers.sort((a, b) => {
-    if (order[a] && order[b])
-      return order[a] - order[b];
-    else if (order[a])
-      return -1;
-    else if (order[b])
-      return 1;
-    else
-      return b - a;
-  });
+  const order = [
+    'id',
+    'metapath_name',
+    'metapath_abbreviation',
+    'path_count',
+    'adjusted_p_value',
+    'p_value',
+    'dwpc',
+    'dgp_source_degree',
+    'dgp_target_degree',
+    'dgp_n_dwpcs',
+    'dgp_n_nonzero_dwpcs',
+    'dgp_nonzero_mean',
+    'dgp_nonzero_sd'
+  ];
+  headers = sortCustom(headers, order);
 
   const table = [];
   table.push(headers);

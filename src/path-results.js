@@ -20,6 +20,7 @@ import { makeFilenameFriendly } from './util.js';
 import { pathChips } from './chips.js';
 import { updatePathQueries } from './actions.js';
 import { toFixed } from './util.js';
+import { sortCustom } from './util.js';
 import './path-results.css';
 
 // path results section component
@@ -779,22 +780,13 @@ function makePathsTable(pathQueries) {
   }
 
   // sort headers in custom order
-  const order = {
-    description: 1,
-    metapath: 2,
-    score: 3,
-    percent_of_DWPC: 4
-  };
-  headers = headers.sort((a, b) => {
-    if (order[a] && order[b])
-      return order[a] - order[b];
-    else if (order[a])
-      return -1;
-    else if (order[b])
-      return 1;
-    else
-      return b - a;
-  });
+  const order = [
+    'description',
+    'metapath',
+    'score',
+    'percent_of_DWPC'
+  ];
+  headers = sortCustom(headers, order);
 
   const table = [];
   table.push(headers);
