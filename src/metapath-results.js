@@ -239,7 +239,7 @@ class TableFull extends Component {
     const sortColumn = this.state.sortColumn;
 
     // sort by appropriate field
-    if (sortColumn === 'metaedges')
+    if (sortColumn === 'metapath_metaedges')
       sortedMetapaths.sort((a, b) => this.compareMetapaths(a, b, sortColumn));
     else
       sortedMetapaths.sort((a, b) => this.compareNumbers(a, b, sortColumn));
@@ -353,7 +353,7 @@ class TableHead extends Component {
         <TableHeadCell
           className='col_l left'
           buttonClass='left'
-          fieldName='metaedges'
+          fieldName='metapath_metaedges'
           tooltipText={tooltipText['metapath']}
           text='metapath'
         />
@@ -386,33 +386,33 @@ class TableHead extends Component {
           text='DWPC'
         />
         <TableHeadCell
-          fieldName='source_degree'
-          tooltipText={tooltipText['source_degree']}
+          fieldName='dgp_source_degree'
+          tooltipText={tooltipText['dgp_source_degree']}
           text='source degree'
         />
         <TableHeadCell
-          fieldName='target_degree'
-          tooltipText={tooltipText['target_degree']}
+          fieldName='dgp_target_degree'
+          tooltipText={tooltipText['dgp_target_degree']}
           text='target degree'
         />
         <TableHeadCell
-          fieldName='n_dwpcs'
-          tooltipText={tooltipText['n_dwpcs']}
+          fieldName='dgp_n_dwpcs'
+          tooltipText={tooltipText['dgp_n_dwpcs']}
           text="# DWPC's"
         />
         <TableHeadCell
-          fieldName='n_nonzero_dwpcs'
-          tooltipText={tooltipText['n_nonzero_dwpcs']}
+          fieldName='dgp_n_nonzero_dwpcs'
+          tooltipText={tooltipText['dgp_n_nonzero_dwpcs']}
           text="# non-0 DWPC's"
         />
         <TableHeadCell
-          fieldName='nonzero_mean'
-          tooltipText={tooltipText['nonzero_mean']}
+          fieldName='dgp_nonzero_mean'
+          tooltipText={tooltipText['dgp_nonzero_mean']}
           text='non-0 mean'
         />
         <TableHeadCell
-          fieldName='nonzero_sd'
-          tooltipText={tooltipText['nonzero_sd']}
+          fieldName='dgp_nonzero_sd'
+          tooltipText={tooltipText['dgp_nonzero_sd']}
           text={<>non-0 &sigma;</>}
         />
       </>
@@ -528,7 +528,7 @@ class TableBodyRow extends Component {
         <TableBodyCell
           className='left'
           fieldClass='left'
-          value={metapathChips(metapath.metaedges)}
+          value={metapathChips(metapath.metapath_metaedges)}
           fullValue={metapath.metapath_name}
         />
         <TableBodyCell value={metapath.path_count} />
@@ -548,17 +548,17 @@ class TableBodyRow extends Component {
           value={toFixed(metapath.dwpc)}
           fullValue={metapath.dwpc}
         />
-        <TableBodyCell value={metapath.source_degree} />
-        <TableBodyCell value={metapath.target_degree} />
-        <TableBodyCell value={metapath.n_dwpcs} />
-        <TableBodyCell value={metapath.n_nonzero_dwpcs} />
+        <TableBodyCell value={metapath.dgp_source_degree} />
+        <TableBodyCell value={metapath.dgp_target_degree} />
+        <TableBodyCell value={metapath.dgp_n_dwpcs} />
+        <TableBodyCell value={metapath.dgp_n_nonzero_dwpcs} />
         <TableBodyCell
-          value={toFixed(metapath.nonzero_mean)}
-          fullValue={metapath.nonzero_mean}
+          value={toFixed(metapath.dgp_nonzero_mean)}
+          fullValue={metapath.dgp_nonzero_mean}
         />
         <TableBodyCell
-          value={toFixed(metapath.nonzero_sd)}
-          fullValue={metapath.nonzero_sd}
+          value={toFixed(metapath.dgp_nonzero_sd)}
+          fullValue={metapath.dgp_nonzero_sd}
         />
       </>
     );
@@ -625,12 +625,12 @@ function makeMetapathsTable(metapaths) {
     path_count: 4,
     p_value: 5,
     dwpc: 6,
-    source_degree: 7,
-    target_degree: 8,
-    n_dwpcs: 9,
-    n_nonzero_dwpcs: 10,
-    nonzero_mean: 11,
-    nonzero_sd: 12
+    dgp_source_degree: 7,
+    dgp_target_degree: 8,
+    dgp_n_dwpcs: 9,
+    dgp_n_nonzero_dwpcs: 10,
+    dgp_nonzero_mean: 11,
+    dgp_nonzero_sd: 12
   };
   headers = headers.sort((a, b) => {
     if (order[a] && order[b])
