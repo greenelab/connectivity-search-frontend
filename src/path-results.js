@@ -91,7 +91,7 @@ class TableFull extends Component {
     this.setState({ showMore: !this.state.showMore });
   }
 
-  // updates state whether all rows are checked
+  // checks if all rows checked and updates state
   updateAllChecked() {
     if (this.allChecked())
       this.setState({ allChecked: true });
@@ -99,7 +99,7 @@ class TableFull extends Component {
       this.setState({ allChecked: false });
   }
 
-  //
+  // toggle check/uncheck all
   toggleAllChecked() {
     if (this.allChecked())
       this.uncheckAll();
@@ -176,21 +176,17 @@ class TableFull extends Component {
 
     for (const pathQuery of pathQueries) {
       for (const path of pathQuery.paths) {
-        if (allOthersUnchecked)
+        if (allOthersUnchecked || this.comparePaths(path, thePath))
           path.checked = true;
-        else {
-          if (this.comparePaths(path, thePath))
-            path.checked = true;
-          else
-            path.checked = false;
-        }
+        else
+          path.checked = false;
       }
     }
 
     this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
   }
 
-  // updates state whether all rows are highlighted
+  // checks if all rows highlighted and updates state
   updateAllHighlighted() {
     if (this.allHighlighted())
       this.setState({ allHighlighted: true });
@@ -198,7 +194,7 @@ class TableFull extends Component {
       this.setState({ allHighlighted: false });
   }
 
-  //
+  // toggle highlight/unhighlight all
   toggleAllHighlighted() {
     if (this.allHighlighted())
       this.unhighlightAll();

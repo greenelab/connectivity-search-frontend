@@ -74,7 +74,7 @@ class TableFull extends Component {
       this.updateAllChecked();
   }
 
-  // updates state whether all rows are checked
+  // checks if all rows checked and updates state
   updateAllChecked() {
     if (this.allChecked())
       this.setState({ allChecked: true });
@@ -90,6 +90,7 @@ class TableFull extends Component {
     this.setState({ showMore: !this.state.showMore });
   }
 
+  // toggle check/uncheck all
   toggleAllChecked() {
     if (this.allChecked())
       this.uncheckAll();
@@ -155,14 +156,10 @@ class TableFull extends Component {
     const allOthersUnchecked = this.allOthersUnchecked(id);
 
     for (const metapath of metapaths) {
-      if (allOthersUnchecked)
+      if (allOthersUnchecked || id === metapath.id)
         metapath.checked = true;
-      else {
-        if (id === metapath.id)
-          metapath.checked = true;
-        else
-          metapath.checked = false;
-      }
+      else
+        metapath.checked = false;
     }
 
     this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
