@@ -74,8 +74,8 @@ export function searchNodes(searchString, metatypes) {
 // search for metapaths by source/target id
 export function searchMetapaths(sourceId, targetId) {
   const params = new URLSearchParams();
-  params.set('source', sourceId || '');
-  params.set('target', targetId || '');
+  params.set('source', sourceId);
+  params.set('target', targetId);
   const query = metapathSearchServer + '?' + params.toString();
   return fetchJson(query).then((results) => {
     return results.path_counts;
@@ -85,9 +85,9 @@ export function searchMetapaths(sourceId, targetId) {
 // search for paths by metapaths
 export function searchPaths(sourceId, targetId, metapath) {
   const params = new URLSearchParams();
-  params.set('source', sourceId || '');
-  params.set('target', targetId || '');
-  params.set('metapath', metapath || '');
+  params.set('source', sourceId);
+  params.set('target', targetId);
+  params.set('metapath', metapath);
   const query = pathSearchServer + '?' + params.toString();
   return fetchJson(query).then((results) => {
     return results;

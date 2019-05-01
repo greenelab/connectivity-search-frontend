@@ -374,12 +374,18 @@ class TableFull extends Component {
     if (this.state.sortUp)
       sortedPaths.reverse();
 
-    //
+    // count paths
     const pathCount = sortedPaths.length;
     let pathSelectedCount = 0;
     for (const path of sortedPaths) {
       if (path.checked)
         pathSelectedCount++;
+    }
+
+    let pathHighlightedCount = 0;
+    for (const path of sortedPaths) {
+      if (path.highlighted)
+        pathHighlightedCount++;
     }
 
     return (
@@ -416,7 +422,8 @@ class TableFull extends Component {
             tooltipText='Expand table'
           />
           <div className='small light right'>
-            {pathCount} results, {pathSelectedCount} selected
+            {pathCount} results, {pathSelectedCount} selected,{' '}
+            {pathHighlightedCount} highlighted
           </div>
         </div>
         <div className='table_container' data-expanded={this.state.showMore}>

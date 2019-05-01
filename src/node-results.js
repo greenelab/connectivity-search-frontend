@@ -90,8 +90,11 @@ class TableFull extends Component {
       // set first col to field name
       const firstCol = field;
       // default second col to field value in node
-      let secondCol =
-        this.props.node[field] || this.props.node.data[field] || '';
+      let secondCol = this.props.node[field];
+      if (secondCol === undefined)
+        secondCol = this.props.node.data[field];
+      if (secondCol === undefined)
+        secondCol = '';
 
       // handle special field cases
       if (field === 'metanode') {

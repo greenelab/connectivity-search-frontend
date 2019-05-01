@@ -46,8 +46,8 @@ export function toGradient(number) {
   number = Math.log10(number);
 
   // start/end cutoffs for exponent
-  const rangeStart = -1;
-  const rangeEnd = -10;
+  const rangeStart = 0;
+  const rangeEnd = -8;
 
   // get percent that number is through range
   let percent = (number - rangeStart) / (rangeEnd - rangeStart);
