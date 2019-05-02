@@ -1,0 +1,28 @@
+#graph_container {
+  margin-top: 5px;
+  position: relative;
+}
+#graph {
+  border: solid #e0e0e0 1px;
+  position: absolute;
+}
+#graph * {
+  user-select: none;
+}
+.graph_dimensions {
+  margin: 0 10px;
+}
+#graph_width,
+#graph_height {
+  width: 50px;
+  padding: 5px;
+  background: #eeeeee;
+  border: none;
+}
+#graph_width:focus,
+#graph_height:focus {
+  background: #e0f7fa;
+}
+.graph_expand_collapse_button {
+  margin: 0 !important;
+}
