@@ -1,7 +1,9 @@
 import puppeteer from 'puppeteer';
 
 test('renders without crashing', async () => {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox']
+  });
   const page = await browser.newPage();
   page.emulate({
     viewport: {
