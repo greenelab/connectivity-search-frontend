@@ -3,7 +3,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: node:8.15.1-stretch
+      - image: buildkite/puppeteer:v1.15.0
     working_directory: ~/hetmech-frontend
     steps:
       - checkout

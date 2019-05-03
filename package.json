@@ -8,6 +8,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.8.0",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "@material-ui/core": "^3.9.2",
+    "d3": "^5.9.2",
     "downshift": "^3.2.7",
     "font-awesome": "^4.7.0",
     "npm": "^6.9.0",
@@ -19,9 +20,9 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "bash run-start.sh",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "bash run-test.sh",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -36,6 +37,7 @@
   "devDependencies": {
     "eslint-config-google": "^0.12.0",
     "eslint-plugin-html": "^5.0.3",
-    "eslint-plugin-react": "^7.12.4"
+    "eslint-plugin-react": "^7.12.4",
+    "puppeteer": "^1.15.0"
   }
 }

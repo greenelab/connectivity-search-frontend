@@ -7,6 +7,7 @@ import { NodeSearch } from './node-search.js';
 import { NodeResults } from './node-results.js';
 import { MetapathResults } from './metapath-results.js';
 import { PathResults } from './path-results.js';
+import { PathGraph } from './path-graph.js';
 import { getMetagraph } from './backend-query.js';
 import { getHetioDefinitions } from './backend-query.js';
 import { getHetioStyles } from './backend-query.js';
@@ -202,6 +203,7 @@ class App extends Component {
         <NodeResults />
         <MetapathResults />
         <PathResults />
+        <PathGraph />
       </>
     );
   }

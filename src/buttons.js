@@ -41,12 +41,12 @@ export class TextButton extends Component {
   render() {
     return (
       <Button
-        className='text_button small'
+        className={this.props.className + ' text_button small'}
         tooltipText={this.props.tooltipText}
         onClick={this.props.onClick}
         onCtrlClick={this.props.onCtrlClick}
       >
-        {this.props.text}
+        {this.props.text && <span>{this.props.text}</span>}
         <FontAwesomeIcon icon={this.props.icon} className='text_button_icon' />
       </Button>
     );

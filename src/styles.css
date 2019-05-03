@@ -113,18 +113,22 @@ textarea {
 }
 .table_attic {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
+  flex-wrap: wrap;
 }
-.table_attic > div:last-child {
+.table_attic > *:last-child {
   flex-grow: 1;
+}
+.table_attic > * {
+  margin: 5px 5px;
 }
 .table_container {
   text-align: center;
   box-sizing: border-box;
   max-height: 50vh;
   overflow: auto;
-  border: solid #eeeeee 1px;
+  border: solid #e0e0e0 1px;
 }
 @media screen and (min-width: 320px) {
   .table_container[data-expanded='true'] {
