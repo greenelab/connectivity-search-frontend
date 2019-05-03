@@ -12,17 +12,6 @@
 .graph_dimensions {
   margin: 0 10px;
 }
-#graph_width,
-#graph_height {
-  width: 50px;
-  padding: 5px;
-  background: #eeeeee;
-  border: none;
-}
-#graph_width:focus,
-#graph_height:focus {
-  background: #e0f7fa;
-}
 .graph_expand_collapse_button {
   margin: 0 !important;
 }

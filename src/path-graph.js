@@ -12,6 +12,7 @@ import { faCompressArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 import { CollapsibleSection } from './collapsible-section.js';
+import { NumberBox } from './number-box.js';
 import { TextButton } from './buttons.js';
 import { downloadSvg } from './util.js';
 import './path-graph.css';
@@ -52,7 +53,8 @@ export class PathGraph extends Component {
     this.expandContainer = this.expandContainer.bind(this);
     this.collapseContainer = this.collapseContainer.bind(this);
     this.updateSectionWidth = this.updateSectionWidth.bind(this);
-    this.setDimensions = this.setDimensions.bind(this);
+    this.setWidth = this.setWidth.bind(this);
+    this.setHeight = this.setHeight.bind(this);
     this.setGraphCounts = this.setGraphCounts.bind(this);
   }
 
@@ -112,16 +114,14 @@ export class PathGraph extends Component {
     });
   }
 
-  // set dimensions of graph container
-  setDimensions(event) {
-    const box = event.target;
-    if (!box)
-      return;
-    const value = parseInt(box.value) || '';
-    if (box.id === 'graph_width')
-      this.setState({ width: value });
-    if (box.id === 'graph_height')
-      this.setState({ height: value });
+  // set width of graph container
+  setWidth(value) {
+    this.setState({ width: value });
+  }
+
+  // set height of graph container
+  setHeight(value) {
+    this.setState({ height: value });
   }
 
   // download graph as svg
@@ -189,20 +189,24 @@ export class PathGraph extends Component {
               onClick={this.downloadSvg}
               tooltipText='Download the graph as an .svg file'
             />
-            <input
-              type='number'
-              id='graph_width'
-              value={this.state.width}
-              onChange={this.setDimensions}
+            <NumberBox
+              tooltipText='Width of the container'
+              min={minWidth}
               step='5'
+              max={maxWidth}
+              value={this.state.width}
+              onArrows={this.setWidth}
+              onSubmit={this.setWidth}
             />
             &times;
-            <input
-              type='number'
-              id='graph_height'
-              value={this.state.height}
-              onChange={this.setDimensions}
+            <NumberBox
+              tooltipText='Height of the container'
+              min={minHeight}
               step='5'
+              max={maxHeight}
+              value={this.state.height}
+              onArrows={this.setHeight}
+              onSubmit={this.setHeight}
             />
             <TextButton
               className='graph_expand_collapse_button'

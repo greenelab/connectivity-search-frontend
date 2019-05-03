@@ -1,0 +1,9 @@
+.number_box {
+  width: 50px;
+  padding: 5px;
+  background: #eeeeee;
+  border: none;
+}
+.number_box:focus {
+  background: #e0f7fa;
+}
