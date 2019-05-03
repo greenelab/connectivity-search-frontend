@@ -50,7 +50,7 @@ export class Tooltip extends Component {
       target.getBoundingClientRect().top + document.documentElement.scrollTop;
 
     // avoid scrunching tooltip too skinny when close to right side of view
-    const x = Math.min(left, window.innerWidth - 200);
+    const x = Math.min(left, document.body.clientWidth - 200);
     const y = top;
 
     // open tooltip and update x/y position

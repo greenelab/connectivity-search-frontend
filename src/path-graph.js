@@ -96,7 +96,7 @@ export class PathGraph extends Component {
 
   // expand graph container to width of window
   expandContainer() {
-    const width = window.innerWidth - 20 - 20;
+    const width = document.body.clientWidth - 20 - 20;
     const height = (width * 3) / 4;
     this.setState({
       width: width,
@@ -181,7 +181,7 @@ export class PathGraph extends Component {
                 if (this.graph.current)
                   this.graph.current.fitView();
               }}
-              tooltipText='Fit the view to the graph'
+              tooltipText='Fit the view to the contents of the graph'
             />
             <TextButton
               text='.svg'
@@ -841,7 +841,7 @@ export class Graph extends Component {
     let left = 0;
     if (this.props.sectionWidth && this.props.width) {
       left = this.props.sectionWidth / 2 - this.props.width / 2;
-      const minLeft = this.props.sectionWidth / 2 - window.innerWidth / 2 + 20;
+      const minLeft = this.props.sectionWidth / 2 - document.body.clientWidth / 2 + 20;
       if (left < minLeft)
         left = minLeft;
     }
