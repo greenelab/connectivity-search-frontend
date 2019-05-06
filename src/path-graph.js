@@ -32,6 +32,8 @@ const nodeRepulsion = 200;
 const edgeFontSize = 8;
 const edgeThickness = 2;
 const edgeArrowSize = 10;
+const edgeSpreadDistance = 20;
+const edgeSpreadAngle = (45 / 360) * 2 * Math.PI;
 const inkColor = '#424242';
 const backgroundColor = '#fafafa';
 const highlightColor = '#02b3e4';
@@ -376,44 +378,90 @@ export class Graph extends Component {
 
   // position edge line between source/target node
   positionEdge(d, i, s) {
-    const angle = Math.atan2(d.target.y - d.source.y, d.target.x - d.source.x);
+    let x1 = d.source.x;
+    let y1 = d.source.y;
+    let x2 = d.target.x;
+    let y2 = d.target.y;
+    let path = '';
+
     const sourceRadius = nodeRadius - 1;
     let targetRadius = nodeRadius - 1;
     if (d.directed)
-      targetRadius += edgeArrowSize;
+      targetRadius += edgeArrowSize / 4;
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+
+    if (d.coincidentOffset === 0) {
+      x1 += Math.cos(angle) * sourceRadius;
+      y1 += Math.sin(angle) * sourceRadius;
+      x2 -= Math.cos(angle) * targetRadius;
+      y2 -= Math.sin(angle) * targetRadius;
+
+      path = ['M', x1, y1, 'L', x2, y2].join(' ');
+    } else {
+      const angleOffset = edgeSpreadAngle * d.coincidentOffset;
+
+      x1 += Math.cos(angle + angleOffset) * sourceRadius;
+      y1 += Math.sin(angle + angleOffset) * sourceRadius;
+      x2 -= Math.cos(angle - angleOffset) * targetRadius;
+      y2 -= Math.sin(angle - angleOffset) * targetRadius;
+
+      const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+      const spreadDistance = Math.min(edgeSpreadDistance, distance);
+
+      const sag = spreadDistance * d.coincidentOffset;
+
+      const qX = (x2 + x1) / 2 - (2 * sag * (y2 - y1)) / distance;
+      const qY = (y2 + y1) / 2 + (2 * sag * (x2 - x1)) / distance;
+
+      path = ['M', x1, y1, 'Q', qX, qY, x2, y2].join(' ');
+    }
 
     const edge = s[i];
-    d3.select(edge)
-      .attr('x1', d.source.x + sourceRadius * Math.cos(angle))
-      .attr('y1', d.source.y + sourceRadius * Math.sin(angle))
-      .attr('x2', d.target.x - targetRadius * Math.cos(angle))
-      .attr('y2', d.target.y - targetRadius * Math.sin(angle));
+    d3.select(edge).attr('d', path);
   }
 
   // position edge label in center of edge line and rotate
   positionEdgeLabel(d, i, s) {
-    const translateX = (d.source.x + d.target.x) / 2;
-    const translateY = (d.source.y + d.target.y) / 2;
-    let rotate =
-      (Math.atan2(d.target.y - d.source.y, d.target.x - d.source.x) * 180) /
-      Math.PI;
-    if (d.source.x > d.target.x)
-      rotate += 180;
+    let x1 = d.source.x;
+    let y1 = d.source.y;
+    let x2 = d.target.x;
+    let y2 = d.target.y;
+
+    const sourceRadius = nodeRadius - 1;
+    let targetRadius = nodeRadius - 1;
+    if (d.directed)
+      targetRadius += edgeArrowSize / 4;
+
+    let angle = Math.atan2(y2 - y1, x2 - x1);
+
+    const angleOffset = edgeSpreadAngle * d.coincidentOffset;
+
+    x1 += Math.cos(angle + angleOffset) * sourceRadius;
+    y1 += Math.sin(angle + angleOffset) * sourceRadius;
+    x2 -= Math.cos(angle - angleOffset) * targetRadius;
+    y2 -= Math.sin(angle - angleOffset) * targetRadius;
+
+    const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+    const spreadDistance = Math.min(edgeSpreadDistance, distance);
+    const sag = spreadDistance * d.coincidentOffset;
+    const midX = (x2 + x1) / 2 - (sag * (y2 - y1)) / distance;
+    const midY = (y2 + y1) / 2 + (sag * (x2 - x1)) / distance;
+    let dy = -0.35 * edgeFontSize;
+    if (midY > (y2 + y1) / 2)
+      dy = 0.85 * edgeFontSize;
+
+    angle = (angle / (2 * Math.PI)) * 360;
+    if (x1 > x2)
+      angle += 180;
 
     const edgeLabel = s[i];
     d3.select(edgeLabel)
       .attr('x', 0)
       .attr('y', 0)
+      .attr('dy', dy)
       .attr(
         'transform',
-        ' translate(' +
-          translateX +
-          ',' +
-          translateY +
-          ') ' +
-          ' rotate(' +
-          rotate +
-          ') '
+        ' translate(' + midX + ',' + midY + ') ' + ' rotate(' + angle + ') '
       );
   }
 
@@ -543,11 +591,13 @@ export class Graph extends Component {
 
     edgeLineHighlights
       .enter()
-      .append('line')
+      .append('path')
       .merge(edgeLineHighlights)
       .attr('class', 'graph_edge_line_highlight')
+      .attr('fill', 'none')
       .attr('stroke', highlightColor)
-      .attr('stroke-width', edgeThickness * 4)
+      .attr('stroke-width', edgeArrowSize)
+      .attr('stroke-linecap', 'square')
       .attr('opacity', 0.35);
 
     edgeLineHighlights.exit().remove();
@@ -562,7 +612,7 @@ export class Graph extends Component {
 
     edgeLines
       .enter()
-      .append('line')
+      .append('path')
       .merge(edgeLines)
       .attr('class', 'graph_edge_line')
       .attr('marker-end', (d) => {
@@ -571,6 +621,7 @@ export class Graph extends Component {
         else
           return '';
       })
+      .attr('fill', 'none')
       .attr('stroke', inkColor)
       .attr('stroke-width', edgeThickness);
 
@@ -594,7 +645,6 @@ export class Graph extends Component {
       .attr('text-anchor', 'middle')
       .attr('pointer-events', 'none')
       .attr('fill', inkColor)
-      .attr('dy', -edgeFontSize / 4)
       .text((d) => d.kind);
 
     edgeLabels.exit().remove();
@@ -617,7 +667,7 @@ export class Graph extends Component {
       .attr('r', nodeRadius)
       .attr('fill', 'none')
       .attr('stroke', highlightColor)
-      .attr('stroke-width', edgeThickness * 4)
+      .attr('stroke-width', edgeArrowSize)
       .attr('opacity', 0.35);
 
     nodeCircleHighlights.exit().remove();
@@ -788,7 +838,9 @@ export class Graph extends Component {
           const existingEdge = graph.edges.find(
             (edge) =>
               edge.source === pathQuery.relationships[relId].source_neo4j_id &&
-              edge.target === pathQuery.relationships[relId].target_neo4j_id
+              edge.target === pathQuery.relationships[relId].target_neo4j_id &&
+              edge.kind === pathQuery.relationships[relId].kind &&
+              edge.directed === pathQuery.relationships[relId].directed
           );
           if (!existingEdge) {
             // if edge hasn't been added to graph yet, add it
@@ -803,6 +855,37 @@ export class Graph extends Component {
             // if edge already in graph, still update highlight status
             existingEdge.highlighted = true;
         }
+      }
+    }
+
+    // loop through all edges in graph to find coincident edges
+    // (multiple edges connecting the same two nodes)
+    const edgeBins = [];
+    for (const edgeA of graph.edges) {
+      let matched = false;
+      for (const edgeBin of edgeBins) {
+        const match = edgeBin.find(
+          (edgeB) =>
+            (edgeA.source === edgeB.source && edgeA.target === edgeB.target) ||
+            (edgeA.source === edgeB.target && edgeA.target === edgeB.source)
+        );
+        if (match) {
+          edgeBin.push(edgeA);
+          matched = true;
+        }
+      }
+      if (!matched)
+        edgeBins.push([edgeA]);
+    }
+    for (const edgeBin of edgeBins) {
+      const firstSource = edgeBin[0].source;
+      for (let index = 0; index < edgeBin.length; index++) {
+        let offset = 0;
+        if (edgeBin.length > 1)
+          offset = -0.5 + index / (edgeBin.length - 1);
+        if (edgeBin[index].source === firstSource)
+          offset *= -1;
+        edgeBin[index].coincidentOffset = offset;
       }
     }
 
@@ -841,7 +924,8 @@ export class Graph extends Component {
     let left = 0;
     if (this.props.sectionWidth && this.props.width) {
       left = this.props.sectionWidth / 2 - this.props.width / 2;
-      const minLeft = this.props.sectionWidth / 2 - document.body.clientWidth / 2 + 20;
+      const minLeft =
+        this.props.sectionWidth / 2 - document.body.clientWidth / 2 + 20;
       if (left < minLeft)
         left = minLeft;
     }
@@ -858,17 +942,17 @@ export class Graph extends Component {
           <defs>
             <style>
               {`
-              @import url('https://fonts.googleapis.com/css?family=Raleway:400,500,700');
-              @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700&text=0123456789');
-              * {
-                font-family: 'Montserrat', 'Raleway', sans-serif;
-              }
-            `}
+                @import url('https://fonts.googleapis.com/css?family=Raleway:400,500,700');
+                @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700&text=0123456789');
+                * {
+                  font-family: 'Montserrat', 'Raleway', sans-serif;
+                }
+              `}
             </style>
             <marker
               id='graph_arrowhead'
               viewBox='0 0 100 100'
-              refX='1'
+              refX='80'
               refY='50'
               orient='auto'
               markerUnits='userSpaceOnUse'
@@ -877,9 +961,9 @@ export class Graph extends Component {
             >
               <path
                 d='
-                M 0 0
-                L 100 50
-                L 0 100'
+                  M 0 0
+                  L 100 50
+                  L 0 100'
                 fill={inkColor}
               />
             </marker>
@@ -888,8 +972,8 @@ export class Graph extends Component {
             <g id='graph_edge_line_highlight_layer' />
             <g id='graph_node_circle_highlight_layer' />
             <g id='graph_edge_line_layer' />
-            <g id='graph_edge_label_layer' />
             <g id='graph_node_circle_layer' />
+            <g id='graph_edge_label_layer' />
             <g id='graph_node_label_layer' />
           </g>
         </svg>
