@@ -165,8 +165,3 @@ export function sortCustom(array, order, key) {
       return b - a;
   });
 }
-
-// xor logical test
-export function xor(conditionA, conditionB) {
-  return (!conditionA && conditionB) || (conditionA && !conditionB);
-}

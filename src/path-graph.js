@@ -15,7 +15,6 @@ import { CollapsibleSection } from './collapsible-section.js';
 import { NumberBox } from './number-box.js';
 import { TextButton } from './buttons.js';
 import { downloadSvg } from './util.js';
-import { xor } from './util.js';
 import './path-graph.css';
 
 // graph settings
@@ -474,18 +473,22 @@ export class Graph extends Component {
     const textX = (x2 + x1) / 2 - (sag * (y2 - y1)) / distance;
     const textY = (y2 + y1) / 2 + (sag * (x2 - x1)) / distance;
 
-    // set vertical alignment of text relative to anchor point
-    let dy = -0.35 * edgeFontSize;
-    // always place text on "outside" side of curve
-    // if (sag * (d.target.x - d.source.x) > 0)
-    if (xor(sag < 0, d.target.x >= d.source.x))
-      dy = 0.85 * edgeFontSize;
-
     // get angle of text in degrees
     angle = (angle / (2 * Math.PI)) * 360;
     // rotate text to always show upright
-    if (d.source.x > d.target.x)
+    // if (d.source.x > d.target.x)
+    if (angle > 90)
+      angle -= 180;
+    if (angle <= -90)
       angle += 180;
+
+    angle = Math.round(angle);
+
+    // set vertical alignment of text relative to anchor point
+    let dy = -0.35 * edgeFontSize;
+    // always place text on "outside" side of curve
+    if (sag < 0 && d.source.x > d.target.x)
+      dy = 1.1 * edgeFontSize;
 
     // set edge text transform
     const edgeLabel = s[i];
