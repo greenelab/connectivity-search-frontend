@@ -10,6 +10,7 @@ jobs:
       - run:
           name: Frontend tests
           command: |
+            apt-get update && apt-get install procps --yes
             npm install
             npm test
             npm run build
@@ -43,7 +44,7 @@ jobs:
               --user "CircleCI Deploy Job <ci-build@circleci.com>" \
               --message \
             "Deploy webpage on `date --utc --iso-8601`
-            
+
             Builds https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME/commit/$CIRCLE_SHA1
             Pushed by $CIRCLE_BUILD_URL
 
