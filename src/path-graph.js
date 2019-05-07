@@ -476,13 +476,10 @@ export class Graph extends Component {
     // get angle of text in degrees
     angle = (angle / (2 * Math.PI)) * 360;
     // rotate text to always show upright
-    // if (d.source.x > d.target.x)
     if (angle > 90)
       angle -= 180;
     if (angle <= -90)
       angle += 180;
-
-    angle = Math.round(angle);
 
     // set vertical alignment of text relative to anchor point
     let dy = -0.35 * edgeFontSize;
