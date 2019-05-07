@@ -1,13 +1,19 @@
 #!/bin/bash
+#
+# Kills all existing react-scripts processes and thus frees default port 3000
+# to be used by new react-scripts process.
 
-# kills any existing react-scripts processes and thus frees
-# default port 3000 to be used by new react-scripts instance
+echo "Killing all existing react-scripts processes ..."
 
-echo "killing any existing react-scripts instances"
+PROCESSES=`ps -ef | grep -i -E "react-scripts.*(start|test)" | grep -v grep`
 
-processes=`ps -ef | grep -i -E "react-scripts.*(start|test)"`
-while read process; do
-  echo killing process $process
-  processId=`awk '{print $2}' <<< $process`
-  kill -9 $processId
-done <<< $processes
+if [ -z "$PROCESSES" ]; then
+    exit
+fi
+
+while read PROC; do
+  CMD=`awk '{print $8, $9, $10}' <<< $PROC`
+  PID=`awk '{print $2}' <<< $PROC`
+  echo "Killing: $CMD"
+  kill -9 $PID
+done <<< $PROCESSES
