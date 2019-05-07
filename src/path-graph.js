@@ -384,11 +384,12 @@ export class Graph extends Component {
     let y2 = d.target.y;
     let path = '';
 
+    const angle = Math.atan2(y2 - y1, x2 - x1);
+
     const sourceRadius = nodeRadius - 1;
     let targetRadius = nodeRadius - 1;
     if (d.directed)
       targetRadius += edgeArrowSize / 4;
-    const angle = Math.atan2(y2 - y1, x2 - x1);
 
     if (d.coincidentOffset === 0) {
       x1 += Math.cos(angle) * sourceRadius;
@@ -427,12 +428,12 @@ export class Graph extends Component {
     let x2 = d.target.x;
     let y2 = d.target.y;
 
+    let angle = Math.atan2(y2 - y1, x2 - x1);
+
     const sourceRadius = nodeRadius - 1;
     let targetRadius = nodeRadius - 1;
     if (d.directed)
       targetRadius += edgeArrowSize / 4;
-
-    let angle = Math.atan2(y2 - y1, x2 - x1);
 
     const angleOffset = edgeSpreadAngle * d.coincidentOffset;
 
@@ -444,14 +445,15 @@ export class Graph extends Component {
     const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
     const spreadDistance = Math.min(edgeSpreadDistance, distance);
     const sag = spreadDistance * d.coincidentOffset;
-    const midX = (x2 + x1) / 2 - (sag * (y2 - y1)) / distance;
-    const midY = (y2 + y1) / 2 + (sag * (x2 - x1)) / distance;
+    const textX = (x2 + x1) / 2 - (sag * (y2 - y1)) / distance;
+    const textY = (y2 + y1) / 2 + (sag * (x2 - x1)) / distance;
+
     let dy = -0.35 * edgeFontSize;
-    if (midY > (y2 + y1) / 2)
+    if (sag > 0 && d.source.x <= d.target.x)
       dy = 0.85 * edgeFontSize;
 
     angle = (angle / (2 * Math.PI)) * 360;
-    if (x1 > x2)
+    if (d.source.x > d.target.x)
       angle += 180;
 
     const edgeLabel = s[i];
@@ -461,7 +463,7 @@ export class Graph extends Component {
       .attr('dy', dy)
       .attr(
         'transform',
-        ' translate(' + midX + ',' + midY + ') ' + ' rotate(' + angle + ') '
+        ' translate(' + textX + ',' + textY + ') ' + ' rotate(' + angle + ') '
       );
   }
 
