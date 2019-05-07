@@ -12,8 +12,8 @@ if [ -z "$PROCESSES" ]; then
 fi
 
 while read PROC; do
-  CMD=`awk '{print $8, $9, $10}' <<< $PROC`
-  PID=`awk '{print $2}' <<< $PROC`
-  echo "Killing: $CMD"
-  kill -9 $PID
+    CMD=`awk '{print $8, $9, $10}' <<< $PROC`
+    PID=`awk '{print $2}' <<< $PROC`
+    echo "Killing: $CMD"
+    kill -9 $PID
 done <<< $PROCESSES
