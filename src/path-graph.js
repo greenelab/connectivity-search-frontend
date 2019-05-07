@@ -15,6 +15,7 @@ import { CollapsibleSection } from './collapsible-section.js';
 import { NumberBox } from './number-box.js';
 import { TextButton } from './buttons.js';
 import { downloadSvg } from './util.js';
+import { xor } from './util.js';
 import './path-graph.css';
 
 // graph settings
@@ -476,7 +477,8 @@ export class Graph extends Component {
     // set vertical alignment of text relative to anchor point
     let dy = -0.35 * edgeFontSize;
     // always place text on "outside" side of curve
-    if (sag > 0 && d.source.x <= d.target.x)
+    // if (sag * (d.target.x - d.source.x) > 0)
+    if (xor(sag < 0, d.target.x >= d.source.x))
       dy = 0.85 * edgeFontSize;
 
     // get angle of text in degrees
@@ -493,7 +495,7 @@ export class Graph extends Component {
       .attr('dy', dy)
       .attr(
         'transform',
-        ' translate(' + textX + ',' + textY + ') ' + ' rotate(' + angle + ') '
+        'translate(' + textX + ',' + textY + ') rotate(' + angle + ') '
       );
   }
 
@@ -898,7 +900,7 @@ export class Graph extends Component {
     for (const edgeA of graph.edges) {
       let matched = false;
       // find bin with edges that have same source/target nodes
-        // (order-insensitve)
+      // (order-insensitve)
       for (const edgeBin of edgeBins) {
         const match = edgeBin.find(
           (edgeB) =>
@@ -909,7 +911,7 @@ export class Graph extends Component {
         if (match) {
           edgeBin.push(edgeA);
           matched = true;
-          return;
+          break;
         }
       }
       // if didn't find matching bin, create new one and add edge to it
