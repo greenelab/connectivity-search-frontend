@@ -5,7 +5,7 @@
 
 echo "Killing all existing react-scripts processes ..."
 
-PROCESSES=`ps -ef | grep -i -E "react-scripts.*(start|test)" | grep -v grep`
+PROCESSES=`ps -ef | grep --extended-regexp "react-scripts.*(start|test)" | grep --invert-match grep`
 
 if [ -z "$PROCESSES" ]; then
     exit
