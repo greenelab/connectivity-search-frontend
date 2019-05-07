@@ -384,39 +384,55 @@ export class Graph extends Component {
     let y2 = d.target.y;
     let path = '';
 
+    // get angle between source/target in radians
     const angle = Math.atan2(y2 - y1, x2 - x1);
 
+    // get radius of source/target nodes
     const sourceRadius = nodeRadius - 1;
     let targetRadius = nodeRadius - 1;
+    // increase target node radius to bring tip of arrowhead out of circle
     if (d.directed)
       targetRadius += edgeArrowSize / 4;
 
     if (d.coincidentOffset === 0) {
+      // if no coincident edges, or middle of odd number of coincident edges,
+      // just draw straight line
+
+      // bring start/end of line to edge of circles
       x1 += Math.cos(angle) * sourceRadius;
       y1 += Math.sin(angle) * sourceRadius;
       x2 -= Math.cos(angle) * targetRadius;
       y2 -= Math.sin(angle) * targetRadius;
 
+      // straight line path
       path = ['M', x1, y1, 'L', x2, y2].join(' ');
     } else {
+      // otherwise, if coincident edge, draw a curve
+
+      // spread out contact points with circle over spread angle
       const angleOffset = edgeSpreadAngle * d.coincidentOffset;
 
+      // bring start/end of curve to edge of circle
       x1 += Math.cos(angle + angleOffset) * sourceRadius;
       y1 += Math.sin(angle + angleOffset) * sourceRadius;
       x2 -= Math.cos(angle - angleOffset) * targetRadius;
       y2 -= Math.sin(angle - angleOffset) * targetRadius;
 
+      // get straight line distance between start/end of curve
       const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-      const spreadDistance = Math.min(edgeSpreadDistance, distance);
 
-      const sag = spreadDistance * d.coincidentOffset;
+      // get "sagitta" distance
+      const sag = Math.min(edgeSpreadDistance, distance) * d.coincidentOffset;
 
+      // get point distance "sag" away from midpoint of line
       const qX = (x2 + x1) / 2 - (2 * sag * (y2 - y1)) / distance;
       const qY = (y2 + y1) / 2 + (2 * sag * (x2 - x1)) / distance;
 
+      // draw curve with handle point Q
       path = ['M', x1, y1, 'Q', qX, qY, x2, y2].join(' ');
     }
 
+    // set edge path
     const edge = s[i];
     d3.select(edge).attr('d', path);
   }
@@ -428,34 +444,48 @@ export class Graph extends Component {
     let x2 = d.target.x;
     let y2 = d.target.y;
 
+    // get angle between source/target in radians
     let angle = Math.atan2(y2 - y1, x2 - x1);
 
+    // get radius of source/target nodes
     const sourceRadius = nodeRadius - 1;
     let targetRadius = nodeRadius - 1;
+    // increase target node radius to bring tip of arrowhead out of circle
     if (d.directed)
       targetRadius += edgeArrowSize / 4;
 
+    // spread out contact points with circle over spread angle
     const angleOffset = edgeSpreadAngle * d.coincidentOffset;
 
+    // bring start/end of curve to edge of circle
     x1 += Math.cos(angle + angleOffset) * sourceRadius;
     y1 += Math.sin(angle + angleOffset) * sourceRadius;
     x2 -= Math.cos(angle - angleOffset) * targetRadius;
     y2 -= Math.sin(angle - angleOffset) * targetRadius;
 
+    // get straight line distance between start/end of curve
     const distance = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
-    const spreadDistance = Math.min(edgeSpreadDistance, distance);
-    const sag = spreadDistance * d.coincidentOffset;
+
+    // get "sagitta" distance
+    const sag = Math.min(edgeSpreadDistance, distance) * d.coincidentOffset;
+
+    // get anchor point of text, point distance "sag" away from midpoint of line
     const textX = (x2 + x1) / 2 - (sag * (y2 - y1)) / distance;
     const textY = (y2 + y1) / 2 + (sag * (x2 - x1)) / distance;
 
+    // set vertical alignment of text relative to anchor point
     let dy = -0.35 * edgeFontSize;
+    // always place text on "outside" side of curve
     if (sag > 0 && d.source.x <= d.target.x)
       dy = 0.85 * edgeFontSize;
 
+    // get angle of text in degrees
     angle = (angle / (2 * Math.PI)) * 360;
+    // rotate text to always show upright
     if (d.source.x > d.target.x)
       angle += 180;
 
+    // set edge text transform
     const edgeLabel = s[i];
     d3.select(edgeLabel)
       .attr('x', 0)
@@ -862,30 +892,45 @@ export class Graph extends Component {
 
     // loop through all edges in graph to find coincident edges
     // (multiple edges connecting the same two nodes)
+
+    // sort all edges in graph into bins of same source/target nodes
     const edgeBins = [];
     for (const edgeA of graph.edges) {
       let matched = false;
+      // find bin with edges that have same source/target nodes
+        // (order-insensitve)
       for (const edgeBin of edgeBins) {
         const match = edgeBin.find(
           (edgeB) =>
             (edgeA.source === edgeB.source && edgeA.target === edgeB.target) ||
             (edgeA.source === edgeB.target && edgeA.target === edgeB.source)
         );
+        // if matching bin found, add edge to it
         if (match) {
           edgeBin.push(edgeA);
           matched = true;
+          return;
         }
       }
+      // if didn't find matching bin, create new one and add edge to it
       if (!matched)
         edgeBins.push([edgeA]);
     }
+
+    // loop through edge bins
     for (const edgeBin of edgeBins) {
+      // for each edge in bin, assign coincident "offset", a value between
+      // -1 and 1 used for drawing, where 0 is straight line, negative is curve
+      // on one side, and positive is curve on other side
       const firstSource = edgeBin[0].source;
       for (let index = 0; index < edgeBin.length; index++) {
+        // default offset to 0
         let offset = 0;
         if (edgeBin.length > 1)
           offset = -0.5 + index / (edgeBin.length - 1);
-        if (edgeBin[index].source === firstSource)
+        // if edge source/target order in reverse order as rest of bin,
+        // invert offset
+        if (edgeBin[index].source !== firstSource)
           offset *= -1;
         edgeBin[index].coincidentOffset = offset;
       }
