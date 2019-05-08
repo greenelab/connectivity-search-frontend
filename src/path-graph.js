@@ -36,7 +36,7 @@ const edgeSpreadDistance = 20;
 const edgeSpreadAngle = (45 / 360) * 2 * Math.PI;
 const inkColor = '#424242';
 const backgroundColor = '#fafafa';
-const highlightColor = '#02b3e4';
+const highlightColor = '#B3E8F7';
 
 // path graph section component
 export class PathGraph extends Component {
@@ -249,12 +249,15 @@ export class Graph extends Component {
 
     this.state = {};
     this.state.data = this.assembleGraph(null);
+    this.state.selectedElement = null;
 
     this.fitView = this.fitView.bind(this);
     this.resetView = this.resetView.bind(this);
     this.onSimulationTick = this.onSimulationTick.bind(this);
+    this.onNodeEdgeClick = this.onNodeEdgeClick.bind(this);
     this.onNodeDragStart = this.onNodeDragStart.bind(this);
     this.onNodeDragEnd = this.onNodeDragEnd.bind(this);
+    this.onViewClick = this.onViewClick.bind(this);
   }
 
   // when component mounts
@@ -275,7 +278,7 @@ export class Graph extends Component {
       // positions/velocities/etc
       for (const newNode of this.state.data.nodes) {
         for (const oldNode of prevState.data.nodes) {
-          if (newNode.id === oldNode.id) {
+          if (newNode.neo4j_id === oldNode.neo4j_id) {
             newNode.x = oldNode.x;
             newNode.y = oldNode.y;
             newNode.fx = oldNode.fx;
@@ -320,7 +323,7 @@ export class Graph extends Component {
         d3
           .forceLink()
           .distance(nodeDistance)
-          .id((d) => d.id)
+          .id((d) => d.neo4j_id)
       )
       .force(
         'collide',
@@ -339,6 +342,9 @@ export class Graph extends Component {
       .scaleExtent([minZoom, maxZoom])
       .on('zoom', this.onViewZoom);
     svg.call(viewZoomHandler);
+
+    // handle clicks on background
+    svg.on('click', this.onViewClick);
 
     // create handler for dragging nodes
     const nodeDragHandler = d3
@@ -388,8 +394,8 @@ export class Graph extends Component {
     const angle = Math.atan2(y2 - y1, x2 - x1);
 
     // get radius of source/target nodes
-    const sourceRadius = nodeRadius - 1;
-    let targetRadius = nodeRadius - 1;
+    const sourceRadius = nodeRadius - 0.25;
+    let targetRadius = nodeRadius - 0.25;
     // increase target node radius to bring tip of arrowhead out of circle
     if (d.directed)
       targetRadius += edgeArrowSize / 4;
@@ -448,8 +454,8 @@ export class Graph extends Component {
     let angle = Math.atan2(y2 - y1, x2 - x1);
 
     // get radius of source/target nodes
-    const sourceRadius = nodeRadius - 1;
-    let targetRadius = nodeRadius - 1;
+    const sourceRadius = nodeRadius - 0.25;
+    let targetRadius = nodeRadius - 0.25;
     // increase target node radius to bring tip of arrowhead out of circle
     if (d.directed)
       targetRadius += edgeArrowSize / 4;
@@ -585,6 +591,30 @@ export class Graph extends Component {
     });
   }
 
+  // when node or edge clicked by user
+  onNodeEdgeClick(d) {
+    d3.event.stopPropagation();
+
+    if (!d.selected) {
+      this.deselectAll();
+      d.selected = true;
+    } else
+      this.deselectAll();
+
+    this.updateNodeCircles();
+    this.updateEdgeLines();
+
+    this.setState({ selectedElement: d });
+  }
+
+  // deselect all elements
+  deselectAll() {
+    for (const node of this.state.data.nodes)
+      node.selected = undefined;
+    for (const edge of this.state.data.edges)
+      edge.selected = undefined;
+  }
+
   // when node dragged by user
   onNodeDragStart() {
     this.state.simulation.alphaTarget(1).restart();
@@ -599,6 +629,14 @@ export class Graph extends Component {
   // when node dragged by user
   onNodeDragEnd() {
     this.state.simulation.alphaTarget(0).restart();
+  }
+
+  // when view/background is clicked by user
+  onViewClick() {
+    this.deselectAll();
+    this.updateNodeCircles();
+    this.updateEdgeLines();
+    this.setState({ selectedElement: null });
   }
 
   // when view panned or zoomed by user
@@ -631,8 +669,7 @@ export class Graph extends Component {
       .attr('fill', 'none')
       .attr('stroke', highlightColor)
       .attr('stroke-width', edgeArrowSize)
-      .attr('stroke-linecap', 'square')
-      .attr('opacity', 0.35);
+      .attr('stroke-linecap', 'square');
 
     edgeLineHighlights.exit().remove();
   }
@@ -647,6 +684,7 @@ export class Graph extends Component {
     edgeLines
       .enter()
       .append('path')
+      .on('click', this.onNodeEdgeClick)
       .merge(edgeLines)
       .attr('class', 'graph_edge_line')
       .attr('marker-end', (d) => {
@@ -657,7 +695,14 @@ export class Graph extends Component {
       })
       .attr('fill', 'none')
       .attr('stroke', inkColor)
-      .attr('stroke-width', edgeThickness);
+      .attr('stroke-width', edgeThickness)
+      .style('stroke-dasharray', (d) => {
+        if (d.selected)
+          return edgeThickness * 2 + ' ' + edgeThickness;
+        else
+          return 'none';
+      })
+      .style('cursor', 'pointer');
 
     edgeLines.exit().remove();
   }
@@ -672,13 +717,15 @@ export class Graph extends Component {
     edgeLabels
       .enter()
       .append('text')
+      .on('click', this.onNodeEdgeClick)
       .merge(edgeLabels)
       .attr('class', 'graph_edge_label')
       .attr('font-size', edgeFontSize)
       .attr('font-weight', 500)
       .attr('text-anchor', 'middle')
-      .attr('pointer-events', 'none')
+      .attr('user-select', 'none')
       .attr('fill', inkColor)
+      .style('cursor', 'pointer')
       .text((d) => d.kind);
 
     edgeLabels.exit().remove();
@@ -701,8 +748,7 @@ export class Graph extends Component {
       .attr('r', nodeRadius)
       .attr('fill', 'none')
       .attr('stroke', highlightColor)
-      .attr('stroke-width', edgeArrowSize)
-      .attr('opacity', 0.35);
+      .attr('stroke-width', edgeArrowSize);
 
     nodeCircleHighlights.exit().remove();
   }
@@ -717,12 +763,21 @@ export class Graph extends Component {
     nodeCircles
       .enter()
       .append('circle')
+      .call(this.state.nodeDragHandler)
+      .on('click', this.onNodeEdgeClick)
       .merge(nodeCircles)
       .attr('class', 'graph_node_circle')
       .attr('r', nodeRadius)
       .attr('fill', (d) => this.getNodeFillColor(d.metanode))
-      .style('cursor', 'pointer')
-      .call(this.state.nodeDragHandler);
+      .attr('stroke', (d) => {
+        if (d.selected)
+          return inkColor;
+        else
+          return 'none';
+      })
+      .attr('stroke-width', edgeThickness)
+      .style('stroke-dasharray', edgeThickness * 2 + ' ' + edgeThickness)
+      .style('cursor', 'pointer');
 
     nodeCircles.exit().remove();
   }
@@ -763,10 +818,10 @@ export class Graph extends Component {
       .style('color', (d) => this.getNodeTextColor(d.metanode))
       .style('word-break', 'break-word')
       .html((d) => {
-        if (d.name.length > nodeCharLimit)
-          return d.name.substr(0, nodeCharLimit - 3) + '...';
+        if (d.data.name.length > nodeCharLimit)
+          return d.data.name.substr(0, nodeCharLimit - 3) + '...';
         else
-          return d.name;
+          return d.data.name;
       });
 
     nodeLabels.exit().remove();
@@ -789,13 +844,13 @@ export class Graph extends Component {
     const data = this.state.data;
 
     data.nodes.forEach((node) => {
-      if (node.id === data.source) {
+      if (node.neo4j_id === data.source_neo4j_id) {
         if (!node.x && !node.fx)
           node.fx = -nodeDistance * 2;
         if (!node.y && !node.fy)
           node.fy = 0;
       }
-      if (node.id === data.target) {
+      if (node.neo4j_id === data.target_neo4j_id) {
         if (!node.x && !node.fx)
           node.fx = nodeDistance * 2;
         if (!node.y && !node.fy)
@@ -825,7 +880,12 @@ export class Graph extends Component {
   // construct graph object with relevant properties for each node/edge
   assembleGraph(pathQueries) {
     // empty graph object
-    const graph = { source: null, target: null, nodes: [], edges: [] };
+    const graph = {
+      source_neo4j_id: null,
+      target_neo4j_id: null,
+      nodes: [],
+      edges: []
+    };
 
     // if null explicitly provided as argument, return empty graph object
     if (pathQueries === null)
@@ -841,8 +901,8 @@ export class Graph extends Component {
 
     // get source/target nodes from first path in pathQueries
     const firstPath = pathQueries[0].paths[0];
-    graph.source = firstPath.node_ids[0];
-    graph.target = firstPath.node_ids[firstPath.node_ids.length - 1];
+    graph.source_neo4j_id = firstPath.node_ids[0];
+    graph.target_neo4j_id = firstPath.node_ids[firstPath.node_ids.length - 1];
 
     // loop through all paths in pathQueries
     for (const pathQuery of pathQueries) {
@@ -853,13 +913,16 @@ export class Graph extends Component {
 
         // loop through nodes in path
         for (const nodeId of path.node_ids) {
-          const existingNode = graph.nodes.find((node) => node.id === nodeId);
+          const node = pathQuery.nodes[nodeId];
+          const existingNode = graph.nodes.find(
+            (existing) => existing.neo4j_id === node.neo4j_id
+          );
           if (!existingNode) {
             // if node hasn't been added to graph yet, add it
             graph.nodes.push({
-              id: nodeId,
-              metanode: pathQuery.nodes[nodeId].metanode,
-              name: pathQuery.nodes[nodeId].data.name,
+              // copy all properties of node
+              ...node,
+              // add highlight property
               highlighted: path.highlighted
             });
           } else if (path.highlighted)
@@ -869,20 +932,24 @@ export class Graph extends Component {
 
         // loop through edges in path
         for (const relId of path.rel_ids) {
+          const edge = pathQuery.relationships[relId];
           const existingEdge = graph.edges.find(
-            (edge) =>
-              edge.source === pathQuery.relationships[relId].source_neo4j_id &&
-              edge.target === pathQuery.relationships[relId].target_neo4j_id &&
-              edge.kind === pathQuery.relationships[relId].kind &&
-              edge.directed === pathQuery.relationships[relId].directed
+            (existing) =>
+              existing.source_neo4j_id === edge.source_neo4j_id &&
+              existing.target_neo4j_id === edge.target_neo4j_id &&
+              existing.kind === edge.kind &&
+              existing.directed === edge.directed
           );
           if (!existingEdge) {
             // if edge hasn't been added to graph yet, add it
             graph.edges.push({
-              source: pathQuery.relationships[relId].source_neo4j_id,
-              target: pathQuery.relationships[relId].target_neo4j_id,
-              kind: pathQuery.relationships[relId].kind,
-              directed: pathQuery.relationships[relId].directed,
+              // copy all properties of edge
+              ...edge,
+              // set duplicate properties "source" and "target" because d3
+              // needs them (with those names) to create links between nodes
+              source: edge.source_neo4j_id,
+              target: edge.target_neo4j_id,
+              // add highlight property
               highlighted: path.highlighted
             });
           } else if (path.highlighted)
@@ -904,8 +971,10 @@ export class Graph extends Component {
       for (const edgeBin of edgeBins) {
         const match = edgeBin.find(
           (edgeB) =>
-            (edgeA.source === edgeB.source && edgeA.target === edgeB.target) ||
-            (edgeA.source === edgeB.target && edgeA.target === edgeB.source)
+            (edgeA.source_neo4j_id === edgeB.source_neo4j_id &&
+              edgeA.target_neo4j_id === edgeB.target_neo4j_id) ||
+            (edgeA.source_neo4j_id === edgeB.target_neo4j_id &&
+              edgeA.target_neo4j_id === edgeB.source_neo4j_id)
         );
         // if matching bin found, add edge to it
         if (match) {
@@ -924,7 +993,7 @@ export class Graph extends Component {
       // for each edge in bin, assign coincident "offset", a value between
       // -1 and 1 used for drawing, where 0 is straight line, negative is curve
       // on one side, and positive is curve on other side
-      const firstSource = edgeBin[0].source;
+      const firstSource = edgeBin[0].source_neo4j_id;
       for (let index = 0; index < edgeBin.length; index++) {
         // default offset to 0
         let offset = 0;
@@ -932,34 +1001,20 @@ export class Graph extends Component {
           offset = -0.5 + index / (edgeBin.length - 1);
         // if edge source/target order in reverse order as rest of bin,
         // invert offset
-        if (edgeBin[index].source !== firstSource)
+        if (edgeBin[index].source_neo4j_id !== firstSource)
           offset *= -1;
         edgeBin[index].coincidentOffset = offset;
       }
     }
 
-    // sort by key === true last
-    function compareBoolean(a, b, key) {
-      if (a[key] === true && b[key] !== true)
-        return 1;
-      else if (a[key] !== true && b[key] === true)
-        return -1;
-      else
-        return 0;
-    }
-
-    // sort lists by highlighted last to ensure higher z-index
-    graph.nodes.sort((a, b) => compareBoolean(a, b, 'highlighted'));
-    graph.edges.sort((a, b) => compareBoolean(a, b, 'highlighted'));
-
     // put source and target node at end of list to ensure highest z-index
     const sourceNodeIndex = graph.nodes.findIndex(
-      (node) => node.id === graph.source
+      (node) => node.neo4j_id === graph.source_neo4j_id
     );
     if (sourceNodeIndex !== -1)
       graph.nodes.push(graph.nodes.splice(sourceNodeIndex, 1)[0]);
     const targetNodeIndex = graph.nodes.findIndex(
-      (node) => node.id === graph.target
+      (node) => node.neo4j_id === graph.target_neo4j_id
     );
     if (targetNodeIndex !== -1)
       graph.nodes.push(graph.nodes.splice(targetNodeIndex, 1)[0]);
@@ -979,6 +1034,55 @@ export class Graph extends Component {
         left = minLeft;
     }
 
+    // title text
+    const title =
+      (this.props.sourceNode.name || '___') +
+      ' → ' +
+      (this.props.targetNode.name || '___');
+
+    // description text
+    const description = [
+      'Graph visualization of the connectivity between ',
+      this.props.sourceNode.name || '___',
+      ' (',
+      this.props.sourceNode.metanode || '___',
+      ') and ',
+      this.props.targetNode.name || '___',
+      ' (',
+      this.props.targetNode.metanode || '___',
+      '). ',
+      '\n\n',
+      'Created at ',
+      window.location.href,
+      '\n\n',
+      'This subgraph of Hetionet v1.0 was created from paths between the ',
+      'specified source/target nodes that occurred more than expected ',
+      'by chance. ',
+      'See https://het.io for more information. '
+    ].join('');
+
+    // selected element info
+    let info = '';
+    const el = this.state.selectedElement;
+    if (el) {
+      console.log(el);
+      let lines = [];
+      lines.push(el.data.name || '');
+      lines.push(el.node_label || '');
+      lines.push(el.data.description || '');
+      lines.push(el.data.source || '');
+      lines.push(el.data.identifier || '');
+      lines.push(el.data.url || '');
+      lines.push(el.neo4j_id || '');
+      lines = lines.filter((line) => line !== '');
+      info = lines.map((line, index) => (
+        <React.Fragment key={index}>
+          {line}
+          <br />
+        </React.Fragment>
+      ));
+    }
+
     return (
       <div id='graph_container' style={{ height: this.props.height }}>
         <svg
@@ -988,6 +1092,8 @@ export class Graph extends Component {
           height={this.props.height}
           style={{ left: left }}
         >
+          <title>{title}</title>
+          <desc>{description}</desc>
           <defs>
             <style>
               {`
@@ -1021,10 +1127,17 @@ export class Graph extends Component {
             <g id='graph_edge_line_highlight_layer' />
             <g id='graph_node_circle_highlight_layer' />
             <g id='graph_edge_line_layer' />
-            <g id='graph_node_circle_layer' />
             <g id='graph_edge_label_layer' />
+            <g id='graph_node_circle_layer' />
             <g id='graph_node_label_layer' />
           </g>
+          <foreignObject
+            width={this.props.width}
+            height={this.props.height}
+            id='graph_overlay'
+          >
+            <div id='graph_info'>{info}</div>
+          </foreignObject>
         </svg>
       </div>
     );
@@ -1033,6 +1146,8 @@ export class Graph extends Component {
 // connect component to global state
 Graph = connect(
   (state) => ({
+    sourceNode: state.sourceNode,
+    targetNode: state.targetNode,
     pathQueries: state.pathQueries,
     hetioStyles: state.hetioStyles
   }),
