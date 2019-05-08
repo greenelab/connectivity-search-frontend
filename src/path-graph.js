@@ -1065,14 +1065,22 @@ export class Graph extends Component {
     let info = '';
     const el = this.state.selectedElement;
     if (el) {
-      console.log(el);
       let lines = [];
       lines.push(el.data.name || '');
       lines.push(el.node_label || '');
       lines.push(el.data.description || '');
       lines.push(el.data.source || '');
+      lines.push(
+        el.data.sources && el.data.sources.length > 0
+          ? el.data.sources.join(', ')
+          : ''
+      );
       lines.push(el.data.identifier || '');
       lines.push(el.data.url || '');
+      lines.push(el.kind || '');
+      lines.push(
+        el.directed === undefined ? '' : el.directed ? 'directed' : 'undirected'
+      );
       lines.push(el.neo4j_id || '');
       lines = lines.filter((line) => line !== '');
       info = lines.map((line, index) => (
