@@ -154,7 +154,6 @@ class App extends Component {
     if (!this.props.sourceNode.id && !this.props.targetNode.id)
       return;
     const title =
-      'hetmech · ' +
       (this.props.sourceNode.name || '___') +
       ' → ' +
       (this.props.targetNode.name || '___');
