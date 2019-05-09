@@ -168,7 +168,7 @@ export function sortCustom(array, order, key) {
 
 // remove unnecessary preceding 'www.' and etc from url
 export function shortenUrl(url) {
-  const regexes = ['^http:\/\/', '^https:\/\/', '\/\/www\.'];
+  const regexes = ['^http://', '^https://', '//www.'];
   for (const regex of regexes)
     url = url.replace(new RegExp(regex), '');
 
