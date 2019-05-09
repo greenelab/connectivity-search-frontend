@@ -1223,7 +1223,7 @@ class SelectedNodeInfo extends Component {
   render() {
     return (
       <>
-        <div className='graph_info_header small'>Selected node:</div>
+        <div className='graph_info_header small light'>Selected Node</div>
         <table id='graph_info_table'>
           <tbody>{this.rows()}</tbody>
         </table>
@@ -1303,7 +1303,7 @@ class SelectedEdgeInfo extends Component {
   render() {
     return (
       <>
-        <div className='graph_info_header small'>Selected edge:</div>
+        <div className='graph_info_header small light'>Selected Edge</div>
         <table id='graph_info_table'>
           <tbody>{this.rows()}</tbody>
         </table>
