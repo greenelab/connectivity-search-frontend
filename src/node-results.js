@@ -9,6 +9,7 @@ import { Tooltip } from './tooltip.js';
 import { TextButton } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
+import { shortenUrl } from './util.js';
 
 // node results section component
 // details about source/target nodes
@@ -85,6 +86,17 @@ class TableFull extends Component {
       fields = fields.concat(extraFields);
     }
 
+    // helper text when user hovers over given field
+    let tooltipText = {};
+    if (this.props.hetioDefinitions.properties) {
+      tooltipText = {
+        ...tooltipText,
+        ...this.props.hetioDefinitions.properties.common,
+        ...this.props.hetioDefinitions.properties.nodes
+      };
+    }
+    tooltipText = { ...tooltipText, ...this.props.hetmechDefinitions };
+
     // determine contents of first and second column for each row entry
     return fields.map((field, index) => {
       // set first col to field name
@@ -95,6 +107,7 @@ class TableFull extends Component {
         secondCol = this.props.node.data[field];
       if (secondCol === undefined)
         secondCol = '';
+      secondCol = String(secondCol);
 
       // handle special field cases
       if (field === 'metanode') {
@@ -116,17 +129,6 @@ class TableFull extends Component {
           </a>
         );
       }
-
-      // helper text when user hovers over given field
-      let tooltipText = {};
-      if (this.props.hetioDefinitions.properties) {
-        tooltipText = {
-          ...tooltipText,
-          ...this.props.hetioDefinitions.properties.common,
-          ...this.props.hetioDefinitions.properties.nodes
-        };
-      }
-      tooltipText = { ...tooltipText, ...this.props.hetmechDefinitions };
 
       // return row entry
       return (
@@ -185,13 +187,4 @@ class TableEmpty extends Component {
       </table>
     );
   }
-}
-
-// remove unnecessary preceding 'www.' and etc from url
-function shortenUrl(url) {
-  const remove = ['http://', 'https://', 'www.'];
-  for (const str of remove)
-    url = url.replace(str, '');
-
-  return url;
 }

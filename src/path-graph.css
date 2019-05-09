@@ -12,7 +12,7 @@
 .graph_expand_collapse_button {
   margin: 0 !important;
 }
-#graph_overlay  {
+#graph_overlay {
   pointer-events: none;
 }
 #graph_info {
@@ -20,4 +20,14 @@
   left: 0;
   bottom: 0;
   font-size: 8px;
+}
+.graph_info_header {
+  margin-top: 10px;
+  font-weight: 500;
+}
+#graph_info_table {
+  margin-top: 10px;
+}
+#graph_info_table td {
+  height: 20px;
 }

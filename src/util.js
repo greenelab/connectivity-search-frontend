@@ -165,3 +165,12 @@ export function sortCustom(array, order, key) {
       return b - a;
   });
 }
+
+// remove unnecessary preceding 'www.' and etc from url
+export function shortenUrl(url) {
+  const remove = ['http://', 'https://', 'www.'];
+  for (const str of remove)
+    url = url.replace(str, '');
+
+  return url;
+}

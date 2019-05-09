@@ -15,6 +15,8 @@ import { CollapsibleSection } from './collapsible-section.js';
 import { NumberBox } from './number-box.js';
 import { TextButton } from './buttons.js';
 import { downloadSvg } from './util.js';
+import { Tooltip } from './tooltip.js';
+import { sortCustom } from './util.js';
 import './path-graph.css';
 
 // graph settings
@@ -49,6 +51,7 @@ export class PathGraph extends Component {
     this.state.height = maxHeight;
     this.state.nodeCount = 0;
     this.state.edgeCount = 0;
+    this.state.selectedElement = null;
 
     this.graph = React.createRef();
 
@@ -58,6 +61,7 @@ export class PathGraph extends Component {
     this.setWidth = this.setWidth.bind(this);
     this.setHeight = this.setHeight.bind(this);
     this.setGraphCounts = this.setGraphCounts.bind(this);
+    this.setSelectedElement = this.setSelectedElement.bind(this);
   }
 
   // when component mounts
@@ -140,8 +144,20 @@ export class PathGraph extends Component {
     });
   }
 
+  // sets the selected node/edge
+  setSelectedElement(element) {
+    this.setState({ selectedElement: element });
+  }
+
   // display component
   render() {
+    let info = '';
+    if (this.state.selectedElement) {
+      if (this.state.selectedElement.elementType === 'node')
+        info = <SelectedNodeInfo node={this.state.selectedElement} />;
+      if (this.state.selectedElement.elementType === 'edge')
+        info = <SelectedEdgeInfo edge={this.state.selectedElement} />;
+    }
     return (
       <section>
         <CollapsibleSection
@@ -215,14 +231,14 @@ export class PathGraph extends Component {
               text=''
               icon={faExpandArrowsAlt}
               onClick={this.expandContainer}
-              tooltipText='Fit the container to the window'
+              tooltipText='Fit the graph to the window'
             />
             <TextButton
               className='graph_expand_collapse_button'
               text=''
               icon={faCompressArrowsAlt}
               onClick={this.collapseContainer}
-              tooltipText='Fit the container to the "Path Graph" section'
+              tooltipText='Fit the graph to the "Path Graph" section'
             />
             <span className='small light right'>
               {this.state.nodeCount} nodes, {this.state.edgeCount} edges
@@ -230,11 +246,13 @@ export class PathGraph extends Component {
           </div>
           <Graph
             ref={this.graph}
-            setGraphCounts={this.setGraphCounts}
             width={this.state.width}
             height={this.state.height}
             sectionWidth={this.state.sectionWidth}
+            setGraphCounts={this.setGraphCounts}
+            setSelectedElement={this.setSelectedElement}
           />
+          {info}
         </CollapsibleSection>
       </section>
     );
@@ -249,7 +267,6 @@ export class Graph extends Component {
 
     this.state = {};
     this.state.data = this.assembleGraph(null);
-    this.state.selectedElement = null;
 
     this.fitView = this.fitView.bind(this);
     this.resetView = this.resetView.bind(this);
@@ -604,7 +621,7 @@ export class Graph extends Component {
     this.updateNodeCircles();
     this.updateEdgeLines();
 
-    this.setState({ selectedElement: d });
+    this.props.setSelectedElement(d);
   }
 
   // deselect all elements
@@ -636,7 +653,7 @@ export class Graph extends Component {
     this.deselectAll();
     this.updateNodeCircles();
     this.updateEdgeLines();
-    this.setState({ selectedElement: null });
+    this.props.setSelectedElement(null);
   }
 
   // when view panned or zoomed by user
@@ -923,7 +940,9 @@ export class Graph extends Component {
               // copy all properties of node
               ...node,
               // add highlight property
-              highlighted: path.highlighted
+              highlighted: path.highlighted,
+              // mark as node
+              elementType: 'node'
             });
           } else if (path.highlighted)
             // if node already in graph, still update highlight status
@@ -950,7 +969,9 @@ export class Graph extends Component {
               source: edge.source_neo4j_id,
               target: edge.target_neo4j_id,
               // add highlight property
-              highlighted: path.highlighted
+              highlighted: path.highlighted,
+              // mark as edge
+              elementType: 'edge'
             });
           } else if (path.highlighted)
             // if edge already in graph, still update highlight status
@@ -1061,36 +1082,6 @@ export class Graph extends Component {
       'See https://het.io for more information. '
     ].join('');
 
-    // selected element info
-    let info = '';
-    const el = this.state.selectedElement;
-    if (el) {
-      let lines = [];
-      lines.push(el.data.name || '');
-      lines.push(el.node_label || '');
-      lines.push(el.data.description || '');
-      lines.push(el.data.source || '');
-      lines.push(
-        el.data.sources && el.data.sources.length > 0
-          ? el.data.sources.join(', ')
-          : ''
-      );
-      lines.push(el.data.identifier || '');
-      lines.push(el.data.url || '');
-      lines.push(el.kind || '');
-      lines.push(
-        el.directed === undefined ? '' : el.directed ? 'directed' : 'undirected'
-      );
-      lines.push(el.neo4j_id || '');
-      lines = lines.filter((line) => line !== '');
-      info = lines.map((line, index) => (
-        <React.Fragment key={index}>
-          {line}
-          <br />
-        </React.Fragment>
-      ));
-    }
-
     return (
       <div id='graph_container' style={{ height: this.props.height }}>
         <svg
@@ -1139,13 +1130,6 @@ export class Graph extends Component {
             <g id='graph_node_circle_layer' />
             <g id='graph_node_label_layer' />
           </g>
-          <foreignObject
-            width={this.props.width}
-            height={this.props.height}
-            id='graph_overlay'
-          >
-            <div id='graph_info'>{info}</div>
-          </foreignObject>
         </svg>
       </div>
     );
@@ -1163,3 +1147,176 @@ Graph = connect(
   null,
   { forwardRef: true }
 )(Graph);
+
+// selected node info component
+class SelectedNodeInfo extends Component {
+  // display row entries
+  rows() {
+    // helper text when user hovers over given field
+    let tooltipText = {};
+    if (this.props.hetioDefinitions.properties) {
+      tooltipText = {
+        ...tooltipText,
+        ...this.props.hetioDefinitions.properties.common,
+        ...this.props.hetioDefinitions.properties.nodes
+      };
+    }
+    tooltipText = { ...tooltipText, ...this.props.hetmechDefinitions };
+    if (tooltipText['id'])
+      tooltipText['neo4j_id'] = tooltipText['id'];
+
+    // get primary fields from node
+    let primaryFields = ['metanode', 'neo4j_id'];
+    // get first/second column text (key/value) for each field
+    primaryFields = primaryFields.map((field) => ({
+      firstCol: field,
+      secondCol: this.props.node[field],
+      tooltipText: tooltipText[field]
+    }));
+
+    // get 'extra fields' from node 'data' field
+    let extraFields = Object.keys(this.props.node.data);
+    // sort extra fields alphabetically
+    extraFields = extraFields.sort();
+    // get first/second column text (key/value) for each field
+    extraFields = extraFields.map((field) => ({
+      firstCol: field,
+      secondCol: this.props.node.data[field],
+      tooltipText: tooltipText[field]
+    }));
+
+    // combine primary and extra fields
+    let fields = primaryFields.concat(extraFields);
+
+    // display fields in custom order
+    const order = [
+      'name',
+      'metanode',
+      'description',
+      'identifier',
+      'source',
+      'url',
+      'neo4j_id'
+    ];
+    fields = sortCustom(fields, order, 'firstCol');
+
+    // make columns from fields
+    const cols = fields.map((field, index) => {
+      return (
+        <React.Fragment key={index}>
+          <td className='col_s small light'>
+            <Tooltip text={field.tooltipText}>{field.firstCol}</Tooltip>
+          </td>
+          <td className='small'>{field.secondCol}</td>
+        </React.Fragment>
+      );
+    });
+
+    // make rows in groups of two
+    const rows = new Array(Math.ceil(cols.length / 2))
+      .fill()
+      .map(() => cols.splice(0, 2))
+      .map((col, index) => <tr key={index}>{col}</tr>);
+
+    return rows;
+  }
+
+  // display component
+  render() {
+    return (
+      <>
+        <div className='graph_info_header small'>Selected node:</div>
+        <table id='graph_info_table'>
+          <tbody>{this.rows()}</tbody>
+        </table>
+      </>
+    );
+  }
+}
+// connect component to global state
+SelectedNodeInfo = connect((state) => ({
+  hetioDefinitions: state.hetioDefinitions,
+  hetmechDefinitions: state.hetmechDefinitions
+}))(SelectedNodeInfo);
+
+// selected edge info component
+class SelectedEdgeInfo extends Component {
+  // display row entries
+  rows() {
+    // helper text when user hovers over given field
+    let tooltipText = {};
+    if (this.props.hetioDefinitions.properties) {
+      tooltipText = {
+        ...tooltipText,
+        ...this.props.hetioDefinitions.properties.common,
+        ...this.props.hetioDefinitions.properties.edges
+      };
+    }
+    tooltipText = { ...tooltipText, ...this.props.hetmechDefinitions };
+    if (tooltipText['id'])
+      tooltipText['neo4j_id'] = tooltipText['id'];
+
+    // get primary fields from node
+    let primaryFields = ['kind', 'directed', 'neo4j_id'];
+    // get first/second column text (key/value) for each field
+    primaryFields = primaryFields.map((field) => ({
+      firstCol: field,
+      secondCol: String(this.props.edge[field]),
+      tooltipText: tooltipText[field]
+    }));
+
+    // get 'extra fields' from node 'data' field
+    let extraFields = Object.keys(this.props.edge.data);
+    // sort extra fields alphabetically
+    extraFields = extraFields.sort();
+    // get first/second column text (key/value) for each field
+    extraFields = extraFields.map((field) => ({
+      firstCol: field,
+      secondCol: String(this.props.edge.data[field]),
+      tooltipText: tooltipText[field]
+    }));
+
+    // combine primary and extra fields
+    let fields = primaryFields.concat(extraFields);
+
+    // display fields in custom order
+    const order = ['kind', 'neo4j_id', 'source'];
+    fields = sortCustom(fields, order, 'firstCol');
+
+    // make columns from fields
+    const cols = fields.map((field, index) => {
+      return (
+        <React.Fragment key={index}>
+          <td className='col_s small light'>
+            <Tooltip text={field.tooltipText}>{field.firstCol}</Tooltip>
+          </td>
+          <td className='small'>{field.secondCol}</td>
+        </React.Fragment>
+      );
+    });
+    // make rows in groups of two
+    const rows = new Array(Math.ceil(cols.length / 2))
+      .fill()
+      .map(() => cols.splice(0, 2))
+      .map((col, index) => <tr key={index}>{col}</tr>);
+
+    return rows;
+  }
+
+  // display component
+  render() {
+    return (
+      <>
+        <div className='graph_info_header small'>Selected edge:</div>
+        <table id='graph_info_table'>
+          <tbody>{this.rows()}</tbody>
+        </table>
+      </>
+    );
+  }
+}
+// connect component to global state
+SelectedEdgeInfo = connect((state) => ({
+  hetioDefinitions: state.hetioDefinitions,
+  hetmechDefinitions: state.hetmechDefinitions
+}))(SelectedEdgeInfo);
