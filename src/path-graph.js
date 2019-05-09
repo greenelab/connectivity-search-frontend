@@ -15,6 +15,7 @@ import { CollapsibleSection } from './collapsible-section.js';
 import { NumberBox } from './number-box.js';
 import { TextButton } from './buttons.js';
 import { downloadSvg } from './util.js';
+import { transferObjectProps } from './util.js';
 import './path-graph.css';
 
 // graph settings
@@ -273,19 +274,12 @@ export class Graph extends Component {
     else if (this.state.data !== prevState.data) {
       // copy simulation vars from old data to new data to persist node
       // positions/velocities/etc
-      for (const newNode of this.state.data.nodes) {
-        for (const oldNode of prevState.data.nodes) {
-          if (newNode.id === oldNode.id) {
-            newNode.x = oldNode.x;
-            newNode.y = oldNode.y;
-            newNode.fx = oldNode.fx;
-            newNode.fy = oldNode.fy;
-            newNode.vx = oldNode.vx;
-            newNode.vy = oldNode.vy;
-            break;
-          }
-        }
-      }
+      transferObjectProps(
+        this.state.data.nodes,
+        prevState.data.nodes,
+        ['id'],
+        ['x', 'y', 'fx', 'fy', 'vx', 'vy']
+      );
 
       // update graph
       this.updateGraph();

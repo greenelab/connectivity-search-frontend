@@ -165,3 +165,95 @@ export function sortCustom(array, order, key) {
       return b - a;
   });
 }
+
+// loop through new array of objects. for each object, find object in old
+// array that matches all compare keys, and transfer specified keys from
+// old object to new
+export function transferObjectProps(
+  oldArray,
+  newArray,
+  compareKeys,
+  transferKeys
+) {
+  for (const newElement of newArray) {
+    for (const oldElement of oldArray) {
+      let matches = true;
+      for (const compareKey of compareKeys) {
+        if (newElement[compareKey] !== oldElement[compareKey]) {
+          matches = false;
+          break;
+        }
+      }
+      if (matches) {
+        for (const transferKey of transferKeys)
+          newElement[transferKey] = oldElement[transferKey];
+      }
+    }
+  }
+
+  return newArray;
+}
+
+// same as transferObjectProps, except arrays are now assumed to contain
+// objects with subKey that contains another array that contains the objects
+// to be transferred
+export function transferQueryProps(
+  oldQueries,
+  newQueries,
+  subKey,
+  compareKeys,
+  transferKeys
+) {
+  for (const newQuery of newQueries) {
+    for (const newElement of newQuery[subKey]) {
+      for (const oldQuery of oldQueries) {
+        for (const oldElement of oldQuery[subKey]) {
+          let matches = true;
+          for (const compareKey of compareKeys) {
+            let compare;
+            if (
+              Array.isArray(newElement[compareKey]) &&
+              Array.isArray(oldElement[compareKey])
+            ) {
+              compare = compareArrays(
+                newElement[compareKey],
+                oldElement[compareKey],
+                true
+              );
+            } else
+              compare = newElement[compareKey] === oldElement[compareKey];
+            if (!compare) {
+              matches = false;
+              break;
+            }
+          }
+          if (matches) {
+            for (const transferKey of transferKeys)
+              newElement[transferKey] = oldElement[transferKey];
+          }
+        }
+      }
+    }
+  }
+
+  return newQueries;
+}
+
+// checks if arrays of numbers or strings are equal
+export function compareArrays(array1, array2, checkReverse) {
+  if (checkReverse) {
+    return (
+      array1.length === array2.length &&
+      array1.every(
+        (value, index) =>
+          value === array2[index] ||
+          array1.reverse().every((value, index) => value === array2[index])
+      )
+    );
+  } else {
+    return (
+      array1.length === array2.length &&
+      array1.every((value, index) => value === array2[index])
+    );
+  }
+}
