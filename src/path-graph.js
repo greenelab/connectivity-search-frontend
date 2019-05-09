@@ -1165,7 +1165,7 @@ class SelectedNodeInfo extends Component {
     if (tooltipText['id'])
       tooltipText['neo4j_id'] = tooltipText['id'];
 
-    // get primary fields from node
+    // get primary fields from top level of node
     let primaryFields = ['metanode', 'neo4j_id'];
     // get first/second column text (key/value) for each field
     primaryFields = primaryFields.map((field) => ({
@@ -1176,8 +1176,6 @@ class SelectedNodeInfo extends Component {
 
     // get 'extra fields' from node 'data' field
     let extraFields = Object.keys(this.props.node.data);
-    // sort extra fields alphabetically
-    extraFields = extraFields.sort();
     // get first/second column text (key/value) for each field
     extraFields = extraFields.map((field) => ({
       firstCol: field,
@@ -1192,10 +1190,10 @@ class SelectedNodeInfo extends Component {
     const order = [
       'name',
       'metanode',
-      'description',
-      'identifier',
       'source',
       'url',
+      'description',
+      'identifier',
       'neo4j_id'
     ];
     fields = sortCustom(fields, order, 'firstCol');
@@ -1256,7 +1254,7 @@ class SelectedEdgeInfo extends Component {
     if (tooltipText['id'])
       tooltipText['neo4j_id'] = tooltipText['id'];
 
-    // get primary fields from node
+    // get primary fields from top level of node
     let primaryFields = ['kind', 'directed', 'neo4j_id'];
     // get first/second column text (key/value) for each field
     primaryFields = primaryFields.map((field) => ({
@@ -1267,8 +1265,6 @@ class SelectedEdgeInfo extends Component {
 
     // get 'extra fields' from node 'data' field
     let extraFields = Object.keys(this.props.edge.data);
-    // sort extra fields alphabetically
-    extraFields = extraFields.sort();
     // get first/second column text (key/value) for each field
     extraFields = extraFields.map((field) => ({
       firstCol: field,
