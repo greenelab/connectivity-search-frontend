@@ -247,22 +247,23 @@ export function compareElements(element1, element2) {
     return element1 === element2;
 }
 
-// checks if arrays of numbers or strings are equal. if specified, also check
-// if arrays are equal in reverse
+// checks if arrays of primitives (strings, numbers, etc) are equal.
+// if specified, also check if arrays are equal in reverse
 export function compareArrays(array1, array2, checkReverse) {
-  if (checkReverse) {
-    return (
-      array1.length === array2.length &&
-      (array1.every((value, index) => value === array2[index]) ||
-        array1
-          .slice()
-          .reverse()
-          .every((value, index) => value === array2[index]))
-    );
+  if (array1.length !== array2.length)
+    return false;
+
+  if (!checkReverse) {
+    // check forwards
+    return array1.every((value, index) => value === array2[index]);
   } else {
+    // check forwards and backwards
     return (
-      array1.length === array2.length &&
-      array1.every((value, index) => value === array2[index])
+      array1.every((value, index) => value === array2[index]) ||
+      array1
+        .slice()
+        .reverse()
+        .every((value, index) => value === array2[index])
     );
   }
 }
