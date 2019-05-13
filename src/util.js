@@ -174,3 +174,96 @@ export function shortenUrl(url) {
 
   return url;
 }
+
+// loop through new array of objects. for each object, find object in old
+// array that matches all compare keys, and transfer specified keys from
+// old object to new
+export function transferObjectProps(
+  oldArray,
+  newArray,
+  compareKeys,
+  transferKeys
+) {
+  for (const newElement of newArray) {
+    for (const oldElement of oldArray) {
+      let matches = true;
+      for (const compareKey of compareKeys) {
+        if (oldElement[compareKey] !== newElement[compareKey]) {
+          matches = false;
+          break;
+        }
+      }
+      if (matches) {
+        for (const transferKey of transferKeys)
+          newElement[transferKey] = oldElement[transferKey];
+      }
+    }
+  }
+
+  return newArray;
+}
+
+// same as transferObjectProps, except arrays are now assumed to contain
+// objects with subKey that contains another array that contains the objects
+// to be transferred
+export function transferQueryProps(
+  oldQueries,
+  newQueries,
+  subKey,
+  compareKeys,
+  transferKeys
+) {
+  for (const newQuery of newQueries) {
+    for (const newElement of newQuery[subKey]) {
+      for (const oldQuery of oldQueries) {
+        for (const oldElement of oldQuery[subKey]) {
+          let matches = true;
+          for (const compareKey of compareKeys) {
+            if (
+              !compareElements(oldElement[compareKey], newElement[compareKey])
+            ) {
+              matches = false;
+              break;
+            }
+          }
+          if (matches) {
+            for (const transferKey of transferKeys)
+              newElement[transferKey] = oldElement[transferKey];
+          }
+        }
+      }
+    }
+  }
+
+  return newQueries;
+}
+
+// compare two elements as primitives (eg number === number or string ===
+// string) or as arrays if both are arrays
+export function compareElements(element1, element2) {
+  if (Array.isArray(element1) && Array.isArray(element2))
+    return compareArrays(element1, element2, true);
+  else
+    return element1 === element2;
+}
+
+// checks if arrays of primitives (strings, numbers, etc) are equal.
+// if specified, also check if arrays are equal in reverse
+export function compareArrays(array1, array2, checkReverse) {
+  if (array1.length !== array2.length)
+    return false;
+
+  if (!checkReverse) {
+    // check forwards
+    return array1.every((value, index) => value === array2[index]);
+  } else {
+    // check forwards and backwards
+    return (
+      array1.every((value, index) => value === array2[index]) ||
+      array1
+        .slice()
+        .reverse()
+        .every((value, index) => value === array2[index])
+    );
+  }
+}

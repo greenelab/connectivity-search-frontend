@@ -1,7 +1,10 @@
+import { transferObjectProps } from './util';
+import { transferQueryProps } from './util';
+
 // map previous global state to new global state based on action
-export function Reducer(previousState = {}, action) {
+export function Reducer(prevState = {}, action) {
   // start with previous state
-  const newState = { ...previousState };
+  const newState = { ...prevState };
 
   // detect action type and set new state accordingly
   switch (action.type) {
@@ -27,22 +30,39 @@ export function Reducer(previousState = {}, action) {
 
     // swap source/target nodes
     case 'swap_source_target_nodes':
-      if (previousState.sourceNode && previousState.targetNode) {
-        newState.sourceNode = previousState.targetNode;
-        newState.targetNode = previousState.sourceNode;
+      if (prevState.sourceNode && prevState.targetNode) {
+        newState.sourceNode = prevState.targetNode;
+        newState.targetNode = prevState.sourceNode;
       }
       break;
 
     // update metapaths
     case 'update_metapaths':
-      if (action.payload.metapaths !== undefined)
+      if (action.payload.metapaths !== undefined) {
         newState.metapaths = action.payload.metapaths;
+        transferObjectProps(
+          prevState.metapaths,
+          newState.metapaths,
+          ['id'],
+          ['checked', 'highlighted']
+        );
+      }
       break;
 
     // update path queries
     case 'update_path_queries':
-      if (action.payload.pathQueries !== undefined)
+      if (action.payload.pathQueries !== undefined) {
         newState.pathQueries = action.payload.pathQueries;
+        // console.log(newState.pathQueries);
+        transferQueryProps(
+          prevState.pathQueries,
+          newState.pathQueries,
+          'paths',
+          ['node_ids', 'rel_ids'],
+          ['checked', 'highlighted']
+        );
+        // console.log(newState.pathQueries);
+      }
       break;
 
     default:
