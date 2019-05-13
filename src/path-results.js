@@ -21,6 +21,7 @@ import { pathChips } from './chips.js';
 import { updatePathQueries } from './actions.js';
 import { toFixed } from './util.js';
 import { sortCustom } from './util.js';
+import { compareArrays } from './util.js';
 import './path-results.css';
 
 // path results section component
@@ -289,8 +290,8 @@ class TableFull extends Component {
   // checks if paths are equal
   comparePaths(path1, path2) {
     return (
-      JSON.stringify(path1.node_ids) === JSON.stringify(path2.node_ids) &&
-      JSON.stringify(path1.rel_ids) === JSON.stringify(path2.rel_ids)
+      compareArrays(path1.node_ids, path2.node_ids) &&
+      compareArrays(path1.rel_ids, path2.rel_ids)
     );
   }
 
