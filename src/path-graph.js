@@ -322,11 +322,10 @@ export class Graph extends Component {
     else if (this.state.data !== prevState.data) {
       // copy simulation vars from old data to new data to persist node
       // positions/velocities/etc
-
       transferObjectProps(
-        this.state.data.nodes,
         prevState.data.nodes,
-        ['id'],
+        this.state.data.nodes,
+        ['neo4j_id'],
         ['x', 'y', 'fx', 'fy', 'vx', 'vy']
       );
 
