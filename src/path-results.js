@@ -698,7 +698,7 @@ function assemblePath(path, nodes, edges) {
     pathNodes.push({
       element: 'node',
       type: node.metanode,
-      name: node.data.name
+      name: node.properties.name
     });
   }
 

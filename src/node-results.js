@@ -97,8 +97,8 @@ class TableFull extends Component {
         );
       } else if (field === 'source') {
         // make link
-        const linkUrl = this.props.node.url || this.props.node.data.url || '';
-        let linkText = this.props.node.data.source || linkUrl;
+        const linkUrl = this.props.node.url || this.props.node.properties.url || '';
+        let linkText = this.props.node.properties.source || linkUrl;
         linkText = shortenUrl(linkText);
         specialSecondCol = (
           <a className='nowrap' href={linkUrl}>
@@ -125,10 +125,10 @@ class TableFull extends Component {
       );
     }
 
-    // get 'extra fields' from node 'data' field
+    // get 'extra fields' from node 'properties' field
     let extraFields = [];
     if (this.state.showMore) {
-      extraFields = Object.keys(this.props.node.data);
+      extraFields = Object.keys(this.props.node.properties);
       // remove source and url, since they are combined and added to
       // primary fields above
       extraFields.splice(extraFields.indexOf('source'), 1);
@@ -136,7 +136,7 @@ class TableFull extends Component {
       // get first/second column text (key/value) for each field
       extraFields = extraFields.map((field) => ({
         firstCol: field,
-        secondCol: String(this.props.node.data[field]),
+        secondCol: String(this.props.node.properties[field]),
         tooltipText: tooltipText[field]
       }));
     }

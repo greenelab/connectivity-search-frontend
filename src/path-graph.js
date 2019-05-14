@@ -857,10 +857,10 @@ export class Graph extends Component {
       .style('color', (d) => this.getNodeTextColor(d.metanode))
       .style('word-break', 'break-word')
       .html((d) => {
-        if (d.data.name.length > nodeCharLimit)
-          return d.data.name.substr(0, nodeCharLimit - 3) + '...';
+        if (d.properties.name.length > nodeCharLimit)
+          return d.properties.name.substr(0, nodeCharLimit - 3) + '...';
         else
-          return d.data.name;
+          return d.properties.name;
       });
 
     nodeLabels.exit().remove();
@@ -1198,12 +1198,12 @@ class SelectedInfo extends Component {
       tooltipText: tooltipText[field]
     }));
 
-    // get 'extra fields' from node/edge 'data' field
-    let extraFields = Object.keys(element.data);
+    // get 'extra fields' from node/edge 'properties' field
+    let extraFields = Object.keys(element.properties);
     // get first/second column text (key/value) for each field
     extraFields = extraFields.map((field) => ({
       firstCol: field,
-      secondCol: String(element.data[field]),
+      secondCol: String(element.properties[field]),
       tooltipText: tooltipText[field]
     }));
 

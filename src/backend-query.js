@@ -66,8 +66,8 @@ export function searchNodes(searchString, metatypes) {
   if (metatypes)
     params.set('metanodes', metatypes);
   const query = nodeSearchServer + '?' + params.toString();
-  return fetchJson(query).then((data) => {
-    return data.results;
+  return fetchJson(query).then((response) => {
+    return response.results;
   });
 }
 
@@ -77,8 +77,8 @@ export function searchMetapaths(sourceId, targetId) {
   params.set('source', sourceId);
   params.set('target', targetId);
   const query = metapathSearchServer + '?' + params.toString();
-  return fetchJson(query).then((results) => {
-    return results.path_counts;
+  return fetchJson(query).then((response) => {
+    return response.path_counts;
   });
 }
 
@@ -89,7 +89,7 @@ export function searchPaths(sourceId, targetId, metapath) {
   params.set('target', targetId);
   params.set('metapath', metapath);
   const query = pathSearchServer + '?' + params.toString();
-  return fetchJson(query).then((results) => {
-    return results;
+  return fetchJson(query).then((response) => {
+    return response;
   });
 }
