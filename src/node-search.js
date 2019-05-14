@@ -14,7 +14,7 @@ import { MetanodeChip } from './chips.js';
 import { Tooltip } from './tooltip.js';
 import { Button } from './buttons.js';
 import { searchNodes } from './backend-query.js';
-import { updateSourceTargetNodes } from './actions.js';
+import { setState } from './actions.js';
 import { swapSourceTargetNodes } from './actions.js';
 import { sortCustom } from './util.js';
 import './node-search.css';
@@ -226,7 +226,7 @@ class SourceNodeSearch extends Component {
 
   // when user makes a new node selection
   onChange(value) {
-    this.props.dispatch(updateSourceTargetNodes({ sourceNode: value }));
+    this.props.dispatch(setState({ sourceNode: value }));
   }
 
   // display component
@@ -256,7 +256,7 @@ class TargetNodeSearch extends Component {
 
   // when user makes a new node selection
   onChange(value) {
-    this.props.dispatch(updateSourceTargetNodes({ targetNode: value }));
+    this.props.dispatch(setState({ targetNode: value }));
     if (value)
       document.activeElement.blur();
   }
@@ -494,7 +494,12 @@ class SwapButton extends Component {
 
   // when user clicks button
   onClick() {
-    this.props.dispatch(swapSourceTargetNodes());
+    this.props.dispatch(
+      setState({
+        sourceNode: this.props.targetNode,
+        targetNode: this.props.sourceNode
+      })
+    );
   }
 
   // display component
@@ -511,4 +516,7 @@ class SwapButton extends Component {
   }
 }
 // connect component to global state
-SwapButton = connect()(SwapButton);
+SwapButton = connect((state) => ({
+  sourceNode: state.sourceNode,
+  targetNode: state.targetNode
+}))(SwapButton);

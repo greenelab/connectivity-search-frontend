@@ -2,71 +2,54 @@ import { transferObjectProps } from './util';
 import { transferQueryProps } from './util';
 
 // map previous global state to new global state based on action
-export function Reducer(prevState = {}, action) {
+export function Reducer(prevState = {}, action = {}) {
   // start with previous state
   const newState = { ...prevState };
 
-  // detect action type and set new state accordingly
-  switch (action.type) {
-    // set definitions
-    case 'set_definitions':
-      if (action.payload.metagraph !== undefined)
-        newState.metagraph = action.payload.metagraph;
-      if (action.payload.hetioDefinitions !== undefined)
-        newState.hetioDefinitions = action.payload.hetioDefinitions;
-      if (action.payload.hetioStyles !== undefined)
-        newState.hetioStyles = action.payload.hetioStyles;
-      if (action.payload.hetmechDefinitions !== undefined)
-        newState.hetmechDefinitions = action.payload.hetmechDefinitions;
-      break;
+  if (!action.payload)
+    action.payload = {};
 
-    // update source and/or target node
-    case 'update_source_target_nodes':
-      if (action.payload.sourceNode !== undefined)
-        newState.sourceNode = action.payload.sourceNode;
-      if (action.payload.targetNode !== undefined)
-        newState.targetNode = action.payload.targetNode;
-      break;
+  // set definitions
+  if (action.payload.metagraph !== undefined)
+    newState.metagraph = action.payload.metagraph;
+  if (action.payload.hetioDefinitions !== undefined)
+    newState.hetioDefinitions = action.payload.hetioDefinitions;
+  if (action.payload.hetioStyles !== undefined)
+    newState.hetioStyles = action.payload.hetioStyles;
+  if (action.payload.hetmechDefinitions !== undefined)
+    newState.hetmechDefinitions = action.payload.hetmechDefinitions;
 
-    // swap source/target nodes
-    case 'swap_source_target_nodes':
-      if (prevState.sourceNode && prevState.targetNode) {
-        newState.sourceNode = prevState.targetNode;
-        newState.targetNode = prevState.sourceNode;
-      }
-      break;
+  // update source and/or target node
+  if (action.payload.sourceNode !== undefined)
+    newState.sourceNode = action.payload.sourceNode;
+  if (action.payload.targetNode !== undefined)
+    newState.targetNode = action.payload.targetNode;
 
-    // update metapaths
-    case 'update_metapaths':
-      if (action.payload.metapaths !== undefined) {
-        newState.metapaths = action.payload.metapaths;
-        transferObjectProps(
-          prevState.metapaths,
-          newState.metapaths,
-          ['id'],
-          ['checked', 'highlighted']
-        );
-      }
-      break;
+  // update metapaths
+  if (action.payload.metapaths !== undefined) {
+    newState.metapaths = action.payload.metapaths;
+    if (action.transferState) {
+      transferObjectProps(
+        prevState.metapaths,
+        newState.metapaths,
+        ['id'],
+        ['checked']
+      );
+    }
+  }
 
-    // update path queries
-    case 'update_path_queries':
-      if (action.payload.pathQueries !== undefined) {
-        newState.pathQueries = action.payload.pathQueries;
-        // console.log(newState.pathQueries);
-        transferQueryProps(
-          prevState.pathQueries,
-          newState.pathQueries,
-          'paths',
-          ['node_ids', 'rel_ids'],
-          ['checked', 'highlighted']
-        );
-        // console.log(newState.pathQueries);
-      }
-      break;
-
-    default:
-      break;
+  // update path queries
+  if (action.payload.pathQueries !== undefined) {
+    newState.pathQueries = action.payload.pathQueries;
+    if (action.transferState) {
+      transferQueryProps(
+        prevState.pathQueries,
+        newState.pathQueries,
+        'paths',
+        ['node_ids', 'rel_ids'],
+        ['checked', 'highlighted']
+      );
+    }
   }
 
   // make sure critical variables defined

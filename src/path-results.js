@@ -18,7 +18,7 @@ import { HighlighterCheckbox } from './buttons.js';
 import { downloadCsv } from './util.js';
 import { makeFilenameFriendly } from './util.js';
 import { pathChips } from './chips.js';
-import { updatePathQueries } from './actions.js';
+import { setState } from './actions.js';
 import { toFixed } from './util.js';
 import { sortCustom } from './util.js';
 import { compareArrays } from './util.js';
@@ -130,7 +130,7 @@ class TableFull extends Component {
         path.checked = true;
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(setState({ pathQueries: pathQueries }));
   }
 
   // makes all paths unchecked
@@ -142,7 +142,7 @@ class TableFull extends Component {
         path.checked = false;
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(setState({ pathQueries: pathQueries }));
   }
 
   // checks whether all paths besides the specified are unchecked
@@ -168,7 +168,7 @@ class TableFull extends Component {
       }
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(setState({ pathQueries: pathQueries }));
   }
 
   // solo path (turn all others off)
@@ -185,7 +185,7 @@ class TableFull extends Component {
       }
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(setState({ pathQueries: pathQueries }));
   }
 
   // checks if all rows highlighted and updates state
@@ -225,7 +225,7 @@ class TableFull extends Component {
         path.highlighted = true;
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(setState({ pathQueries: pathQueries }));
   }
 
   // makes all paths unhighlighted
@@ -237,7 +237,7 @@ class TableFull extends Component {
         path.highlighted = false;
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(setState({ pathQueries: pathQueries }));
   }
 
   // checks whether all paths besides the specified are unhighlighted
@@ -263,7 +263,7 @@ class TableFull extends Component {
       }
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(setState({ pathQueries: pathQueries }));
   }
 
   // solo path (turn all others off)
@@ -284,7 +284,7 @@ class TableFull extends Component {
       }
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(setState({ pathQueries: pathQueries }));
   }
 
   // checks if paths are equal

@@ -21,7 +21,7 @@ import { toFixed } from './util.js';
 import { toExponential } from './util.js';
 import { toGradient } from './util.js';
 import { sortCustom } from './util.js';
-import { updateMetapaths } from './actions.js';
+import { setState } from './actions.js';
 import './metapath-results.css';
 
 // path results section component
@@ -116,7 +116,7 @@ class TableFull extends Component {
     for (const metapath of this.props.metapaths)
       metapath.checked = true;
 
-    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+    this.props.dispatch(setState({ metapaths: metapaths }));
   }
 
   // makes all metapaths unchecked
@@ -126,7 +126,7 @@ class TableFull extends Component {
     for (const metapath of this.props.metapaths)
       metapath.checked = false;
 
-    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+    this.props.dispatch(setState({ metapaths: metapaths }));
   }
 
   // checks whether all metapaths besides the specified are unchecked
@@ -148,7 +148,7 @@ class TableFull extends Component {
         metapath.checked = !metapath.checked;
     }
 
-    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+    this.props.dispatch(setState({ metapaths: metapaths }));
   }
 
   // solo metapath (turn all others off)
@@ -163,7 +163,7 @@ class TableFull extends Component {
         metapath.checked = false;
     }
 
-    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+    this.props.dispatch(setState({ metapaths: metapaths }));
   }
 
   // change which column table is sorted by

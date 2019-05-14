@@ -51,8 +51,6 @@ export function getHetmechDefinitions() {
 
 // lookup node by id
 export function lookupNodeById(id) {
-  if (!id)
-    return null;
   const query = nodeSearchServer + id;
   return fetchJson(query);
 }
