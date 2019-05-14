@@ -28,25 +28,23 @@ class App extends Component {
     super(props);
 
     this.fetchDefinitions = this.fetchDefinitions.bind(this);
-    this.updateNodesFromUrl = this.updateNodesFromUrl.bind(this);
+    this.updateStateFromUrl = this.updateStateFromUrl.bind(this);
     this.updateMetapaths = this.updateMetapaths.bind(this);
-    this.updateHistory = this.updateHistory.bind(this);
-    this.updateTitle = this.updateTitle.bind(this);
     this.updatePaths = this.updatePaths.bind(this);
 
     // fetch definitions when page first loads
     this.fetchDefinitions();
     // get parameters from url when page first loads
-    this.updateNodesFromUrl();
+    this.updateStateFromUrl();
     // listen for back/forward navigation (history)
-    window.addEventListener('popstate', this.updateNodesFromUrl);
+    window.addEventListener('popstate', this.updateStateFromUrl);
   }
 
   // when component changes
   componentDidUpdate(prevProps) {
     if (
-      prevProps.sourceNode !== this.props.sourceNode ||
-      prevProps.targetNode !== this.props.targetNode
+      prevProps.sourceNode.id !== this.props.sourceNode.id ||
+      prevProps.targetNode.id !== this.props.targetNode.id
     )
       this.onNodeChange();
     if (prevProps.metapaths !== this.props.metapaths)
@@ -76,36 +74,68 @@ class App extends Component {
     });
   }
 
-  // update source/target nodes from url
-  updateNodesFromUrl() {
+  // update source/target nodes, checked metapaths, etc from url
+  updateStateFromUrl(event) {
     this.props.dispatch((dispatch) => {
       const params = new URLSearchParams(window.location.search);
-      const sourceNodeId = params.get('source');
-      const targetNodeId = params.get('target');
+      const source = params.get('source');
+      const target = params.get('target');
+      const metapaths = params.get('metapaths');
+      let checkedMetapaths;
+      if (metapaths)
+        checkedMetapaths = metapaths.split(',');
+      else
+        checkedMetapaths = [];
 
-      // wait until both node searches return to update state
       const promises = [
-        lookupNodeById(sourceNodeId),
-        lookupNodeById(targetNodeId)
+        lookupNodeById(source),
+        lookupNodeById(target),
+        searchMetapaths(source, target)
       ];
-      Promise.all(promises).then((results) => {
-        dispatch(
-          updateSourceTargetNodes({
-            sourceNode: results[0],
-            targetNode: results[1]
-          })
-        );
-      });
+
+      // once all queries have returned
+      Promise.all(promises).then(
+        ([newSourceNode, newTargetNode, newMetapaths]) => {
+          // by the time promises return, url may be different (eg if user
+          // clicks back/forward quickly). if different, exit and allow more
+          // recent call to change state
+          const params = new URLSearchParams(window.location.search);
+          if (
+            params.get('source') !== source ||
+            params.get('target') !== target ||
+            params.get('metapaths') !== metapaths
+          )
+            return;
+
+          // check metapaths based on url
+          for (const newMetapath of newMetapaths) {
+            if (checkedMetapaths.includes(newMetapath.metapath_abbreviation))
+              newMetapath.checked = true;
+          }
+
+          // update global state
+          dispatch(
+            updateSourceTargetNodes({
+              sourceNode: newSourceNode,
+              targetNode: newTargetNode,
+              dontUpdateUrl: true
+            })
+          );
+          dispatch(
+            updateMetapaths({
+              metapaths: newMetapaths,
+              dontUpdateUrl: true,
+              dontTransferState: true
+            })
+          );
+        }
+      );
     });
   }
 
   // when source/target node change
   onNodeChange() {
-    // update history url before title to make sure title gets changed for
-    // correct page
     this.updateMetapaths();
-    this.updateHistory();
-    this.updateTitle();
   }
 
   // update metapaths (node pair query results) when source/target node change
@@ -120,44 +150,6 @@ class App extends Component {
           )
       )
     );
-  }
-
-  // add history entry for source/target node without navigating page
-  updateHistory() {
-    const oldParams = new URLSearchParams(window.location.search);
-    const newParams = new URLSearchParams();
-
-    if (this.props.sourceNode.id !== undefined)
-      newParams.set('source', this.props.sourceNode.id);
-    if (this.props.targetNode.id !== undefined)
-      newParams.set('target', this.props.targetNode.id);
-
-    // if url already matches source/target nodes, don't update.
-    // will prevent extra history entry from getting source/target from url on
-    // page load
-    if (
-      (oldParams.get('source') === newParams.get('source')) &
-      (oldParams.get('target') === newParams.get('target'))
-    )
-      return;
-
-    let search = newParams.toString();
-    if (search.length > 0)
-      search = '?' + search;
-
-    const url = window.location.origin + window.location.pathname + search;
-    window.history.pushState({}, '', url);
-  }
-
-  // update page title based on source/target node
-  updateTitle() {
-    if (!this.props.sourceNode.id && !this.props.targetNode.id)
-      return;
-    const title =
-      (this.props.sourceNode.name || '___') +
-      ' → ' +
-      (this.props.targetNode.name || '___');
-    document.title = title;
   }
 
   // when checked metapaths change

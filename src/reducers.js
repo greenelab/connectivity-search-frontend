@@ -2,7 +2,7 @@ import { transferObjectProps } from './util';
 import { transferQueryProps } from './util';
 
 // map previous global state to new global state based on action
-export function Reducer(prevState = {}, action) {
+export function Reducer(prevState, action) {
   // start with previous state
   const newState = { ...prevState };
 
@@ -40,12 +40,14 @@ export function Reducer(prevState = {}, action) {
     case 'update_metapaths':
       if (action.payload.metapaths !== undefined) {
         newState.metapaths = action.payload.metapaths;
-        transferObjectProps(
-          prevState.metapaths,
-          newState.metapaths,
-          ['id'],
-          ['checked', 'highlighted']
-        );
+        if (action.transferState === true) {
+          transferObjectProps(
+            prevState.metapaths,
+            newState.metapaths,
+            ['id'],
+            ['checked']
+          );
+        }
       }
       break;
 
@@ -53,15 +55,15 @@ export function Reducer(prevState = {}, action) {
     case 'update_path_queries':
       if (action.payload.pathQueries !== undefined) {
         newState.pathQueries = action.payload.pathQueries;
-        // console.log(newState.pathQueries);
-        transferQueryProps(
-          prevState.pathQueries,
-          newState.pathQueries,
-          'paths',
-          ['node_ids', 'rel_ids'],
-          ['checked', 'highlighted']
-        );
-        // console.log(newState.pathQueries);
+        if (action.transferState === true) {
+          transferQueryProps(
+            prevState.pathQueries,
+            newState.pathQueries,
+            'paths',
+            ['node_ids', 'rel_ids'],
+            ['checked', 'highlighted']
+          );
+        }
       }
       break;
 
@@ -87,6 +89,68 @@ export function Reducer(prevState = {}, action) {
   if (!newState.pathQueries)
     newState.pathQueries = [];
 
+  // update url after state change unless on redux initialization or
+  // explicitly bypassed
+  if (action.updateUrl === true && prevState !== undefined)
+    updateUrl(newState);
+
+  // update document title after state change
+  updateTitle(newState);
+
   // set new state
   return newState;
+}
+
+// update url to reflect current state
+function updateUrl(state) {
+  // get checked metapaths
+  const checkedMetapaths = [];
+  for (const metapath of state.metapaths) {
+    if (metapath.checked)
+      checkedMetapaths.push(metapath.metapath_abbreviation);
+  }
+
+  // new url
+  const newParams = new URLSearchParams();
+
+  // set url parameters
+  if (state.sourceNode.id !== undefined)
+    newParams.set('source', state.sourceNode.id);
+  if (state.targetNode.id !== undefined)
+    newParams.set('target', state.targetNode.id);
+  if (checkedMetapaths.length > 0)
+    newParams.set('metapaths', checkedMetapaths.join(','));
+
+  // make search string
+  let search = newParams.toString();
+  if (search.length > 0)
+    search = '?' + search;
+
+  // if url already matches state, dont push another history entry
+  if (search === window.location.search)
+    return;
+
+  // navigate to new url
+  const url = window.location.origin + window.location.pathname + search;
+  window.history.pushState({}, '', url);
+  console.log('push state');
+}
+
+// update document title to reflect current state
+function updateTitle(state) {
+  const checkedMetapaths = [];
+  for (const metapath of state.metapaths) {
+    if (metapath.checked)
+      checkedMetapaths.push(metapath.metapath_abbreviation);
+  }
+
+  // update document/tab title
+  const title =
+    (state.sourceNode.name || '___') +
+    ' → ' +
+    (state.targetNode.name || '___') +
+    ' – ' +
+    checkedMetapaths.length +
+    ' metapaths';
+  document.title = title;
 }
