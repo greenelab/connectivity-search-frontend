@@ -550,7 +550,7 @@ class RandomButton extends Component {
   render() {
     return (
       <Button
-        tooltipText='Get a random source and target node'
+        tooltipText='Get random source/target node pair that has at least one metapath result'
         className='node_search_swap_button'
         onClick={this.onClick}
       >
