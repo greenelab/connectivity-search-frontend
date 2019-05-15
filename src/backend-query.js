@@ -11,6 +11,8 @@ const hetioStyles =
   'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/describe/styles.json';
 // url for node search
 const nodeSearchServer = 'https://search-api.het.io/v1/nodes/';
+// url for random node pair
+const randomNodeServer = 'https://search-api.het.io/v1/random-node-pair/';
 // url for metapaths search
 const metapathSearchServer = 'https://search-api.het.io/v1/query-metapaths/';
 // url for paths search
@@ -68,6 +70,14 @@ export function searchNodes(searchString, metatypes) {
   const query = nodeSearchServer + '?' + params.toString();
   return fetchJson(query).then((response) => {
     return response.results;
+  });
+}
+
+// get random source/target node pair that has metapath(s)
+export function getRandomNodePair() {
+  const query = randomNodeServer;
+  return fetchJson(query).then((response) => {
+    return response;
   });
 }
 

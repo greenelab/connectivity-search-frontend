@@ -8,12 +8,15 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
+import { faDice } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { MetanodeChip } from './chips.js';
 import { Tooltip } from './tooltip.js';
 import { Button } from './buttons.js';
 import { searchNodes } from './backend-query.js';
+import { lookupNodeById } from './backend-query.js';
+import { getRandomNodePair } from './backend-query.js';
 import { updateSourceTargetNodes } from './actions.js';
 import { swapSourceTargetNodes } from './actions.js';
 import { sortCustom } from './util.js';
@@ -54,6 +57,7 @@ export class NodeSearch extends Component {
           />
           <SourceNodeSearch />
           <SwapButton />
+          <RandomButton />
           <TargetNodeSearch />
         </NodeSearchContext.Provider>
       </section>
@@ -512,3 +516,48 @@ class SwapButton extends Component {
 }
 // connect component to global state
 SwapButton = connect()(SwapButton);
+
+// random button component
+// picks random source/target node with metapaths
+class RandomButton extends Component {
+  // initialize component
+  constructor() {
+    super();
+
+    this.onClick = this.onClick.bind(this);
+  }
+
+  // when user clicks button
+  onClick() {
+    getRandomNodePair()
+      .then((results) => {
+        return Promise.all([
+          lookupNodeById(results.source_id),
+          lookupNodeById(results.target_id)
+        ]);
+      })
+      .then(([newSourceNode, newTargetNode]) =>
+        this.props.dispatch(
+          updateSourceTargetNodes({
+            sourceNode: newSourceNode,
+            targetNode: newTargetNode
+          })
+        )
+      );
+  }
+
+  // display component
+  render() {
+    return (
+      <Button
+        tooltipText='Get a random source and target node'
+        className='node_search_swap_button'
+        onClick={this.onClick}
+      >
+        <FontAwesomeIcon icon={faDice} />
+      </Button>
+    );
+  }
+}
+// connect component to global state
+RandomButton = connect()(RandomButton);
