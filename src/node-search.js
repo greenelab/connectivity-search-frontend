@@ -113,8 +113,7 @@ class Filters extends Component {
   // checks whether all filters are active
   allOn(filters) {
     for (const filter of filters) {
-      if (!filter.active)
-        return false;
+      if (!filter.active) return false;
     }
 
     return true;
@@ -123,8 +122,7 @@ class Filters extends Component {
   // checks whether all filters besides the specified filter are off
   allOthersOff(filters, type) {
     for (const filter of filters) {
-      if (type !== filter.name && filter.active)
-        return false;
+      if (type !== filter.name && filter.active) return false;
     }
 
     return true;
@@ -135,8 +133,7 @@ class Filters extends Component {
     const filters = this.props.filters.slice();
 
     for (const filter of filters) {
-      if (filter.name === type)
-        filter.active = !filter.active;
+      if (filter.name === type) filter.active = !filter.active;
     }
 
     this.props.updateFilters(filters, this.toString(filters));
@@ -148,13 +145,10 @@ class Filters extends Component {
     const allOthersOff = this.allOthersOff(filters, type);
 
     for (const filter of filters) {
-      if (allOthersOff)
-        filter.active = true;
+      if (allOthersOff) filter.active = true;
       else {
-        if (type === filter.name)
-          filter.active = true;
-        else
-          filter.active = false;
+        if (type === filter.name) filter.active = true;
+        else filter.active = false;
       }
     }
 
@@ -163,8 +157,7 @@ class Filters extends Component {
 
   // turn state of filters into string query list of metanode metagraph
   toString(filters) {
-    if (this.allOn(filters))
-      return '';
+    if (this.allOn(filters)) return '';
 
     const list = [];
     for (const filter of filters) {
@@ -261,8 +254,7 @@ class TargetNodeSearch extends Component {
   // when user makes a new node selection
   onChange(value) {
     this.props.dispatch(updateSourceTargetNodes({ targetNode: value }));
-    if (value)
-      document.activeElement.blur();
+    if (value) document.activeElement.blur();
   }
 
   // display component
@@ -306,10 +298,8 @@ class SearchBox extends Component {
 
   // convert result/selection item to string to display in text box
   itemToString(item) {
-    if (item && item.name)
-      return item.name;
-    else
-      return '';
+    if (item && item.name) return item.name;
+    else return '';
   }
 
   // display component
@@ -377,8 +367,7 @@ class TextBox extends Component {
 
   // when user types into text box
   onInput(event) {
-    if (event.target.value === '')
-      this.props.clearSelection();
+    if (event.target.value === '') this.props.clearSelection();
   }
 
   // when user focuses text box
@@ -550,7 +539,7 @@ class RandomButton extends Component {
   render() {
     return (
       <Button
-        tooltipText='Get a random source and target node'
+        tooltipText='Get random source/target node pair that has at least one metapath result'
         className='node_search_swap_button'
         onClick={this.onClick}
       >
