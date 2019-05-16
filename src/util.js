@@ -267,3 +267,11 @@ export function compareArrays(array1, array2, checkReverse) {
     );
   }
 }
+
+// truncate string to character limit, insert ellipsis  if necessary
+export function cutString(string, n) {
+  if (string.length <= n)
+    return string;
+  else
+    return string.substring(0, n - 3) + '...';
+}

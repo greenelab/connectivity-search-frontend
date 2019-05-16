@@ -94,9 +94,6 @@ export function Reducer(prevState, action) {
   if (action.updateUrl === true && prevState !== undefined)
     updateUrl(newState);
 
-  // update document title after state change
-  updateTitle(newState);
-
   // set new state
   return newState;
 }
@@ -133,24 +130,4 @@ function updateUrl(state) {
   // navigate to new url
   const url = window.location.origin + window.location.pathname + search;
   window.history.pushState({}, '', url);
-  console.log('push state');
-}
-
-// update document title to reflect current state
-function updateTitle(state) {
-  const checkedMetapaths = [];
-  for (const metapath of state.metapaths) {
-    if (metapath.checked)
-      checkedMetapaths.push(metapath.metapath_abbreviation);
-  }
-
-  // update document/tab title
-  const title =
-    (state.sourceNode.name || '___') +
-    ' → ' +
-    (state.targetNode.name || '___') +
-    ' – ' +
-    checkedMetapaths.length +
-    ' metapaths';
-  document.title = title;
 }

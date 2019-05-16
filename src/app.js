@@ -19,6 +19,7 @@ import { setDefinitions } from './actions.js';
 import { updateSourceTargetNodes } from './actions.js';
 import { updateMetapaths } from './actions.js';
 import { updatePathQueries } from './actions.js';
+import { cutString } from './util.js';
 import './styles.css';
 
 // main app component
@@ -47,8 +48,11 @@ class App extends Component {
       prevProps.targetNode.id !== this.props.targetNode.id
     )
       this.onNodeChange();
-    if (prevProps.metapaths !== this.props.metapaths)
+    else if (prevProps.metapaths !== this.props.metapaths)
       this.onMetapathChange();
+
+    // update document title after state change
+    this.updateTitle();
   }
 
   // get metagraph, hetio definitions, and hetmech definitions
@@ -107,6 +111,9 @@ class App extends Component {
           )
             return;
 
+          if (!newMetapaths)
+            newMetapaths = [];
+
           // check metapaths based on url
           for (const newMetapath of newMetapaths) {
             if (checkedMetapaths.includes(newMetapath.metapath_abbreviation))
@@ -131,6 +138,25 @@ class App extends Component {
         }
       );
     });
+  }
+
+  // update document title to reflect current state
+  updateTitle() {
+    const checkedMetapaths = [];
+    for (const metapath of this.props.metapaths) {
+      if (metapath.checked)
+        checkedMetapaths.push(metapath.metapath_abbreviation);
+    }
+
+    // update document/tab title
+    const title =
+      cutString(this.props.sourceNode.name || '___', 20) +
+      ' ↔ ' +
+      cutString(this.props.targetNode.name || '___', 20) +
+      ' – ' +
+      checkedMetapaths.length +
+      ' metapaths';
+    document.title = title;
   }
 
   // when source/target node change
