@@ -20,7 +20,6 @@ import { updateSourceTargetNodes } from './actions.js';
 import { updateMetapaths } from './actions.js';
 import { updatePathQueries } from './actions.js';
 import { cutString } from './util.js';
-import { compareArraysByKey } from './util.js';
 import './styles.css';
 
 // main app component
@@ -52,8 +51,8 @@ class App extends Component {
       this.updateMetapaths();
     // when metapaths change
     else if (
-      !compareArraysByKey(prevProps.metapaths, this.props.metapaths, 'id') ||
-      !compareArraysByKey(prevProps.metapaths, this.props.metapaths, 'checked')
+      JSON.stringify(prevProps.metapaths) !==
+      JSON.stringify(this.props.metapaths)
     )
       this.updatePaths();
 
