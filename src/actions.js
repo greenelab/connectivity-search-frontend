@@ -43,21 +43,21 @@ export function swapSourceTargetNodes() {
 export function updateMetapaths({
   metapaths,
   dontUpdateUrl,
-  dontTransferState
+  preserveChecks
 }) {
   return {
     type: 'update_metapaths',
     payload: { metapaths: metapaths },
     updateUrl: !dontUpdateUrl,
-    transferState: !dontTransferState
+    preserveChecks: preserveChecks
   };
 }
 
 // update path queries
-export function updatePathQueries({ pathQueries }) {
+export function updatePathQueries({ pathQueries, preserveChecks }) {
   return {
     type: 'update_path_queries',
     payload: { pathQueries: pathQueries },
-    transferState: true
+    preserveChecks: preserveChecks
   };
 }

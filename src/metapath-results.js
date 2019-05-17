@@ -21,6 +21,7 @@ import { toFixed } from './util.js';
 import { toExponential } from './util.js';
 import { toGradient } from './util.js';
 import { sortCustom } from './util.js';
+import { copyObject } from './util.js';
 import { updateMetapaths } from './actions.js';
 import './metapath-results.css';
 
@@ -111,22 +112,22 @@ class TableFull extends Component {
 
   // makes all metapaths checked
   checkAll() {
-    const metapaths = this.props.metapaths.slice();
+    const newMetapaths = copyObject(this.props.metapaths);
 
-    for (const metapath of this.props.metapaths)
+    for (const metapath of newMetapaths)
       metapath.checked = true;
 
-    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+    this.props.dispatch(updateMetapaths({ metapaths: newMetapaths }));
   }
 
   // makes all metapaths unchecked
   uncheckAll() {
-    const metapaths = this.props.metapaths.slice();
+    const newMetapaths = copyObject(this.props.metapaths);
 
-    for (const metapath of this.props.metapaths)
+    for (const metapath of newMetapaths)
       metapath.checked = false;
 
-    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+    this.props.dispatch(updateMetapaths({ metapaths: newMetapaths }));
   }
 
   // checks whether all metapaths besides the specified are unchecked
@@ -141,29 +142,29 @@ class TableFull extends Component {
 
   // toggles the specified metapaths on/off
   toggleChecked(id) {
-    const metapaths = this.props.metapaths.slice();
+    const newMetapaths = copyObject(this.props.metapaths);
 
-    for (const metapath of metapaths) {
+    for (const metapath of newMetapaths) {
       if (metapath.id === id)
         metapath.checked = !metapath.checked;
     }
 
-    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+    this.props.dispatch(updateMetapaths({ metapaths: newMetapaths }));
   }
 
   // solo metapath (turn all others off)
   soloChecked(id) {
-    const metapaths = this.props.metapaths.slice();
+    const newMetapaths = copyObject(this.props.metapaths);
     const allOthersUnchecked = this.allOthersUnchecked(id);
 
-    for (const metapath of metapaths) {
+    for (const metapath of newMetapaths) {
       if (allOthersUnchecked || id === metapath.id)
         metapath.checked = true;
       else
         metapath.checked = false;
     }
 
-    this.props.dispatch(updateMetapaths({ metapaths: metapaths }));
+    this.props.dispatch(updateMetapaths({ metapaths: newMetapaths }));
   }
 
   // change which column table is sorted by

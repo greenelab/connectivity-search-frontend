@@ -22,6 +22,7 @@ import { updatePathQueries } from './actions.js';
 import { toFixed } from './util.js';
 import { sortCustom } from './util.js';
 import { compareArrays } from './util.js';
+import { copyObject } from './util.js';
 import './path-results.css';
 
 // path results section component
@@ -123,26 +124,26 @@ class TableFull extends Component {
 
   // makes all paths checked
   checkAll() {
-    const pathQueries = this.props.pathQueries.slice();
+    const newPathQueries = copyObject(this.props.pathQueries);
 
-    for (const pathQuery of pathQueries) {
+    for (const pathQuery of newPathQueries) {
       for (const path of pathQuery.paths)
         path.checked = true;
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(updatePathQueries({ pathQueries: newPathQueries }));
   }
 
   // makes all paths unchecked
   uncheckAll() {
-    const pathQueries = this.props.pathQueries.slice();
+    const newPathQueries = copyObject(this.props.pathQueries);
 
-    for (const pathQuery of pathQueries) {
+    for (const pathQuery of newPathQueries) {
       for (const path of pathQuery.paths)
         path.checked = false;
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(updatePathQueries({ pathQueries: newPathQueries }));
   }
 
   // checks whether all paths besides the specified are unchecked
@@ -159,24 +160,24 @@ class TableFull extends Component {
 
   // toggles the specified paths on/off
   toggleChecked(thePath) {
-    const pathQueries = this.props.pathQueries.slice();
+    const newPathQueries = copyObject(this.props.pathQueries);
 
-    for (const pathQuery of pathQueries) {
+    for (const pathQuery of newPathQueries) {
       for (const path of pathQuery.paths) {
         if (this.comparePaths(path, thePath))
           path.checked = !path.checked;
       }
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(updatePathQueries({ pathQueries: newPathQueries }));
   }
 
   // solo path (turn all others off)
   soloChecked(thePath) {
-    const pathQueries = this.props.pathQueries.slice();
+    const newPathQueries = copyObject(this.props.pathQueries);
     const allOthersUnchecked = this.allOthersUnchecked(thePath);
 
-    for (const pathQuery of pathQueries) {
+    for (const pathQuery of newPathQueries) {
       for (const path of pathQuery.paths) {
         if (allOthersUnchecked || this.comparePaths(path, thePath))
           path.checked = true;
@@ -185,7 +186,7 @@ class TableFull extends Component {
       }
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(updatePathQueries({ pathQueries: newPathQueries }));
   }
 
   // checks if all rows highlighted and updates state
@@ -218,26 +219,26 @@ class TableFull extends Component {
 
   // makes all paths highlighted
   highlightAll() {
-    const pathQueries = this.props.pathQueries.slice();
+    const newPathQueries = copyObject(this.props.pathQueries);
 
-    for (const pathQuery of pathQueries) {
+    for (const pathQuery of newPathQueries) {
       for (const path of pathQuery.paths)
         path.highlighted = true;
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(updatePathQueries({ pathQueries: newPathQueries }));
   }
 
   // makes all paths unhighlighted
   unhighlightAll() {
-    const pathQueries = this.props.pathQueries.slice();
+    const newPathQueries = copyObject(this.props.pathQueries);
 
-    for (const pathQuery of pathQueries) {
+    for (const pathQuery of newPathQueries) {
       for (const path of pathQuery.paths)
         path.highlighted = false;
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(updatePathQueries({ pathQueries: newPathQueries }));
   }
 
   // checks whether all paths besides the specified are unhighlighted
@@ -254,24 +255,24 @@ class TableFull extends Component {
 
   // toggles the specified paths on/off
   toggleHighlighted(thePath) {
-    const pathQueries = this.props.pathQueries.slice();
+    const newPathQueries = copyObject(this.props.pathQueries);
 
-    for (const pathQuery of pathQueries) {
+    for (const pathQuery of newPathQueries) {
       for (const path of pathQuery.paths) {
         if (this.comparePaths(path, thePath))
           path.highlighted = !path.highlighted;
       }
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(updatePathQueries({ pathQueries: newPathQueries }));
   }
 
   // solo path (turn all others off)
   soloHighlighted(thePath) {
-    const pathQueries = this.props.pathQueries.slice();
+    const newPathQueries = copyObject(this.props.pathQueries);
     const allOthersUnhighlighted = this.allOthersUnhighlighted(thePath);
 
-    for (const pathQuery of pathQueries) {
+    for (const pathQuery of newPathQueries) {
       for (const path of pathQuery.paths) {
         if (allOthersUnhighlighted)
           path.highlighted = true;
@@ -284,7 +285,7 @@ class TableFull extends Component {
       }
     }
 
-    this.props.dispatch(updatePathQueries({ pathQueries: pathQueries }));
+    this.props.dispatch(updatePathQueries({ pathQueries: newPathQueries }));
   }
 
   // checks if paths are equal

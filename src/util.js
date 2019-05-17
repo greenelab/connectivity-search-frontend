@@ -255,17 +255,26 @@ export function compareArrays(array1, array2, checkReverse) {
 
   if (!checkReverse) {
     // check forwards
-    return array1.every((value, index) => value === array2[index]);
+    return array1.every((element, index) => element === array2[index]);
   } else {
     // check forwards and backwards
     return (
-      array1.every((value, index) => value === array2[index]) ||
+      array1.every((element, index) => element === array2[index]) ||
       array1
         .slice()
         .reverse()
-        .every((value, index) => value === array2[index])
+        .every((element, index) => element === array2[index])
     );
   }
+}
+
+// compare an array of objects by specified key in object
+// eg [{id: 1}, {id: 2, fruit: 'apple'}] === [{id: 1, fruit: 'pear'}, {id: 2}]
+export function compareArraysByKey(array1, array2, key) {
+  if (array1.length !== array2.length)
+    return false;
+
+  return array1.every((element, index) => element[key] === array2[index][key]);
 }
 
 // truncate string to character limit, insert ellipsis  if necessary
@@ -274,4 +283,9 @@ export function cutString(string, n) {
     return string;
   else
     return string.substring(0, n - 3) + '...';
+}
+
+//
+export function copyObject(object) {
+  return JSON.parse(JSON.stringify(object));
 }

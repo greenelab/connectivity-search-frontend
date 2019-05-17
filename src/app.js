@@ -20,6 +20,7 @@ import { updateSourceTargetNodes } from './actions.js';
 import { updateMetapaths } from './actions.js';
 import { updatePathQueries } from './actions.js';
 import { cutString } from './util.js';
+import { compareArraysByKey } from './util.js';
 import './styles.css';
 
 // main app component
@@ -43,13 +44,18 @@ class App extends Component {
 
   // when component changes
   componentDidUpdate(prevProps) {
+    // when source/target node change
     if (
       prevProps.sourceNode.id !== this.props.sourceNode.id ||
       prevProps.targetNode.id !== this.props.targetNode.id
     )
-      this.onNodeChange();
-    else if (prevProps.metapaths !== this.props.metapaths)
-      this.onMetapathChange();
+      this.updateMetapaths();
+    // when metapaths change
+    else if (
+      !compareArraysByKey(prevProps.metapaths, this.props.metapaths, 'id') ||
+      !compareArraysByKey(prevProps.metapaths, this.props.metapaths, 'checked')
+    )
+      this.updatePaths();
 
     // update document title after state change
     this.updateTitle();
@@ -131,8 +137,7 @@ class App extends Component {
           dispatch(
             updateMetapaths({
               metapaths: newMetapaths,
-              dontUpdateUrl: true,
-              dontTransferState: true
+              dontUpdateUrl: true
             })
           );
         }
@@ -148,7 +153,6 @@ class App extends Component {
         checkedMetapaths.push(metapath.metapath_abbreviation);
     }
 
-    // update document/tab title
     const title =
       cutString(this.props.sourceNode.name || '___', 20) +
       ' ↔ ' +
@@ -159,11 +163,6 @@ class App extends Component {
     document.title = title;
   }
 
-  // when source/target node change
-  onNodeChange() {
-    this.updateMetapaths();
-  }
-
   // update metapaths (node pair query results) when source/target node change
   updateMetapaths() {
     this.props.dispatch((dispatch) =>
@@ -171,16 +170,12 @@ class App extends Component {
         (results) =>
           dispatch(
             updateMetapaths({
-              metapaths: results
+              metapaths: results,
+              preserveChecks: true
             })
           )
       )
     );
-  }
-
-  // when checked metapaths change
-  onMetapathChange() {
-    this.updatePaths();
   }
 
   // update paths when checked metapaths change
@@ -204,7 +199,8 @@ class App extends Component {
       Promise.all(promises).then((results) => {
         dispatch(
           updatePathQueries({
-            pathQueries: results
+            pathQueries: results,
+            preserveChecks: true
           })
         );
       });

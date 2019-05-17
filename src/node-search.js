@@ -17,6 +17,7 @@ import { searchNodes } from './backend-query.js';
 import { updateSourceTargetNodes } from './actions.js';
 import { swapSourceTargetNodes } from './actions.js';
 import { sortCustom } from './util.js';
+import { copyObject } from './util.js';
 import './node-search.css';
 
 // node search section component
@@ -128,22 +129,22 @@ class Filters extends Component {
 
   // toggles the specified filters on/off
   toggle(type) {
-    const filters = this.props.filters.slice();
+    const newFilters = copyObject(this.props.filters);
 
-    for (const filter of filters) {
+    for (const filter of newFilters) {
       if (filter.name === type)
         filter.active = !filter.active;
     }
 
-    this.props.updateFilters(filters, this.toString(filters));
+    this.props.updateFilters(newFilters, this.toString(newFilters));
   }
 
   // solo filter (turn all others off)
   solo(type) {
-    const filters = this.props.filters.slice();
-    const allOthersOff = this.allOthersOff(filters, type);
+    const newFilters = copyObject(this.props.filters);
+    const allOthersOff = this.allOthersOff(newFilters, type);
 
-    for (const filter of filters) {
+    for (const filter of newFilters) {
       if (allOthersOff)
         filter.active = true;
       else {
@@ -154,7 +155,7 @@ class Filters extends Component {
       }
     }
 
-    this.props.updateFilters(filters, this.toString(filters));
+    this.props.updateFilters(newFilters, this.toString(newFilters));
   }
 
   // turn state of filters into string query list of metanode metagraph
