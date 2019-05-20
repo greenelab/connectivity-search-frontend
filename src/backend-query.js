@@ -26,7 +26,7 @@ export function fetchJson(url) {
       return results || {};
     })
     .catch((error) => {
-      console.log(error);
+      console.log(error, url);
       return {};
     });
 }

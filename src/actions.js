@@ -19,32 +19,45 @@ export function setDefinitions({
 }
 
 // update source and/or target node
-export function updateSourceTargetNodes({ sourceNode, targetNode }) {
+export function updateSourceTargetNodes({
+  sourceNode,
+  targetNode,
+  dontUpdateUrl
+}) {
   return {
     type: 'update_source_target_nodes',
-    payload: { sourceNode: sourceNode, targetNode: targetNode }
+    payload: { sourceNode: sourceNode, targetNode: targetNode },
+    updateUrl: !dontUpdateUrl
   };
 }
 
 // swap source/target node
 export function swapSourceTargetNodes() {
   return {
-    type: 'swap_source_target_nodes'
+    type: 'swap_source_target_nodes',
+    updateUrl: false
   };
 }
 
 // update metapaths
-export function updateMetapaths({ metapaths }) {
+export function updateMetapaths({
+  metapaths,
+  dontUpdateUrl,
+  preserveChecks
+}) {
   return {
     type: 'update_metapaths',
-    payload: { metapaths: metapaths }
+    payload: { metapaths: metapaths },
+    updateUrl: !dontUpdateUrl,
+    preserveChecks: preserveChecks
   };
 }
 
 // update path queries
-export function updatePathQueries({ pathQueries }) {
+export function updatePathQueries({ pathQueries, preserveChecks }) {
   return {
     type: 'update_path_queries',
-    payload: { pathQueries: pathQueries }
+    payload: { pathQueries: pathQueries },
+    preserveChecks: preserveChecks
   };
 }

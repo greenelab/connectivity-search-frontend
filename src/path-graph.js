@@ -18,6 +18,7 @@ import { downloadSvg } from './util.js';
 import { transferObjectProps } from './util.js';
 import { Tooltip } from './tooltip.js';
 import { sortCustom } from './util.js';
+import { cutString } from './util.js';
 import './path-graph.css';
 
 // graph settings
@@ -856,12 +857,7 @@ export class Graph extends Component {
       .style('font-weight', 500)
       .style('color', (d) => this.getNodeTextColor(d.metanode))
       .style('word-break', 'break-word')
-      .html((d) => {
-        if (d.properties.name.length > nodeCharLimit)
-          return d.properties.name.substr(0, nodeCharLimit - 3) + '...';
-        else
-          return d.properties.name;
-      });
+      .html((d) => cutString(d.properties.name, nodeCharLimit));
 
     nodeLabels.exit().remove();
   }
