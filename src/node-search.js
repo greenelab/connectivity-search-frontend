@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCodeBranch } from '@fortawesome/free-solid-svg-icons';
 import { faDice } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
@@ -15,6 +16,7 @@ import { MetanodeChip } from './chips.js';
 import { Tooltip } from './tooltip.js';
 import { Button } from './buttons.js';
 import { searchNodes } from './backend-query.js';
+import { searchNodesMetapaths } from './backend-query.js';
 import { lookupNodeById } from './backend-query.js';
 import { getRandomNodePair } from './backend-query.js';
 import { updateSourceTargetNodes } from './actions.js';
@@ -232,6 +234,8 @@ class SourceNodeSearch extends Component {
   // when user makes a new node selection
   onChange(value) {
     this.props.dispatch(updateSourceTargetNodes({ sourceNode: value }));
+    if (value)
+      document.activeElement.blur();
   }
 
   // display component
@@ -240,7 +244,8 @@ class SourceNodeSearch extends Component {
       <SearchBox
         label='Source Node'
         tooltipText='The starting node of the paths'
-        value={this.props.node}
+        node={this.props.node}
+        otherNode={this.props.otherNode}
         onChange={this.onChange}
       />
     );
@@ -248,7 +253,8 @@ class SourceNodeSearch extends Component {
 }
 // connect component to global state
 SourceNodeSearch = connect((state) => ({
-  node: state.sourceNode
+  node: state.sourceNode,
+  otherNode: state.targetNode
 }))(SourceNodeSearch);
 
 // source node search box component
@@ -272,7 +278,8 @@ class TargetNodeSearch extends Component {
       <SearchBox
         label='Target Node'
         tooltipText='The ending node of the paths'
-        value={this.props.node}
+        node={this.props.node}
+        otherNode={this.props.otherNode}
         onChange={this.onChange}
       />
     );
@@ -280,7 +287,8 @@ class TargetNodeSearch extends Component {
 }
 // connect component to global state
 TargetNodeSearch = connect((state) => ({
-  node: state.targetNode
+  node: state.targetNode,
+  otherNode: state.sourceNode
 }))(TargetNodeSearch);
 
 // search box component with dropdown autocomplete/autosuggest
@@ -300,9 +308,20 @@ class SearchBox extends Component {
 
   // when user types into or modifies text in text box
   onInput(searchString) {
-    searchNodes(searchString, this.context.filterString).then((results) =>
-      this.setState({ searchResults: results || [] })
-    );
+    let otherNodeId = '';
+    if (this.props.otherNode && this.props.otherNode.id !== undefined)
+      otherNodeId = this.props.otherNode.id;
+
+    if (searchString === '' && otherNodeId !== '') {
+      searchNodesMetapaths(otherNodeId).then((results) =>
+        this.setState({ searchResults: results || [] })
+      );
+    } else {
+      searchNodes(searchString, this.context.filterString, otherNodeId).then(
+        (results) =>
+          this.setState({ searchResults: results || [] })
+      );
+    }
   }
 
   // convert result/selection item to string to display in text box
@@ -318,9 +337,10 @@ class SearchBox extends Component {
     return (
       <Downshift
         onChange={this.props.onChange}
+        onBlur={this.onBlur}
         onInputValueChange={this.onInput}
         itemToString={this.itemToString}
-        selectedItem={this.props.value}
+        selectedItem={this.props.node}
       >
         {({
           getInputProps,
@@ -329,7 +349,8 @@ class SearchBox extends Component {
           isOpen,
           selectedItem,
           highlightedIndex,
-          clearSelection
+          clearSelection,
+          openMenu
         }) => (
           <div className='node_search_form' ref={this.formRef}>
             <span className='small light node_search_form_label'>
@@ -342,6 +363,8 @@ class SearchBox extends Component {
               getInputProps={getInputProps}
               clearSelection={clearSelection}
               selectedItem={selectedItem}
+              onFocus={this.onInput}
+              openMenu={openMenu}
             />
             <Dropdown
               isOpen={isOpen}
@@ -349,6 +372,7 @@ class SearchBox extends Component {
               formRef={this.formRef}
               getMenuProps={getMenuProps}
               searchResults={this.state.searchResults}
+              showMetapathCount={this.props.otherNode.id !== undefined}
               selectedItem={selectedItem}
               highlightedIndex={highlightedIndex}
               getItemProps={getItemProps}
@@ -383,7 +407,9 @@ class TextBox extends Component {
   }
 
   // when user focuses text box
-  onFocus() {
+  onFocus(event) {
+    this.props.onFocus(event.target.value);
+    this.props.openMenu();
     this.setState({ focused: true });
   }
 
@@ -476,9 +502,12 @@ class Dropdown extends Component {
               <span className='node_search_results_item_name'>
                 {result.name}
               </span>
-              <span className='node_search_results_item_identifier'>
-                {result.identifier}
-              </span>
+              {this.props.showMetapathCount && (
+                <span className='node_search_results_item_count'>
+                  <FontAwesomeIcon icon={faCodeBranch} />
+                  {result.metapath_count || 0}
+                </span>
+              )}
             </MenuItem>
           ))}
         </Paper>
