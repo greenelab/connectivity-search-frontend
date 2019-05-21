@@ -40,7 +40,7 @@ const edgeSpreadDistance = 20;
 const edgeSpreadAngle = (45 / 360) * 2 * Math.PI;
 const inkColor = '#424242';
 const backgroundColor = '#fafafa';
-const highlightColor = '#B3E8F7';
+const highlightColor = '#ffcc00';
 
 // path graph section component
 export class PathGraph extends Component {
@@ -62,6 +62,7 @@ export class PathGraph extends Component {
     this.updateSectionWidth = this.updateSectionWidth.bind(this);
     this.setWidth = this.setWidth.bind(this);
     this.setHeight = this.setHeight.bind(this);
+    this.fitView = this.fitView.bind(this);
     this.setGraphCounts = this.setGraphCounts.bind(this);
     this.setSelectedElement = this.setSelectedElement.bind(this);
   }
@@ -69,7 +70,7 @@ export class PathGraph extends Component {
   // when component mounts
   componentDidMount() {
     this.updateSectionWidth();
-    this.collapseContainer();
+    this.collapseContainer(true);
     window.addEventListener('resize', this.updateSectionWidth);
   }
 
@@ -103,23 +104,21 @@ export class PathGraph extends Component {
   }
 
   // expand graph container to width of window
-  expandContainer() {
-    const width = document.body.clientWidth - 20 - 20;
-    const height = (width * 3) / 4;
-    this.setState({
-      width: width,
-      height: height
-    });
+  expandContainer(proportionalHeight) {
+    const newState = {};
+    newState.width = document.body.clientWidth - 20 - 20;
+    if (proportionalHeight)
+      newState.height = (newState.width * 3) / 4;
+    this.setState(newState, this.fitView);
   }
 
   // collapse graph container to width of <section> element
-  collapseContainer() {
-    const width = ReactDOM.findDOMNode(this).clientWidth;
-    const height = (width * 3) / 4;
-    this.setState({
-      width: width,
-      height: height
-    });
+  collapseContainer(proportionalHeight) {
+    const newState = {};
+    newState.width = ReactDOM.findDOMNode(this).clientWidth;
+    if (proportionalHeight)
+      newState.height = (newState.width * 3) / 4;
+    this.setState(newState, this.fitView);
   }
 
   // set width of graph container
@@ -130,6 +129,12 @@ export class PathGraph extends Component {
   // set height of graph container
   setHeight(value) {
     this.setState({ height: value });
+  }
+
+  // fit view to contents of graph
+  fitView() {
+    if (this.graph.current)
+      this.graph.current.fitView();
   }
 
   // download graph as svg
@@ -225,10 +230,7 @@ export class PathGraph extends Component {
             <TextButton
               text='fit'
               icon={faExpand}
-              onClick={() => {
-                if (this.graph.current)
-                  this.graph.current.fitView();
-              }}
+              onClick={this.fitView}
               tooltipText='Fit the view to the contents of the graph'
             />
             <TextButton
