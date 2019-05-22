@@ -124,9 +124,12 @@
   color: #757575;
   font-size: 0.75em;
   font-weight: 500;
-  width: 30px;
-  min-width: 30px;
+  width: 40px;
+  min-width: 40px;
+  vertical-align: middle;
 }
 .node_search_results_item_count svg {
+  height: 25px;
   margin-right: 3px;
+  vertical-align: middle;
 }

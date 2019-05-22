@@ -8,7 +8,6 @@ import Paper from '@material-ui/core/Paper';
 import MenuItem from '@material-ui/core/MenuItem';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
-import { faCodeBranch } from '@fortawesome/free-solid-svg-icons';
 import { faDice } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
@@ -23,6 +22,7 @@ import { updateSourceTargetNodes } from './actions.js';
 import { swapSourceTargetNodes } from './actions.js';
 import { sortCustom } from './util.js';
 import { copyObject } from './util.js';
+import { ReactComponent as PathIcon } from './path.svg';
 import './node-search.css';
 
 // node search section component
@@ -504,8 +504,10 @@ class Dropdown extends Component {
               </span>
               {this.props.showMetapathCount && (
                 <span className='node_search_results_item_count'>
-                  <FontAwesomeIcon icon={faCodeBranch} />
-                  {result.metapath_count || 0}
+                  <PathIcon />
+                  <span>
+                    {result.metapath_count || 0}
+                  </span>
                 </span>
               )}
             </MenuItem>
