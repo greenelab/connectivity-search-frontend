@@ -1,29 +1,29 @@
-import React from "react";
-import { Component } from "react";
-import { connect } from "react-redux";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { faAngleRight } from "@fortawesome/free-solid-svg-icons";
-import { faAngleLeft } from "@fortawesome/free-solid-svg-icons";
-import { faSort } from "@fortawesome/free-solid-svg-icons";
-import { faSortUp } from "@fortawesome/free-solid-svg-icons";
-import { faSortDown } from "@fortawesome/free-solid-svg-icons";
+import React from 'react';
+import { Component } from 'react';
+import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faSort } from '@fortawesome/free-solid-svg-icons';
+import { faSortUp } from '@fortawesome/free-solid-svg-icons';
+import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 
-import { metapathChips } from "./chips.js";
-import { Button } from "./buttons.js";
-import { TextButton } from "./buttons.js";
-import { Checkbox } from "./buttons.js";
-import { DynamicField } from "./dynamic-field.js";
-import { CollapsibleSection } from "./collapsible-section.js";
-import { makeFilenameFriendly } from "./util.js";
-import { downloadCsv } from "./util.js";
-import { toFixed } from "./util.js";
-import { toExponential } from "./util.js";
-import { toGradient } from "./util.js";
-import { sortCustom } from "./util.js";
-import { copyObject } from "./util.js";
-import { updateMetapaths } from "./actions.js";
-import "./metapath-results.css";
+import { metapathChips } from './chips.js';
+import { Button } from './buttons.js';
+import { TextButton } from './buttons.js';
+import { Checkbox } from './buttons.js';
+import { DynamicField } from './dynamic-field.js';
+import { CollapsibleSection } from './collapsible-section.js';
+import { makeFilenameFriendly } from './util.js';
+import { downloadCsv } from './util.js';
+import { toFixed } from './util.js';
+import { toExponential } from './util.js';
+import { toGradient } from './util.js';
+import { sortCustom } from './util.js';
+import { copyObject } from './util.js';
+import { updateMetapaths } from './actions.js';
+import './metapath-results.css';
 
 // path results section component
 export class MetapathResults extends Component {
@@ -42,7 +42,7 @@ export class MetapathResults extends Component {
   }
 }
 // connect component to global state
-MetapathResults = connect(state => ({
+MetapathResults = connect((state) => ({
   metapaths: state.metapaths
 }))(MetapathResults);
 
@@ -55,7 +55,7 @@ class TableFull extends Component {
     this.state = {};
     this.state.showMore = false;
     this.state.allChecked = false;
-    this.state.sortColumn = "adjusted_p_value";
+    this.state.sortColumn = 'adjusted_p_value';
     this.state.sortUp = false;
 
     this.toggleShowMore = this.toggleShowMore.bind(this);
@@ -72,32 +72,40 @@ class TableFull extends Component {
 
   // when component updates
   componentDidUpdate(prevProps) {
-    if (this.props.metapaths !== prevProps.metapaths) this.updateAllChecked();
+    if (this.props.metapaths !== prevProps.metapaths)
+      this.updateAllChecked();
   }
 
   // checks if all rows checked and updates state
   updateAllChecked() {
-    if (this.allChecked()) this.setState({ allChecked: true });
-    else this.setState({ allChecked: false });
+    if (this.allChecked())
+      this.setState({ allChecked: true });
+    else
+      this.setState({ allChecked: false });
   }
 
   // toggle show more/less
   toggleShowMore(event) {
-    if (event) event.preventDefault();
+    if (event)
+      event.preventDefault();
 
     this.setState({ showMore: !this.state.showMore });
   }
 
   // toggle check/uncheck all
   toggleAllChecked() {
-    if (this.allChecked()) this.uncheckAll();
-    else this.checkAll();
+    if (this.allChecked())
+      this.uncheckAll();
+    else
+      this.checkAll();
   }
 
   // checks whether all metapaths are checked
   allChecked() {
-    for (const metapath of this.props.metapaths) {
-      if (!metapath.checked) return false;
+    for (const metapath of this.props.metapaths)
+    {
+      if (!metapath.checked)
+        return false;
     }
 
     return true;
@@ -107,7 +115,8 @@ class TableFull extends Component {
   checkAll() {
     const newMetapaths = copyObject(this.props.metapaths);
 
-    for (const metapath of newMetapaths) metapath.checked = true;
+    for (const metapath of newMetapaths)
+      metapath.checked = true;
 
     this.props.dispatch(updateMetapaths({ metapaths: newMetapaths }));
   }
@@ -116,15 +125,18 @@ class TableFull extends Component {
   uncheckAll() {
     const newMetapaths = copyObject(this.props.metapaths);
 
-    for (const metapath of newMetapaths) metapath.checked = false;
+    for (const metapath of newMetapaths)
+      metapath.checked = false;
 
     this.props.dispatch(updateMetapaths({ metapaths: newMetapaths }));
   }
 
   // checks whether all metapaths besides the specified are unchecked
   allOthersUnchecked(id) {
-    for (const metapath of this.props.metapaths) {
-      if (id !== metapath.id && metapath.checked) return false;
+    for (const metapath of this.props.metapaths)
+    {
+      if (id !== metapath.id && metapath.checked)
+        return false;
     }
 
     return true;
@@ -134,8 +146,10 @@ class TableFull extends Component {
   toggleChecked(id) {
     const newMetapaths = copyObject(this.props.metapaths);
 
-    for (const metapath of newMetapaths) {
-      if (metapath.id === id) metapath.checked = !metapath.checked;
+    for (const metapath of newMetapaths)
+    {
+      if (metapath.id === id)
+        metapath.checked = !metapath.checked;
     }
 
     this.props.dispatch(updateMetapaths({ metapaths: newMetapaths }));
@@ -147,8 +161,10 @@ class TableFull extends Component {
     const allOthersUnchecked = this.allOthersUnchecked(id);
 
     for (const metapath of newMetapaths) {
-      if (allOthersUnchecked || id === metapath.id) metapath.checked = true;
-      else metapath.checked = false;
+      if (allOthersUnchecked || id === metapath.id)
+        metapath.checked = true;
+      else
+        metapath.checked = false;
     }
 
     this.props.dispatch(updateMetapaths({ metapaths: newMetapaths }));
@@ -161,7 +177,8 @@ class TableFull extends Component {
 
     if (sortColumn === this.state.sortColumn)
       newState.sortUp = !this.state.sortUp;
-    else newState.sortUp = true;
+    else
+      newState.sortUp = true;
 
     this.setState(newState);
   }
@@ -170,12 +187,16 @@ class TableFull extends Component {
   compareNumbers(a, b, key) {
     // parse as numbers
     const comparison = Number(a[key]) - Number(b[key]);
-    if (!Number.isNaN(comparison)) return comparison;
+    if (!Number.isNaN(comparison))
+      return comparison;
 
     // otherwise parse as strings and compare alphabetically
-    if (a[key] < b[key]) return -1;
-    else if (a[key] > b[key]) return 1;
-    else return 0;
+    if (a[key] < b[key])
+      return -1;
+    else if (a[key] > b[key])
+      return 1;
+    else
+      return 0;
   }
 
   // compare metapaths (for sorting)
@@ -183,13 +204,18 @@ class TableFull extends Component {
     a = a[key];
     b = b[key];
     // first by length
-    if (a.length < b.length) return -1;
-    else if (a.length > b.length) return 1;
+    if (a.length < b.length)
+      return -1;
+    else if (a.length > b.length)
+      return 1;
     else {
       // then alphabetically
-      if (a < b) return -1;
-      else if (a > b) return 1;
-      else return 0;
+      if (a < b)
+        return -1;
+      else if (a > b)
+        return 1;
+      else
+        return 0;
     }
   }
 
@@ -204,10 +230,10 @@ class TableFull extends Component {
 
     const tableData = makeMetapathsTable(this.props.metapaths);
     const filename = [
-      "metapaths",
+      'metapaths',
       makeFilenameFriendly(this.props.sourceNode.name),
       makeFilenameFriendly(this.props.targetNode.name)
-    ].join("_");
+    ].join('_');
     downloadCsv(tableData, filename);
   }
 
@@ -218,18 +244,22 @@ class TableFull extends Component {
     const sortColumn = this.state.sortColumn;
 
     // sort by appropriate field
-    if (sortColumn === "metapath_metaedges")
+    if (sortColumn === 'metapath_metaedges')
       sortedMetapaths.sort((a, b) => this.compareMetapaths(a, b, sortColumn));
-    else sortedMetapaths.sort((a, b) => this.compareNumbers(a, b, sortColumn));
+    else
+      sortedMetapaths.sort((a, b) => this.compareNumbers(a, b, sortColumn));
 
     // reverse sort direction
-    if (this.state.sortUp) sortedMetapaths.reverse();
+    if (this.state.sortUp)
+      sortedMetapaths.reverse();
 
     // count metapaths
     const metapathCount = sortedMetapaths.length;
     let metapathSelectedCount = 0;
-    for (const metapath of sortedMetapaths) {
-      if (metapath.checked) metapathSelectedCount++;
+    for (const metapath of sortedMetapaths)
+    {
+      if (metapath.checked)
+        metapathSelectedCount++;
     }
 
     return (
@@ -255,7 +285,7 @@ class TableFull extends Component {
             tooltipText="Download table as .csv file"
           />
           <TextButton
-            text={this.state.showMore ? "show less " : "show more "}
+            text={this.state.showMore ? 'show less ' : 'show more '}
             icon={this.state.showMore ? faAngleLeft : faAngleRight}
             className="link_button small"
             onClick={this.toggleShowMore}
@@ -278,7 +308,7 @@ class TableFull extends Component {
 // allow other components to access component's variables and methods
 const TableContext = React.createContext({});
 // connect component to global state
-TableFull = connect(state => ({
+TableFull = connect((state) => ({
   sourceNode: state.sourceNode,
   targetNode: state.targetNode,
   metapaths: state.metapaths
@@ -331,19 +361,19 @@ class TableHead extends Component {
           className="col_l"
           buttonClass="left"
           fieldName="metapath_metaedges"
-          tooltipText={tooltipText["metapath"]}
+          tooltipText={tooltipText['metapath']}
           text="metapath"
         />
         <TableHeadCell
           className="col_s"
           fieldName="path_count"
-          tooltipText={tooltipText["path_count"]}
+          tooltipText={tooltipText['path_count']}
           text="path count"
         />
         <TableHeadCell
           className="col_m"
           fieldName="adjusted_p_value"
-          tooltipText={tooltipText["adjusted_p_value"]}
+          tooltipText={tooltipText['adjusted_p_value']}
           text={
             <span>
               adjusted
@@ -361,7 +391,7 @@ class TableHead extends Component {
         <TableHeadCell
           className="col_m"
           fieldName="p_value"
-          tooltipText={tooltipText["p_value"]}
+          tooltipText={tooltipText['p_value']}
           text={
             <>
               <i>p</i>-value
@@ -371,42 +401,42 @@ class TableHead extends Component {
         <TableHeadCell
           className="col_s"
           fieldName="dwpc"
-          tooltipText={tooltipText["dwpc"]}
+          tooltipText={tooltipText['dwpc']}
           text="DWPC"
         />
         <TableHeadCell
           fieldName="dgp_source_degree"
-          tooltipText={tooltipText["dgp_source_degree"]}
+          tooltipText={tooltipText['dgp_source_degree']}
           text="source degree"
         />
         <TableHeadCell
           fieldName="dgp_target_degree"
-          tooltipText={tooltipText["dgp_target_degree"]}
+          tooltipText={tooltipText['dgp_target_degree']}
           text="target degree"
         />
         <TableHeadCell
           fieldName="dgp_n_dwpcs"
-          tooltipText={tooltipText["dgp_n_dwpcs"]}
+          tooltipText={tooltipText['dgp_n_dwpcs']}
           text="# DWPC's"
         />
         <TableHeadCell
           fieldName="dgp_n_nonzero_dwpcs"
-          tooltipText={tooltipText["dgp_n_nonzero_dwpcs"]}
+          tooltipText={tooltipText['dgp_n_nonzero_dwpcs']}
           text="# non-0 DWPC's"
         />
         <TableHeadCell
           fieldName="dgp_nonzero_mean"
-          tooltipText={tooltipText["dgp_nonzero_mean"]}
+          tooltipText={tooltipText['dgp_nonzero_mean']}
           text="non-0 mean"
         />
         <TableHeadCell
           fieldName="dgp_nonzero_sd"
-          tooltipText={tooltipText["dgp_nonzero_sd"]}
+          tooltipText={tooltipText['dgp_nonzero_sd']}
           text={<>non-0 &sigma;</>}
         />
         <TableHeadCell
           fieldName="cypher_query"
-          tooltipText={tooltipText["cypher_query"]}
+          tooltipText={tooltipText['cypher_query']}
           text={
             <a href="https://neo4j.het.io/browser/" target="_blank">
               neo4j query
@@ -430,7 +460,7 @@ class TableHead extends Component {
 // connect component to context component
 TableHead.contextType = TableContext;
 // connect component to global state
-TableHead = connect(state => ({
+TableHead = connect((state) => ({
   hetioDefinitions: state.hetioDefinitions,
   hetmechDefinitions: state.hetmechDefinitions
 }))(TableHead);
@@ -459,7 +489,7 @@ class SortButton extends Component {
     return (
       <Button
         tooltipText={this.props.tooltipText}
-        className={"sort_button " + (this.props.className || "")}
+        className={'sort_button ' + (this.props.className || '')}
         onClick={() => this.context.changeSort(this.props.fieldName)}
       >
         {this.props.text}
@@ -517,9 +547,9 @@ class TableBodyRow extends Component {
             onClick={() => this.context.toggleChecked(this.props.metapath.id)}
             onCtrlClick={() => this.context.soloChecked(this.props.metapath.id)}
             tooltipText={
-              "Show these " +
-              (this.props.metapath.path_count || "") +
-              " paths in the paths table"
+              'Show these ' +
+              (this.props.metapath.path_count || '') +
+              ' paths in the paths table'
             }
           />
         </td>
@@ -620,27 +650,27 @@ function makeMetapathsTable(metapaths) {
   let headers = [];
   for (const field of Object.keys(metapaths[0])) {
     if (
-      typeof metapaths[0][field] === "number" ||
-      typeof metapaths[0][field] === "string"
+      typeof metapaths[0][field] === 'number' ||
+      typeof metapaths[0][field] === 'string'
     )
       headers.push(field);
   }
 
   // sort headers in custom order
   const order = [
-    "id",
-    "metapath_name",
-    "metapath_abbreviation",
-    "path_count",
-    "adjusted_p_value",
-    "p_value",
-    "dwpc",
-    "dgp_source_degree",
-    "dgp_target_degree",
-    "dgp_n_dwpcs",
-    "dgp_n_nonzero_dwpcs",
-    "dgp_nonzero_mean",
-    "dgp_nonzero_sd"
+    'id',
+    'metapath_name',
+    'metapath_abbreviation',
+    'path_count',
+    'adjusted_p_value',
+    'p_value',
+    'dwpc',
+    'dgp_source_degree',
+    'dgp_target_degree',
+    'dgp_n_dwpcs',
+    'dgp_n_nonzero_dwpcs',
+    'dgp_nonzero_mean',
+    'dgp_nonzero_sd'
   ];
   headers = sortCustom(headers, order);
 
@@ -648,7 +678,8 @@ function makeMetapathsTable(metapaths) {
   table.push(headers);
   for (const result of metapaths) {
     const row = [];
-    for (const header of headers) row.push(result[header]);
+    for (const header of headers)
+      row.push(result[header]);
     table.push(row);
   }
 
