@@ -102,8 +102,7 @@ class TableFull extends Component {
 
   // checks whether all metapaths are checked
   allChecked() {
-    for (const metapath of this.props.metapaths)
-    {
+    for (const metapath of this.props.metapaths) {
       if (!metapath.checked)
         return false;
     }
@@ -133,8 +132,7 @@ class TableFull extends Component {
 
   // checks whether all metapaths besides the specified are unchecked
   allOthersUnchecked(id) {
-    for (const metapath of this.props.metapaths)
-    {
+    for (const metapath of this.props.metapaths) {
       if (id !== metapath.id && metapath.checked)
         return false;
     }
@@ -146,8 +144,7 @@ class TableFull extends Component {
   toggleChecked(id) {
     const newMetapaths = copyObject(this.props.metapaths);
 
-    for (const metapath of newMetapaths)
-    {
+    for (const metapath of newMetapaths) {
       if (metapath.id === id)
         metapath.checked = !metapath.checked;
     }
@@ -256,8 +253,7 @@ class TableFull extends Component {
     // count metapaths
     const metapathCount = sortedMetapaths.length;
     let metapathSelectedCount = 0;
-    for (const metapath of sortedMetapaths)
-    {
+    for (const metapath of sortedMetapaths) {
       if (metapath.checked)
         metapathSelectedCount++;
     }
