@@ -17,7 +17,7 @@ export function toFixed(number) {
   return <span>{parseFloat(number).toFixed(1)}</span>;
 }
 
-// split many-digit numbers by comma (or other, depending on locale)
+// split many-digit number by comma (or other, depending on locale)
 export function toComma(number) {
   return Number(number).toLocaleString();
 }
