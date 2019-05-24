@@ -234,6 +234,7 @@ class SourceNodeSearch extends Component {
   // when user makes a new node selection
   onChange(value) {
     this.props.dispatch(updateSourceTargetNodes({ sourceNode: value }));
+    // unfocus search box on selection
     if (value)
       document.activeElement.blur();
   }
@@ -268,6 +269,7 @@ class TargetNodeSearch extends Component {
   // when user makes a new node selection
   onChange(value) {
     this.props.dispatch(updateSourceTargetNodes({ targetNode: value }));
+    // unfocus search box on selection
     if (value)
       document.activeElement.blur();
   }
@@ -312,11 +314,15 @@ class SearchBox extends Component {
     if (this.props.otherNode && this.props.otherNode.id !== undefined)
       otherNodeId = this.props.otherNode.id;
 
+    // if one node selected and other node search box focused but empty,
+    // show list of nodes in order of metapath count
     if (searchString === '' && otherNodeId !== '') {
       searchNodesMetapaths(otherNodeId).then((results) =>
         this.setState({ searchResults: results || [] })
       );
-    } else {
+    } 
+    // otherwise, show normal search results based on search string
+    else {
       searchNodes(searchString, this.context.filterString, otherNodeId).then(
         (results) =>
           this.setState({ searchResults: results || [] })
