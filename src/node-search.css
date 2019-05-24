@@ -116,9 +116,20 @@
 }
 .node_search_results_item_name {
   font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
-.node_search_results_item_identifier {
+.node_search_results_item_count {
   margin-left: auto;
-  font-size: 0.75em;
   color: #757575;
+  font-size: 0.75em;
+  font-weight: 500;
+  width: 40px;
+  min-width: 40px;
+  vertical-align: middle;
+}
+.node_search_results_item_count svg {
+  height: 25px;
+  margin-right: 3px;
+  vertical-align: middle;
 }

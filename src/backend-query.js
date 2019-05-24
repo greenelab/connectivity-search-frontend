@@ -11,6 +11,9 @@ const hetioStyles =
   'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/describe/styles.json';
 // url for node search
 const nodeSearchServer = 'https://search-api.het.io/v1/nodes/';
+// url for node search with results sorted by metapath count
+const nodeSearchMetapathsServer =
+  'https://search-api.het.io/v1/count-metapaths-to/';
 // url for random node pair
 const randomNodeServer = 'https://search-api.het.io/v1/random-node-pair/';
 // url for metapaths search
@@ -61,13 +64,23 @@ export function lookupNodeById(id) {
 
 // search for nodes by string, and with metatype filter list
 // accepts comma-separated list of abbreviations of metatypes to include
-export function searchNodes(searchString, metatypes) {
+export function searchNodes(searchString, metatypes, otherNode) {
   const params = new URLSearchParams();
   params.set('search', searchString);
   params.set('limit', '100');
   if (metatypes)
     params.set('metanodes', metatypes);
+  if (otherNode)
+    params.set('count-metapaths-to', otherNode);
   const query = nodeSearchServer + '?' + params.toString();
+  return fetchJson(query).then((response) => {
+    return response.results;
+  });
+}
+
+// search for nodes sorted by metapath count
+export function searchNodesMetapaths(otherNode) {
+  const query = nodeSearchMetapathsServer + otherNode;
   return fetchJson(query).then((response) => {
     return response.results;
   });
