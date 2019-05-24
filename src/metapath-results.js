@@ -32,8 +32,9 @@ export class MetapathResults extends Component {
     return (
       <section>
         <CollapsibleSection
-          label="Metapaths"
-          tooltipText="Metapaths of length <= 3 between the source and target node"
+          label='Metapaths'
+          tooltipText=
+            'Metapaths of length <= 3 between the source and target node'
         >
           {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
         </CollapsibleSection>
@@ -272,27 +273,27 @@ class TableFull extends Component {
           changeSort: this.changeSort
         }}
       >
-        <div className="table_attic">
+        <div className='table_attic'>
           <TextButton
-            text=".csv"
+            text='.csv'
             icon={faDownload}
-            className="link_button small"
+            className='link_button small'
             onClick={this.downloadCsv}
-            tooltipText="Download table as .csv file"
+            tooltipText='Download table as .csv file'
           />
           <TextButton
             text={this.state.showMore ? 'show less ' : 'show more '}
             icon={this.state.showMore ? faAngleLeft : faAngleRight}
-            className="link_button small"
+            className='link_button small'
             onClick={this.toggleShowMore}
-            tooltipText="Expand table and show more columns"
+            tooltipText='Expand table and show more columns'
           />
-          <div className="small light right">
+          <div className='small light right'>
             {metapathCount} results, {metapathSelectedCount} selected
           </div>
         </div>
-        <div className="table_container" data-expanded={this.state.showMore}>
-          <table className="metapath_results_table">
+        <div className='table_container' data-expanded={this.state.showMore}>
+          <table className='metapath_results_table'>
             <TableHead />
             <TableBody />
           </table>
@@ -318,16 +319,16 @@ class TableHead extends Component {
     // extra 'super-grouping' row at top of table
     const extraRow = (
       <tr>
-        <td className="col_xs" />
-        <td className="col_l" />
-        <td className="col_s" />
-        <td className="col_m" />
-        <td className="col_m" />
-        <td className="col_s" />
-        <td className="col_xxl center" colSpan="6">
-          <div className="divider">Null DWPC distribution information</div>
+        <td className='col_xs' />
+        <td className='col_l' />
+        <td className='col_s' />
+        <td className='col_m' />
+        <td className='col_m' />
+        <td className='col_s' />
+        <td className='col_xxl center' colSpan='6'>
+          <div className='divider'>Null DWPC distribution information</div>
         </td>
-        <td className="col_l" />
+        <td className='col_l' />
       </tr>
     );
 
@@ -345,30 +346,30 @@ class TableHead extends Component {
     // primary columns
     const cols = (
       <>
-        <td className="col_xs">
+        <td className='col_xs'>
           <Checkbox
             checked={this.context.allChecked}
             onClick={() => this.context.toggleAllChecked()}
             onCtrlClick={() => this.context.toggleAllChecked()}
-            tooltipText="Show all paths"
+            tooltipText='Show all paths'
           />
         </td>
         <TableHeadCell
-          className="col_l"
-          buttonClass="left"
-          fieldName="metapath_metaedges"
+          className='col_l'
+          buttonClass='left'
+          fieldName='metapath_metaedges'
           tooltipText={tooltipText['metapath']}
-          text="metapath"
+          text='metapath'
         />
         <TableHeadCell
-          className="col_s"
-          fieldName="path_count"
+          className='col_s'
+          fieldName='path_count'
           tooltipText={tooltipText['path_count']}
-          text="path count"
+          text='path count'
         />
         <TableHeadCell
-          className="col_m"
-          fieldName="adjusted_p_value"
+          className='col_m'
+          fieldName='adjusted_p_value'
           tooltipText={tooltipText['adjusted_p_value']}
           text={
             <span>
@@ -385,8 +386,8 @@ class TableHead extends Component {
     const extraCols = (
       <>
         <TableHeadCell
-          className="col_m"
-          fieldName="p_value"
+          className='col_m'
+          fieldName='p_value'
           tooltipText={tooltipText['p_value']}
           text={
             <>
@@ -395,46 +396,46 @@ class TableHead extends Component {
           }
         />
         <TableHeadCell
-          className="col_s"
-          fieldName="dwpc"
+          className='col_s'
+          fieldName='dwpc'
           tooltipText={tooltipText['dwpc']}
-          text="DWPC"
+          text='DWPC'
         />
         <TableHeadCell
-          fieldName="dgp_source_degree"
+          fieldName='dgp_source_degree'
           tooltipText={tooltipText['dgp_source_degree']}
-          text="source degree"
+          text='source degree'
         />
         <TableHeadCell
-          fieldName="dgp_target_degree"
+          fieldName='dgp_target_degree'
           tooltipText={tooltipText['dgp_target_degree']}
-          text="target degree"
+          text='target degree'
         />
         <TableHeadCell
-          fieldName="dgp_n_dwpcs"
+          fieldName='dgp_n_dwpcs'
           tooltipText={tooltipText['dgp_n_dwpcs']}
           text="# DWPC's"
         />
         <TableHeadCell
-          fieldName="dgp_n_nonzero_dwpcs"
+          fieldName='dgp_n_nonzero_dwpcs'
           tooltipText={tooltipText['dgp_n_nonzero_dwpcs']}
           text="# non-0 DWPC's"
         />
         <TableHeadCell
-          fieldName="dgp_nonzero_mean"
+          fieldName='dgp_nonzero_mean'
           tooltipText={tooltipText['dgp_nonzero_mean']}
-          text="non-0 mean"
+          text='non-0 mean'
         />
         <TableHeadCell
-          fieldName="dgp_nonzero_sd"
+          fieldName='dgp_nonzero_sd'
           tooltipText={tooltipText['dgp_nonzero_sd']}
           text={<>non-0 &sigma;</>}
         />
         <TableHeadCell
-          fieldName="cypher_query"
+          fieldName='cypher_query'
           tooltipText={tooltipText['cypher_query']}
           text={
-            <a href="https://neo4j.het.io/browser/" target="_blank">
+            <a href='https://neo4j.het.io/browser/' target='_blank'>
               neo4j query
             </a>
           }
@@ -443,7 +444,7 @@ class TableHead extends Component {
     );
 
     return (
-      <thead className="small light">
+      <thead className='small light'>
         {this.context.showMore && extraRow}
         <tr>
           {cols}
@@ -550,7 +551,7 @@ class TableBodyRow extends Component {
           />
         </td>
         <TableBodyCell
-          fieldClass="left"
+          fieldClass='left'
           value={metapathChips(metapath.metapath_metaedges)}
           fullValue={metapath.metapath_name}
         />
@@ -588,9 +589,9 @@ class TableBodyRow extends Component {
           fullValue={metapath.dgp_nonzero_sd}
         />
         <TableBodyCell
-          value="..."
+          value='...'
           fullValue={
-            <textarea rows="4" cols="50">
+            <textarea rows='4' cols='50'>
               {metapath.cypher_query}
             </textarea>
           }
@@ -630,10 +631,10 @@ class TableEmpty extends Component {
   // display component
   render() {
     return (
-      <table className="metapath_results_table">
+      <table className='metapath_results_table'>
         <tbody>
           <tr>
-            <td className="center light">no results to show</td>
+            <td className='center light'>no results to show</td>
           </tr>
         </tbody>
       </table>
