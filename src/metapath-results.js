@@ -33,7 +33,8 @@ export class MetapathResults extends Component {
       <section>
         <CollapsibleSection
           label='Metapaths'
-          tooltipText='Metapaths of length <= 3 between the source and target node'
+          tooltipText=
+            'Metapaths of length <= 3 between the source and target node'
         >
           {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
         </CollapsibleSection>
@@ -327,6 +328,7 @@ class TableHead extends Component {
         <td className='col_xxl center' colSpan='6'>
           <div className='divider'>Null DWPC distribution information</div>
         </td>
+        <td className='col_l' />
       </tr>
     );
 
@@ -428,6 +430,18 @@ class TableHead extends Component {
           fieldName='dgp_nonzero_sd'
           tooltipText={tooltipText['dgp_nonzero_sd']}
           text={<>non-0 &sigma;</>}
+        />
+        <TableHeadCell
+          fieldName='cypher_query'
+          tooltipText={tooltipText['cypher_query']}
+          text={
+            <a
+              href='https://neo4j.het.io/browser/'
+              target='_blank'
+              rel='noopener noreferrer'>
+              neo4j query
+            </a>
+          }
         />
       </>
     );
@@ -576,6 +590,14 @@ class TableBodyRow extends Component {
         <TableBodyCell
           value={toFixed(metapath.dgp_nonzero_sd)}
           fullValue={metapath.dgp_nonzero_sd}
+        />
+        <TableBodyCell
+          value='...'
+          fullValue={
+            <textarea rows='4' cols='50'>
+              {metapath.cypher_query}
+            </textarea>
+          }
         />
       </>
     );
