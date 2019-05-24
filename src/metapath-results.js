@@ -438,7 +438,7 @@ class TableHead extends Component {
             <a
               href='https://neo4j.het.io/browser/'
               target='_blank'
-              rel="noopener noreferrer">
+              rel='noopener noreferrer'>
               neo4j query
             </a>
           }
