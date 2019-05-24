@@ -435,7 +435,10 @@ class TableHead extends Component {
           fieldName='cypher_query'
           tooltipText={tooltipText['cypher_query']}
           text={
-            <a href='https://neo4j.het.io/browser/' target='_blank'>
+            <a
+              href='https://neo4j.het.io/browser/'
+              target='_blank'
+              rel="noopener noreferrer">
               neo4j query
             </a>
           }
