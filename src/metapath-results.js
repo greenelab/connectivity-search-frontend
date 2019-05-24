@@ -594,7 +594,7 @@ class TableBodyRow extends Component {
           fullValue={metapath.dgp_nonzero_sd}
         />
         <TableBodyCell
-          value={cutString(metapath.cypher_query, 30)}
+          value={cutString(metapath.cypher_query, 16)}
           fullValue={
             <textarea rows='4' cols='50'>
               {metapath.cypher_query}
