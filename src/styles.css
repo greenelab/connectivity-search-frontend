@@ -154,7 +154,7 @@ table thead td {
 td {
   box-sizing: border-box;
   padding: 0;
-  height: 30px;
+  height: 28px;
 }
 td > * {
   vertical-align: middle;
