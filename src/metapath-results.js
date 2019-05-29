@@ -658,6 +658,9 @@ function makeMetapathsTable(metapaths) {
       headers.push(field);
   }
 
+  // remove undesired fields
+  headers = headers.filter((header) => header !== 'cypher_query');
+
   // sort headers in custom order
   const order = [
     'id',
