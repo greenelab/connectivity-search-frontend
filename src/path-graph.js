@@ -54,6 +54,7 @@ export class PathGraph extends Component {
     this.state.nodeCount = 0;
     this.state.edgeCount = 0;
     this.state.selectedElement = null;
+    this.state.hoveredElement = null;
 
     this.graph = React.createRef();
 
@@ -65,6 +66,7 @@ export class PathGraph extends Component {
     this.fitView = this.fitView.bind(this);
     this.setGraphCounts = this.setGraphCounts.bind(this);
     this.setSelectedElement = this.setSelectedElement.bind(this);
+    this.setHoveredElement = this.setHoveredElement.bind(this);
   }
 
   // when component mounts
@@ -156,40 +158,40 @@ export class PathGraph extends Component {
     this.setState({ selectedElement: element });
   }
 
+  // sets the hovered node/edge
+  setHoveredElement(element) {
+    this.setState({ hoveredElement: element });
+  }
+
   // display component
   render() {
+    const element = this.state.hoveredElement || this.state.selectedElement;
     let info = '';
-    if (this.state.selectedElement) {
-      if (this.state.selectedElement.elementType === 'node') {
+    if (element) {
+      if (element.elementType === 'node') {
         info = (
-          <>
-            <div className='graph_info_header small light'>Selected Node</div>
-            <SelectedInfo
-              node={this.state.selectedElement}
-              primaryFields={['metanode', 'neo4j_id']}
-              order={[
-                'name',
-                'metanode',
-                'source',
-                'url',
-                'description',
-                'identifier',
-                'neo4j_id'
-              ]}
-            />
-          </>
+          <SelectedInfo
+            node={element}
+            primaryFields={['metanode', 'neo4j_id']}
+            order={[
+              'name',
+              'metanode',
+              'source',
+              'url',
+              'description',
+              'identifier',
+              'neo4j_id'
+            ]}
+          />
         );
       }
-      if (this.state.selectedElement.elementType === 'edge') {
+      if (element.elementType === 'edge') {
         info = (
-          <>
-            <div className='graph_info_header small light'>Selected Edge</div>
-            <SelectedInfo
-              edge={this.state.selectedElement}
-              primaryFields={['kind', 'directed', 'neo4j_id']}
-              order={['kind', 'neo4j_id', 'source']}
-            />
-          </>
+          <SelectedInfo
+            edge={element}
+            primaryFields={['kind', 'directed', 'neo4j_id']}
+            order={['kind', 'neo4j_id', 'source']}
+          />
         );
       }
     }
@@ -283,8 +285,9 @@ export class PathGraph extends Component {
             sectionWidth={this.state.sectionWidth}
             setGraphCounts={this.setGraphCounts}
             setSelectedElement={this.setSelectedElement}
+            setHoveredElement={this.setHoveredElement}
           />
-          {info}
+          <div id='graph_info_container'>{info}</div>
         </CollapsibleSection>
       </section>
     );
@@ -304,6 +307,8 @@ export class Graph extends Component {
     this.resetView = this.resetView.bind(this);
     this.onSimulationTick = this.onSimulationTick.bind(this);
     this.onNodeEdgeClick = this.onNodeEdgeClick.bind(this);
+    this.onNodeEdgeHover = this.onNodeEdgeHover.bind(this);
+    this.onNodeEdgeUnhover = this.onNodeEdgeUnhover.bind(this);
     this.onNodeDragStart = this.onNodeDragStart.bind(this);
     this.onNodeDragEnd = this.onNodeDragEnd.bind(this);
     this.onViewClick = this.onViewClick.bind(this);
@@ -649,6 +654,30 @@ export class Graph extends Component {
     this.props.setSelectedElement(d);
   }
 
+  // when node or edge hovered by user
+  onNodeEdgeHover(d) {
+    d3.event.stopPropagation();
+
+    d.hovered = true;
+
+    this.updateNodeCircles();
+    this.updateEdgeLines();
+
+    this.props.setHoveredElement(d);
+  }
+
+  // when node or edge unhovered by user
+  onNodeEdgeUnhover(d) {
+    d3.event.stopPropagation();
+
+    d.hovered = false;
+
+    this.updateNodeCircles();
+    this.updateEdgeLines();
+
+    this.props.setHoveredElement(null);
+  }
+
   // deselect all elements
   deselectAll() {
     for (const node of this.state.data.nodes)
@@ -726,25 +755,17 @@ export class Graph extends Component {
     edgeLines
       .enter()
       .append('path')
-      .on('click', this.onNodeEdgeClick)
       .merge(edgeLines)
       .attr('class', 'graph_edge_line')
-      .attr('marker-end', (d) => {
-        if (d.directed)
-          return 'url(#graph_arrowhead)';
-        else
-          return '';
-      })
+      .attr('marker-end', (d) => (d.directed ? 'url(#graph_arrowhead)' : ''))
       .attr('fill', 'none')
       .attr('stroke', inkColor)
       .attr('stroke-width', edgeThickness)
-      .style('stroke-dasharray', (d) => {
-        if (d.selected)
-          return edgeThickness * 2 + ' ' + edgeThickness;
-        else
-          return 'none';
-      })
-      .style('cursor', 'pointer');
+      .style('stroke-dasharray', (d) =>
+        d.selected || d.hovered
+          ? edgeThickness * 2 + ' ' + edgeThickness
+          : 'none'
+      );
 
     edgeLines.exit().remove();
   }
@@ -760,6 +781,8 @@ export class Graph extends Component {
       .enter()
       .append('text')
       .on('click', this.onNodeEdgeClick)
+      .on('mouseenter', this.onNodeEdgeHover)
+      .on('mouseleave', this.onNodeEdgeUnhover)
       .merge(edgeLabels)
       .attr('class', 'graph_edge_label')
       .attr('font-size', edgeFontSize)
@@ -807,16 +830,13 @@ export class Graph extends Component {
       .append('circle')
       .call(this.state.nodeDragHandler)
       .on('click', this.onNodeEdgeClick)
+      .on('mouseenter', this.onNodeEdgeHover)
+      .on('mouseleave', this.onNodeEdgeUnhover)
       .merge(nodeCircles)
       .attr('class', 'graph_node_circle')
       .attr('r', nodeRadius)
       .attr('fill', (d) => this.getNodeFillColor(d.metanode))
-      .attr('stroke', (d) => {
-        if (d.selected)
-          return inkColor;
-        else
-          return 'none';
-      })
+      .attr('stroke', (d) => (d.selected || d.hovered ? inkColor : 'none'))
       .attr('stroke-width', edgeThickness)
       .style('stroke-dasharray', edgeThickness * 2 + ' ' + edgeThickness)
       .style('cursor', 'pointer');

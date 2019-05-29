@@ -12,22 +12,12 @@
 .graph_expand_collapse_button {
   margin: 0 !important;
 }
-#graph_overlay {
-  pointer-events: none;
-}
-#graph_info {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  font-size: 8px;
-}
-.graph_info_header {
-  margin-top: 10px;
-  font-weight: 500;
-}
 #graph_info_table {
   margin-top: 5px;
 }
 #graph_info_table td {
   height: 20px;
+}
+#graph_info_container {
+  min-height: 160px;
 }
