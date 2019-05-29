@@ -159,6 +159,7 @@ td {
   box-sizing: border-box;
   padding: 0;
   height: 28px;
+  word-break: break-word;
 }
 td > * {
   vertical-align: middle;

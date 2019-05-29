@@ -1235,7 +1235,7 @@ class SelectedInfo extends Component {
     const cols = fields.map((field, index) => {
       return (
         <React.Fragment key={index}>
-          <td className='col_s small light'>
+          <td className='col_m small light'>
             <Tooltip text={field.tooltipText}>{field.firstCol}</Tooltip>
           </td>
           <td className='small'>{field.secondCol}</td>
