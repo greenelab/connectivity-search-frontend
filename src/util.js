@@ -93,7 +93,7 @@ export function toGradient(number) {
 export function downloadCsv(data, filename) {
   const fileContent = data.map((cell) => cell.join(',')).join('\n');
   const blob = new Blob(['\ufeff', fileContent], {
-    type: 'text/csv;charset=utf-16'
+    type: 'text/csv;charset=utf-8'
   });
   const url = window.URL.createObjectURL(blob);
   const link = document.createElement('a');
