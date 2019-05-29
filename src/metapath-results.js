@@ -19,9 +19,11 @@ import { makeFilenameFriendly } from './util.js';
 import { downloadCsv } from './util.js';
 import { toFixed } from './util.js';
 import { toExponential } from './util.js';
+import { toComma } from './util.js';
 import { toGradient } from './util.js';
 import { sortCustom } from './util.js';
 import { copyObject } from './util.js';
+import { cutString } from './util.js';
 import { updateMetapaths } from './actions.js';
 import './metapath-results.css';
 
@@ -581,8 +583,8 @@ class TableBodyRow extends Component {
         />
         <TableBodyCell value={metapath.dgp_source_degree} />
         <TableBodyCell value={metapath.dgp_target_degree} />
-        <TableBodyCell value={metapath.dgp_n_dwpcs} />
-        <TableBodyCell value={metapath.dgp_n_nonzero_dwpcs} />
+        <TableBodyCell value={toComma(metapath.dgp_n_dwpcs)} />
+        <TableBodyCell value={toComma(metapath.dgp_n_nonzero_dwpcs)} />
         <TableBodyCell
           value={toFixed(metapath.dgp_nonzero_mean)}
           fullValue={metapath.dgp_nonzero_mean}
@@ -592,7 +594,7 @@ class TableBodyRow extends Component {
           fullValue={metapath.dgp_nonzero_sd}
         />
         <TableBodyCell
-          value='...'
+          value={cutString(metapath.cypher_query, 16)}
           fullValue={
             <textarea rows='4' cols='50'>
               {metapath.cypher_query}
