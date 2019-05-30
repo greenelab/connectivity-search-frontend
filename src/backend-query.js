@@ -23,15 +23,33 @@ const pathSearchServer = 'https://search-api.het.io/v1/query-paths/';
 
 // get resource at url and parse as json
 export function fetchJson(url) {
-  return fetch(url)
-    .then((response) => response.json())
-    .then((results) => {
-      return results || {};
-    })
-    .catch((error) => {
-      console.log(error, url);
-      return {};
-    });
+  // check if query has already been made during this session
+  // if so, use cache of that. if not, run backend query anew
+  const cachedResponse = window.sessionStorage.getItem(url);
+  if (cachedResponse)
+    return Promise.resolve(JSON.parse(cachedResponse));
+  else {
+    return fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          console.log('response', response.status);
+          return {};
+        } else
+          return response.json();
+      })
+      .then((results) => {
+        try {
+          window.sessionStorage.setItem(url, JSON.stringify(results));
+        } catch (error) {
+          console.log(error, url);
+        }
+        return results || {};
+      })
+      .catch((error) => {
+        console.log(error, url);
+        return {};
+      });
+  }
 }
 
 // get metagraph
@@ -51,7 +69,7 @@ export function getHetioStyles() {
 
 // get hetmech definitions
 export function getHetmechDefinitions() {
-  return hetmechDefinitions;
+  return Promise.resolve(hetmechDefinitions);
 }
 
 // lookup node by id

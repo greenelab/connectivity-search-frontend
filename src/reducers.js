@@ -15,63 +15,52 @@ export function Reducer(prevState, action) {
   switch (action.type) {
     // set definitions
     case 'set_definitions':
-      if (action.payload.metagraph !== undefined)
-        newState.metagraph = copyObject(action.payload.metagraph);
-      if (action.payload.hetioDefinitions !== undefined)
-        newState.hetioDefinitions = copyObject(action.payload.hetioDefinitions);
-      if (action.payload.hetioStyles !== undefined)
-        newState.hetioStyles = copyObject(action.payload.hetioStyles);
-      if (action.payload.hetmechDefinitions !== undefined) {
-        newState.hetmechDefinitions = copyObject(
-          action.payload.hetmechDefinitions
-        );
-      }
+      newState.metagraph = copyObject(action.payload.metagraph) || {};
+      newState.hetioDefinitions =
+        copyObject(action.payload.hetioDefinitions) || {};
+      newState.hetioStyles = copyObject(action.payload.hetioStyles) || {};
+      newState.hetmechDefinitions =
+        copyObject(action.payload.hetmechDefinitions) || {};
       break;
 
     // update source and/or target node
     case 'update_source_target_nodes':
       if (action.payload.sourceNode !== undefined)
-        newState.sourceNode = copyObject(action.payload.sourceNode);
+        newState.sourceNode = copyObject(action.payload.sourceNode) || {};
       if (action.payload.targetNode !== undefined)
-        newState.targetNode = copyObject(action.payload.targetNode);
+        newState.targetNode = copyObject(action.payload.targetNode) || {};
       break;
 
     // swap source/target nodes
     case 'swap_source_target_nodes':
-      if (prevState.sourceNode && prevState.targetNode) {
-        newState.sourceNode = copyObject(prevState.targetNode);
-        newState.targetNode = copyObject(prevState.sourceNode);
-      }
+      newState.sourceNode = copyObject(prevState.targetNode) || {};
+      newState.targetNode = copyObject(prevState.sourceNode) || {};
       break;
 
     // update metapaths
     case 'update_metapaths':
-      if (action.payload.metapaths !== undefined) {
-        newState.metapaths = copyObject(action.payload.metapaths);
-        if (action.preserveChecks === true) {
-          transferObjectProps(
-            prevState.metapaths,
-            newState.metapaths,
-            ['id'],
-            ['checked']
-          );
-        }
+      newState.metapaths = copyObject(action.payload.metapaths) || [];
+      if (action.preserveChecks === true) {
+        transferObjectProps(
+          prevState.metapaths,
+          newState.metapaths,
+          ['id'],
+          ['checked']
+        );
       }
       break;
 
     // update path queries
     case 'update_path_queries':
-      if (action.payload.pathQueries !== undefined) {
-        newState.pathQueries = copyObject(action.payload.pathQueries);
-        if (action.preserveChecks === true) {
-          transferQueryProps(
-            prevState.pathQueries,
-            newState.pathQueries,
-            'paths',
-            ['node_ids', 'rel_ids'],
-            ['checked', 'highlighted']
-          );
-        }
+      newState.pathQueries = copyObject(action.payload.pathQueries) || [];
+      if (action.preserveChecks === true) {
+        transferQueryProps(
+          prevState.pathQueries,
+          newState.pathQueries,
+          'paths',
+          ['node_ids', 'rel_ids'],
+          ['checked', 'highlighted']
+        );
       }
       break;
 
@@ -96,6 +85,8 @@ export function Reducer(prevState, action) {
     newState.metapaths = [];
   if (!newState.pathQueries)
     newState.pathQueries = [];
+  if (!newState.cacheStore)
+    newState.cacheStore = {};
 
   // update url after state change unless on redux initialization or
   // explicitly bypassed
