@@ -22,11 +22,11 @@ const metapathSearchServer = 'https://search-api.het.io/v1/query-metapaths/';
 const pathSearchServer = 'https://search-api.het.io/v1/query-paths/';
 
 // get resource at url and parse as json
-export function fetchJson(url) {
+export function fetchJson(url, dontCache) {
   // check if query has already been made during this session
   // if so, use cache of that. if not, query server
   const cachedResponse = window.sessionStorage.getItem(url);
-  if (cachedResponse)
+  if (cachedResponse && !dontCache)
     return Promise.resolve(JSON.parse(cachedResponse));
   else {
     return fetch(url)
@@ -38,11 +38,13 @@ export function fetchJson(url) {
           return response.json();
       })
       .then((results) => {
-        try {
-          // save response to cache. use try/catch in case storage full
-          window.sessionStorage.setItem(url, JSON.stringify(results));
-        } catch (error) {
-          console.log(error, url);
+        if (!dontCache) {
+          try {
+            // save response to cache. use try/catch in case storage
+            window.sessionStorage.setItem(url, JSON.stringify(results));
+          } catch (error) {
+            console.log(error, url);
+          }
         }
         return results || {};
       })
@@ -108,7 +110,7 @@ export function searchNodesMetapaths(otherNode) {
 // get random source/target node pair that has metapath(s)
 export function getRandomNodePair() {
   const query = randomNodeServer;
-  return fetchJson(query).then((response) => {
+  return fetchJson(query, true).then((response) => {
     return response;
   });
 }
