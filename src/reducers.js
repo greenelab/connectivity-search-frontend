@@ -85,8 +85,6 @@ export function Reducer(prevState, action) {
     newState.metapaths = [];
   if (!newState.pathQueries)
     newState.pathQueries = [];
-  if (!newState.cacheStore)
-    newState.cacheStore = {};
 
   // update url after state change unless on redux initialization or
   // explicitly bypassed
