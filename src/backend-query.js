@@ -24,7 +24,7 @@ const pathSearchServer = 'https://search-api.het.io/v1/query-paths/';
 // get resource at url and parse as json
 export function fetchJson(url) {
   // check if query has already been made during this session
-  // if so, use cache of that. if not, run backend query anew
+  // if so, use cache of that. if not, query server
   const cachedResponse = window.sessionStorage.getItem(url);
   if (cachedResponse)
     return Promise.resolve(JSON.parse(cachedResponse));
@@ -39,6 +39,7 @@ export function fetchJson(url) {
       })
       .then((results) => {
         try {
+          // save response to cache. use try/catch in case storage full
           window.sessionStorage.setItem(url, JSON.stringify(results));
         } catch (error) {
           console.log(error, url);
