@@ -956,8 +956,8 @@ export class Graph extends Component {
     if (
       !pathQueries ||
       pathQueries.length <= 0 ||
-      !pathQueries.paths ||
-      pathQueries.paths.length <= 0
+      !pathQueries[0].paths ||
+      pathQueries[0].paths.length <= 0
     )
       return graph;
 
