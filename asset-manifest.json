@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "./static/css/main.2201a6bf.chunk.css",
-    "main.js": "./static/js/main.d61880a1.chunk.js",
-    "main.js.map": "./static/js/main.d61880a1.chunk.js.map",
+    "main.js": "./static/js/main.821c8703.chunk.js",
+    "main.js.map": "./static/js/main.821c8703.chunk.js.map",
     "runtime~main.js": "./static/js/runtime~main.d653cc00.js",
     "runtime~main.js.map": "./static/js/runtime~main.d653cc00.js.map",
     "static/js/2.9cb88284.chunk.js": "./static/js/2.9cb88284.chunk.js",
     "static/js/2.9cb88284.chunk.js.map": "./static/js/2.9cb88284.chunk.js.map",
     "index.html": "./index.html",
-    "precache-manifest.b3393da190153cf597120c91c1b5e41b.js": "./precache-manifest.b3393da190153cf597120c91c1b5e41b.js",
+    "precache-manifest.5bef9f948b9c97c46bef4e5b276d19f8.js": "./precache-manifest.5bef9f948b9c97c46bef4e5b276d19f8.js",
     "service-worker.js": "./service-worker.js",
     "static/css/main.2201a6bf.chunk.css.map": "./static/css/main.2201a6bf.chunk.css.map",
     "static/media/arrow-icon-backward.c6a85500.svg": "./static/media/arrow-icon-backward.c6a85500.svg",
