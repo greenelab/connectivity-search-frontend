@@ -40,11 +40,7 @@ export function swapSourceTargetNodes() {
 }
 
 // update metapaths
-export function updateMetapaths({
-  metapaths,
-  dontUpdateUrl,
-  preserveChecks
-}) {
+export function updateMetapaths({ metapaths, dontUpdateUrl, preserveChecks }) {
   return {
     type: 'update_metapaths',
     payload: { metapaths: metapaths },

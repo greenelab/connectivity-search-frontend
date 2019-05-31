@@ -35,8 +35,7 @@ export class MetapathResults extends Component {
       <section>
         <CollapsibleSection
           label='Metapaths'
-          tooltipText=
-            'Metapaths of length <= 3 between the source and target node'
+          tooltipText='Metapaths of length <= 3 between the source and target node'
         >
           {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
         </CollapsibleSection>
@@ -440,7 +439,9 @@ class TableHead extends Component {
             <a
               href='https://neo4j.het.io/browser/'
               target='_blank'
-              rel='noopener noreferrer'>
+              rel='noopener noreferrer'
+              onClick={(event) => event.stopPropagation()}
+            >
               neo4j query
             </a>
           }

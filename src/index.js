@@ -8,6 +8,9 @@ import { Provider } from 'react-redux';
 import { Reducer } from './reducers.js';
 import { App } from './app.js';
 
+// clear cache when app first starts (page refresh)
+window.sessionStorage.clear();
+
 // create global state store
 const store = createStore(Reducer, applyMiddleware(thunk));
 

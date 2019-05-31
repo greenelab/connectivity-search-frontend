@@ -953,7 +953,12 @@ export class Graph extends Component {
       pathQueries = this.props.pathQueries;
 
     // if pathQueries not valid, exit
-    if (!pathQueries || pathQueries.length <= 0)
+    if (
+      !pathQueries ||
+      pathQueries.length <= 0 ||
+      !pathQueries.paths ||
+      pathQueries.paths.length <= 0
+    )
       return graph;
 
     // get source/target nodes from first path in pathQueries

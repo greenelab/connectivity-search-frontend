@@ -286,5 +286,8 @@ export function cutString(string, n) {
 // make deep copy of object. ensures everything is clone/copy, not reference.
 // works for everything except circular refs, functions, and js Dates
 export function copyObject(object) {
-  return JSON.parse(JSON.stringify(object));
+  if (object === undefined)
+    return;
+  else
+    return JSON.parse(JSON.stringify(object));
 }

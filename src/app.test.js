@@ -20,4 +20,4 @@ test('renders without crashing', async () => {
   );
   expect(children).toBeGreaterThan(0);
   browser.close();
-}, 20000);
+}, 40000);
