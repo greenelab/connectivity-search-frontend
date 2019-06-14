@@ -2,18 +2,18 @@
 import hetmechDefinitions from './definitions.json';
 // url for metagraph (node and edge metatypes and abbreviations)
 const metagraphUrl =
-  'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/hetnet/json/hetionet-v1.0-metagraph.json';
+    'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/hetnet/json/hetionet-v1.0-metagraph.json';
 // url for hetio definitions (metanodes, properties, etc)
 const hetioDefinitions =
-  'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/describe/definitions.json';
+    'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/describe/definitions.json';
 // url for hetio styles (metanode fill/text color, etc)
 const hetioStyles =
-  'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/describe/styles.json';
+    'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/describe/styles.json';
 // url for node search
-const nodeSearchServer = 'https://search-api.het.io/v1/nodes/';
+const nodeSearchServer = 'http://18.210.24.231/v1/nodes/';
 // url for node search with results sorted by metapath count
 const nodeSearchMetapathsServer =
-  'https://search-api.het.io/v1/count-metapaths-to/';
+    'https://search-api.het.io/v1/count-metapaths-to/';
 // url for random node pair
 const randomNodeServer = 'https://search-api.het.io/v1/random-node-pair/';
 // url for metapaths search
@@ -41,7 +41,10 @@ export function fetchJson(url, dontCache) {
         if (!dontCache) {
           try {
             // save response to cache. use try/catch in case storage
-            window.sessionStorage.setItem(url, JSON.stringify(results));
+            window.sessionStorage.setItem(
+              url,
+              JSON.stringify(results)
+            );
           } catch (error) {
             console.log(error, url);
           }
@@ -88,11 +91,12 @@ export function lookupNodeById(id) {
 export function searchNodes(searchString, metatypes, otherNode) {
   const params = new URLSearchParams();
   params.set('search', searchString);
-  params.set('limit', '100');
+  // params.set('limit', '100');
   if (metatypes)
     params.set('metanodes', metatypes);
   if (otherNode)
     params.set('count-metapaths-to', otherNode);
+  params.set('fuzzy', '');
   const query = nodeSearchServer + '?' + params.toString();
   return fetchJson(query).then((response) => {
     return response.results;
