@@ -1,16 +1,12 @@
 {
   "files": {
-    "main.css": "./static/css/main.2201a6bf.chunk.css",
-    "main.js": "./static/js/main.821c8703.chunk.js",
-    "main.js.map": "./static/js/main.821c8703.chunk.js.map",
-    "runtime~main.js": "./static/js/runtime~main.d653cc00.js",
-    "runtime~main.js.map": "./static/js/runtime~main.d653cc00.js.map",
-    "static/js/2.9cb88284.chunk.js": "./static/js/2.9cb88284.chunk.js",
-    "static/js/2.9cb88284.chunk.js.map": "./static/js/2.9cb88284.chunk.js.map",
+    "main.css": "./static/css/main.css",
+    "main.js": "./static/js/main.js",
+    "main.js.map": "./static/js/main.js.map",
     "index.html": "./index.html",
-    "precache-manifest.5bef9f948b9c97c46bef4e5b276d19f8.js": "./precache-manifest.5bef9f948b9c97c46bef4e5b276d19f8.js",
+    "precache-manifest.fefaa5e59b7e8606b4efcc2d3c3ad8e3.js": "./precache-manifest.fefaa5e59b7e8606b4efcc2d3c3ad8e3.js",
     "service-worker.js": "./service-worker.js",
-    "static/css/main.2201a6bf.chunk.css.map": "./static/css/main.2201a6bf.chunk.css.map",
+    "static/css/main.css.map": "./static/css/main.css.map",
     "static/media/arrow-icon-backward.c6a85500.svg": "./static/media/arrow-icon-backward.c6a85500.svg",
     "static/media/arrow-icon-both.5f01d574.svg": "./static/media/arrow-icon-both.5f01d574.svg",
     "static/media/arrow-icon-forward.43aa27a1.svg": "./static/media/arrow-icon-forward.43aa27a1.svg",
@@ -25,7 +21,6 @@
     "static/media/chip-pharmacologic-class.b1fbdc49.svg": "./static/media/chip-pharmacologic-class.b1fbdc49.svg",
     "static/media/chip-side-effect.dbe94434.svg": "./static/media/chip-side-effect.dbe94434.svg",
     "static/media/chip-symptom.2689ac77.svg": "./static/media/chip-symptom.2689ac77.svg",
-    "static/media/logo-animated.94624129.svg": "./static/media/logo-animated.94624129.svg",
     "static/media/path.1b180159.svg": "./static/media/path.1b180159.svg"
   }
 }

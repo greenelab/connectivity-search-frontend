@@ -1,23 +1,15 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "1087f19d56101c13c4454892e9cf02bc",
+    "revision": "a5bf9241ff4263a600ec5488e7afe0f5",
     "url": "./index.html"
   },
   {
-    "revision": "e4f1a46cce5f5da0c2a6",
-    "url": "./static/css/main.2201a6bf.chunk.css"
+    "revision": "a4e20a069278f98a3d3e",
+    "url": "./static/css/main.css"
   },
   {
-    "revision": "df6c6cafe0da858a13c8",
-    "url": "./static/js/2.9cb88284.chunk.js"
-  },
-  {
-    "revision": "e4f1a46cce5f5da0c2a6",
-    "url": "./static/js/main.821c8703.chunk.js"
-  },
-  {
-    "revision": "8c97409f0ee389fe75da",
-    "url": "./static/js/runtime~main.d653cc00.js"
+    "revision": "a4e20a069278f98a3d3e",
+    "url": "./static/js/main.js"
   },
   {
     "revision": "c6a855007a649d8251ccdbabcebf1426",
@@ -74,10 +66,6 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
     "revision": "2689ac777452bb99786c8f910808d77b",
     "url": "./static/media/chip-symptom.2689ac77.svg"
-  },
-  {
-    "revision": "94624129a04dd8a25775dbd089c5af07",
-    "url": "./static/media/logo-animated.94624129.svg"
   },
   {
     "revision": "1b1801598e1cdda021c6def708768f69",
