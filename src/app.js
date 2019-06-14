@@ -2,7 +2,6 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Header } from './header.js';
 import { NodeSearch } from './node-search.js';
 import { NodeResults } from './node-results.js';
 import { MetapathResults } from './metapath-results.js';
@@ -210,7 +209,6 @@ class App extends Component {
   render() {
     return (
       <>
-        <Header />
         <NodeSearch />
         <NodeResults />
         <MetapathResults />
