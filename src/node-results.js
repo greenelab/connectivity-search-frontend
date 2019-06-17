@@ -11,6 +11,7 @@ import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
 import { shortenUrl } from './util.js';
 import { sortCustom } from './util.js';
+import './node-results.css';
 
 // node results section component
 // details about source/target nodes
@@ -18,10 +19,10 @@ export class NodeResults extends Component {
   // display component
   render() {
     return (
-            <>
-                <NodeCard label='Source Node' node={this.props.sourceNode} />
-                <NodeCard label='Target Node' node={this.props.targetNode} />
-            </>
+      <>
+        <NodeCard label='Source Node' node={this.props.sourceNode} />
+        <NodeCard label='Target Node' node={this.props.targetNode} />
+      </>
     );
   }
 }
@@ -39,9 +40,7 @@ class NodeCard extends Component {
     return (
       <CollapsibleSection
         label={this.props.label}
-        tooltipText={
-          'Details about the ' + this.props.label.toLowerCase()
-        }
+        tooltipText={'Details about the ' + this.props.label.toLowerCase()}
       >
         {this.props.node.name ? (
           <TableFull node={this.props.node} />
@@ -93,14 +92,14 @@ class TableFull extends Component {
         // make text with metanode chip
         specialSecondCol = (
           <>
-              <MetanodeChip type={this.props.node[field]} />
-              <span className='nowrap'>{this.props.node[field]}</span>
+            <MetanodeChip type={this.props.node[field]} />
+            <span className='nowrap'>{this.props.node[field]}</span>
           </>
         );
       } else if (field === 'source') {
         // make link
         const linkUrl =
-                    this.props.node.url || this.props.node.properties.url || '';
+          this.props.node.url || this.props.node.properties.url || '';
         let linkText = this.props.node.properties.source || linkUrl;
         linkText = shortenUrl(linkText);
         specialSecondCol = (
@@ -123,9 +122,7 @@ class TableFull extends Component {
         1
       );
       primaryFields.splice(
-        primaryFields.findIndex(
-          (field) => field.firstCol === 'identifier'
-        ),
+        primaryFields.findIndex((field) => field.firstCol === 'identifier'),
         1
       );
     }
@@ -164,16 +161,11 @@ class TableFull extends Component {
     return fields.map((field, index) => {
       return (
         <tr key={index}>
-          <td className='col_s small light'>
-            <Tooltip text={field.tooltipText}>
-              {field.firstCol}
-            </Tooltip>
+          <td className='col_m small light'>
+            <Tooltip text={field.tooltipText}>{field.firstCol}</Tooltip>
           </td>
           <td>
-            <DynamicField
-              value={field.secondCol}
-              className='left'
-            />
+            <DynamicField value={field.secondCol} className='left' />
           </td>
         </tr>
       );
@@ -183,22 +175,14 @@ class TableFull extends Component {
   // display component
   render() {
     return (
-      <table className='node_results_table'>
+      <table className='node_results_table left'>
         <tbody>
           {this.rows()}
           <tr>
             <td className='center' colSpan='2'>
               <TextButton
-                text={
-                  this.state.showMore
-                    ? 'show less '
-                    : 'show more '
-                }
-                icon={
-                  this.state.showMore
-                    ? faAngleUp
-                    : faAngleDown
-                }
+                text={this.state.showMore ? 'show less ' : 'show more '}
+                icon={this.state.showMore ? faAngleUp : faAngleDown}
                 className='link_button small'
                 onClick={this.toggleShowMore}
                 tooltipText='Show more information about the node'
@@ -224,7 +208,7 @@ class TableEmpty extends Component {
         <tbody>
           <tr>
             <td className='center light'>
-                            select a {this.props.label.toLowerCase()}
+              select a {this.props.label.toLowerCase()}
             </td>
           </tr>
         </tbody>

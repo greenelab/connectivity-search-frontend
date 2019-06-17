@@ -3,7 +3,7 @@
   position: relative;
 }
 #graph {
-  border: solid #e0e0e0 1px;
+  border: solid #e0e0e0 2px;
   position: absolute;
 }
 .graph_dimensions {

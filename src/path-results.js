@@ -429,7 +429,7 @@ class TableFull extends Component {
         </div>
         <div className='table_container' data-expanded={this.state.showMore}>
           <table
-            className='path_results_table'
+            className='path_results_table center'
             data-expanded={this.state.showMore}
           >
             <TableHead />
@@ -675,7 +675,7 @@ class TableEmpty extends Component {
   // display component
   render() {
     return (
-      <table className='metapath_results_table'>
+      <table className='path_results_table'>
         <tbody>
           <tr>
             <td className='center light'>no results to show</td>

@@ -4,6 +4,7 @@
 .node_search_filter_button {
   margin: 0;
   font-weight: 400;
+  color: #303030;
 }
 .node_search_filter_button_off {
   opacity: 0.25;
@@ -54,16 +55,13 @@
 }
 .node_search_field:after {
   border-bottom-color: #00bcd4 !important;
+  border-bottom-width: 2px !important;
 }
 .node_search_input,
 .node_search_input_blank {
   padding: 10px !important;
   padding-right: 35px !important;
   color: #303030 !important;
-  transition: background 0.25s ease;
-}
-.node_search_input:focus {
-  background: #c0ecf8 !important;
 }
 .node_search_input_blank {
   overflow: hidden;
@@ -86,6 +84,7 @@
   border-radius: 20px;
   margin: 5px !important;
   padding: 0 !important;
+  color: #606060;
 }
 .node_search_swap_button svg {
   transform: rotate(90deg);

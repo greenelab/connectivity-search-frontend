@@ -292,7 +292,7 @@ class TableFull extends Component {
           </div>
         </div>
         <div className='table_container' data-expanded={this.state.showMore}>
-          <table className='metapath_results_table'>
+          <table className='metapath_results_table center'>
             <TableHead />
             <TableBody />
           </table>
@@ -325,7 +325,7 @@ class TableHead extends Component {
         <td className='col_m' />
         <td className='col_s' />
         <td className='col_xxl center' colSpan='6'>
-          <div className='divider'>Null DWPC distribution information</div>
+          <div className='line_sides'>Null DWPC distribution information</div>
         </td>
         <td className='col_l' />
       </tr>

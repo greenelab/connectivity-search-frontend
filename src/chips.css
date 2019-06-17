@@ -28,7 +28,7 @@
   max-height: 20px;
   vertical-align: top;
   position: relative;
-  color: #757575;
+  color: #808080;
 }
 .metaedge_chip:after {
   content: attr(data-abbreviation);
@@ -37,10 +37,10 @@
   align-items: center;
   position: absolute;
   left: 0;
-  top: -5px;
+  top: -6px;
   right: 0;
-  font-family: 'Work Sans';
   font-size: 12px;
+  font-weight: 500;
 }
 .metaedge_chip > svg {
   width: 15px;

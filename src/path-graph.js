@@ -249,7 +249,7 @@ export class PathGraph extends Component {
             onArrows={this.setWidth}
             onSubmit={this.setWidth}
           />
-            &times;
+          &times;
           <NumberBox
             tooltipText='Height of the container'
             min={minHeight}
@@ -262,16 +262,16 @@ export class PathGraph extends Component {
           <TextButton
             className='graph_expand_collapse_button'
             text=''
-            icon={faExpandArrowsAlt}
-            onClick={this.expandContainer}
-            tooltipText='Fit the graph to the window'
+            icon={faCompressArrowsAlt}
+            onClick={this.collapseContainer}
+            tooltipText='Fit the graph to the "Path Graph" section'
           />
           <TextButton
             className='graph_expand_collapse_button'
             text=''
-            icon={faCompressArrowsAlt}
-            onClick={this.collapseContainer}
-            tooltipText='Fit the graph to the "Path Graph" section'
+            icon={faExpandArrowsAlt}
+            onClick={this.expandContainer}
+            tooltipText='Fit the graph to the window'
           />
           <span className='small light right'>
             {this.state.nodeCount} nodes, {this.state.edgeCount} edges

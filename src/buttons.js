@@ -47,7 +47,7 @@ export class TextButton extends Component {
         onCtrlClick={this.props.onCtrlClick}
       >
         {this.props.text && <span>{this.props.text}</span>}
-        <FontAwesomeIcon icon={this.props.icon} className='text_button_icon' />
+        <FontAwesomeIcon icon={this.props.icon} />
       </Button>
     );
   }
