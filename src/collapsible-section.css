@@ -6,20 +6,16 @@
   margin: 0;
   margin-bottom: 10px;
   color: #303030;
-  border-bottom: solid 2px #e0e0e0;
-}
-.collapsible_section_button:hover,
-.collapsible_section_button:focus {
-  border-bottom-color: transparent;
+  position: relative;
 }
 .collapsible_section_button:before {
   content: '';
   position: absolute;
-  height: 1.5px;
+  height: 2px;
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.25);
+  background: #e0e0e0;
   opacity: 1;
   transition: opacity 0.25s ease;
 }
@@ -36,7 +32,4 @@
 }
 .collapsible_section_button > div {
   flex-grow: 1;
-}
-.collapsible_section_button > svg {
-  margin-right: 5px;
 }
