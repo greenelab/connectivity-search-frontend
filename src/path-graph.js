@@ -240,25 +240,27 @@ export class PathGraph extends Component {
             onClick={this.downloadSvg}
             tooltipText='Download the graph as an .svg file'
           />
-          <NumberBox
-            tooltipText='Width of the container'
-            min={minWidth}
-            step='5'
-            max={maxWidth}
-            value={this.state.width}
-            onArrows={this.setWidth}
-            onSubmit={this.setWidth}
-          />
-          &nbsp;&times;&nbsp;
-          <NumberBox
-            tooltipText='Height of the container'
-            min={minHeight}
-            step='5'
-            max={maxHeight}
-            value={this.state.height}
-            onArrows={this.setHeight}
-            onSubmit={this.setHeight}
-          />
+          <span className='graph_dimensions nowrap'>
+            <NumberBox
+              tooltipText='Width of the container'
+              min={minWidth}
+              step='5'
+              max={maxWidth}
+              value={this.state.width}
+              onArrows={this.setWidth}
+              onSubmit={this.setWidth}
+            />
+            &nbsp;&times;&nbsp;
+            <NumberBox
+              tooltipText='Height of the container'
+              min={minHeight}
+              step='5'
+              max={maxHeight}
+              value={this.state.height}
+              onArrows={this.setHeight}
+              onSubmit={this.setHeight}
+            />
+          </span>
           <IconButton
             className='graph_expand_collapse_button'
             text=''
