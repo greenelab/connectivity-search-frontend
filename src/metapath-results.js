@@ -32,14 +32,12 @@ export class MetapathResults extends Component {
   // display component
   render() {
     return (
-      <section>
-        <CollapsibleSection
-          label='Metapaths'
-          tooltipText='Metapaths of length <= 3 between the source and target node'
-        >
-          {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
-        </CollapsibleSection>
-      </section>
+      <CollapsibleSection
+        label='Metapaths'
+        tooltipText='Metapaths of length <= 3 between the source and target node'
+      >
+        {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
+      </CollapsibleSection>
     );
   }
 }

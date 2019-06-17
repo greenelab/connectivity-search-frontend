@@ -1,21 +1,23 @@
 .collapsible_section {
   margin: 10px auto;
 }
-.collapsible_section_header {
+.collapsible_section_button {
   width: 100%;
-  text-align: left;
-  font-weight: 500;
+  margin: 0;
 }
 .collapsible_section[data-collapsed='true'] > *:not(:first-child) {
   display: none;
 }
-.collapsible_section_header {
+.collapsible_section_button {
   display: flex;
   align-items: center;
 }
-.collapsible_section_header > div {
+.collapsible_section_button > div {
   flex-grow: 1;
 }
-.collapsible_section_header > svg {
+.collapsible_section_button > svg {
   margin-right: 5px;
+}
+.collapsible_section_content {
+  padding: 10px;
 }

@@ -30,14 +30,12 @@ export class PathResults extends Component {
   // display component
   render() {
     return (
-      <section>
-        <CollapsibleSection
-          label='Paths'
-          tooltipText='Paths of the selected metapaths'
-        >
-          {this.props.pathQueries.length > 0 ? <TableFull /> : <TableEmpty />}
-        </CollapsibleSection>
-      </section>
+      <CollapsibleSection
+        label='Paths'
+        tooltipText='Paths of the selected metapaths'
+      >
+        {this.props.pathQueries.length > 0 ? <TableFull /> : <TableEmpty />}
+      </CollapsibleSection>
     );
   }
 }

@@ -55,7 +55,7 @@ export class CollapsibleSection extends Component {
       >
         <Button
           tooltipText={this.props.tooltipText}
-          className='collapsible_section_header'
+          className='collapsible_section_button left'
           onClick={this.toggle}
         >
           <div>{this.props.label}</div>
@@ -63,7 +63,7 @@ export class CollapsibleSection extends Component {
             icon={this.state.collapsed ? faAngleUp : faAngleDown}
           />
         </Button>
-        {this.props.children}
+        <div className='collapsible_section_content'>{this.props.children}</div>
       </div>
     );
   }
