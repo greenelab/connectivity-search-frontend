@@ -6,7 +6,7 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 import { MetanodeChip } from './chips.js';
 import { Tooltip } from './tooltip.js';
-import { TextButton } from './buttons.js';
+import { IconButton } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
 import { shortenUrl } from './util.js';
@@ -180,7 +180,7 @@ class TableFull extends Component {
           {this.rows()}
           <tr>
             <td className='center' colSpan='2'>
-              <TextButton
+              <IconButton
                 text={this.state.showMore ? 'show less ' : 'show more '}
                 icon={this.state.showMore ? faAngleUp : faAngleDown}
                 className='link_button small'
