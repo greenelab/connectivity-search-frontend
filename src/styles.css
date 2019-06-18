@@ -11,6 +11,3 @@
 .table_attic > *:last-child {
   flex-grow: 1;
 }
-.table_attic > * {
-  margin: 5px 5px;
-}

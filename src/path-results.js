@@ -12,7 +12,7 @@ import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { CollapsibleSection } from './collapsible-section.js';
 import { Button } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
-import { TextButton } from './buttons.js';
+import { IconButton } from './buttons.js';
 import { EyeCheckbox } from './buttons.js';
 import { HighlighterCheckbox } from './buttons.js';
 import { downloadCsv } from './util.js';
@@ -408,14 +408,14 @@ class TableFull extends Component {
         }}
       >
         <div className='table_attic'>
-          <TextButton
+          <IconButton
             text='.csv'
             icon={faDownload}
             className='link_button small'
             onClick={this.downloadCsv}
             tooltipText='Download table as .csv file'
           />
-          <TextButton
+          <IconButton
             text={this.state.showMore ? 'show less ' : 'show more '}
             icon={this.state.showMore ? faAngleLeft : faAngleRight}
             className='link_button small'

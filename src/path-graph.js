@@ -13,7 +13,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 import { CollapsibleSection } from './collapsible-section.js';
 import { NumberBox } from './number-box.js';
-import { TextButton } from './buttons.js';
+import { IconButton } from './buttons.js';
 import { downloadSvg } from './util.js';
 import { transferObjectProps } from './util.js';
 import { Tooltip } from './tooltip.js';
@@ -201,7 +201,7 @@ export class PathGraph extends Component {
         tooltipText='Graph of path results'
       >
         <div className='table_attic'>
-          <TextButton
+          <IconButton
             text='reset'
             icon={faPowerOff}
             onClick={() => {
@@ -210,7 +210,7 @@ export class PathGraph extends Component {
             }}
             tooltipText='Completely restart graph'
           />
-          <TextButton
+          <IconButton
             text='unpin all'
             icon={faMapMarkerAlt}
             onClick={() => {
@@ -219,7 +219,7 @@ export class PathGraph extends Component {
             }}
             tooltipText='Unpin all nodes'
           />
-          <TextButton
+          <IconButton
             text='pin all'
             icon={faMapMarker}
             onClick={() => {
@@ -228,45 +228,47 @@ export class PathGraph extends Component {
             }}
             tooltipText='Pin all nodes in their current position'
           />
-          <TextButton
+          <IconButton
             text='fit'
             icon={faExpand}
             onClick={this.fitView}
             tooltipText='Fit the view to the contents of the graph'
           />
-          <TextButton
+          <IconButton
             text='.svg'
             icon={faDownload}
             onClick={this.downloadSvg}
             tooltipText='Download the graph as an .svg file'
           />
-          <NumberBox
-            tooltipText='Width of the container'
-            min={minWidth}
-            step='5'
-            max={maxWidth}
-            value={this.state.width}
-            onArrows={this.setWidth}
-            onSubmit={this.setWidth}
-          />
-          &times;
-          <NumberBox
-            tooltipText='Height of the container'
-            min={minHeight}
-            step='5'
-            max={maxHeight}
-            value={this.state.height}
-            onArrows={this.setHeight}
-            onSubmit={this.setHeight}
-          />
-          <TextButton
+          <span className='graph_dimensions nowrap'>
+            <NumberBox
+              tooltipText='Width of the container'
+              min={minWidth}
+              step='5'
+              max={maxWidth}
+              value={this.state.width}
+              onArrows={this.setWidth}
+              onSubmit={this.setWidth}
+            />
+            &nbsp;&times;&nbsp;
+            <NumberBox
+              tooltipText='Height of the container'
+              min={minHeight}
+              step='5'
+              max={maxHeight}
+              value={this.state.height}
+              onArrows={this.setHeight}
+              onSubmit={this.setHeight}
+            />
+          </span>
+          <IconButton
             className='graph_expand_collapse_button'
             text=''
             icon={faCompressArrowsAlt}
             onClick={this.collapseContainer}
             tooltipText='Fit the graph to the "Path Graph" section'
           />
-          <TextButton
+          <IconButton
             className='graph_expand_collapse_button'
             text=''
             icon={faExpandArrowsAlt}

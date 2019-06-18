@@ -27,11 +27,7 @@ export function toGradient(number) {
   // pretty gradient
   let gradient = [
     'rgba(255, 255, 255, 0)',
-    'rgba(255, 249, 196, 1)',
-    'rgba(255, 236, 179, 1)',
-    'rgba(255, 224, 178, 1)',
-    'rgba(255, 204, 188, 1)',
-    'rgba(248, 187, 208, 1)'
+    'rgba(244, 143, 177, 1)'
   ];
 
   // split each gradient color into component rgba values
@@ -246,7 +242,7 @@ export function transferQueryProps(
 }
 
 // compare two elements as primitives (eg number === number or string ===
-// string) or as arrays if both are arrays
+// string) or as arrays ifesc both are arrays
 export function compareElements(element1, element2) {
   if (Array.isArray(element1) && Array.isArray(element2))
     return compareArrays(element1, element2, true);
