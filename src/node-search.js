@@ -11,6 +11,7 @@ import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 import { faDice } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
+import { CollapsibleSection } from './collapsible-section.js';
 import { MetanodeChip } from './chips.js';
 import { Tooltip } from './tooltip.js';
 import { Button } from './buttons.js';
@@ -52,15 +53,20 @@ export class NodeSearch extends Component {
           filterString: this.state.filterString
         }}
       >
-        <Filters
-          filters={this.state.filters}
-          filterString={this.state.filterString}
-          updateFilters={this.updateFilters}
-        />
-        <SourceNodeSearch />
-        <SwapButton />
-        <RandomButton />
-        <TargetNodeSearch />
+        <CollapsibleSection
+          label='Node Search'
+          tooltipText='Search the database for a source and target node'
+        >
+          <Filters
+            filters={this.state.filters}
+            filterString={this.state.filterString}
+            updateFilters={this.updateFilters}
+          />
+          <SourceNodeSearch />
+          <SwapButton />
+          <RandomButton />
+          <TargetNodeSearch />
+        </CollapsibleSection>
       </NodeSearchContext.Provider>
     );
   }
