@@ -469,22 +469,22 @@ class TableHead extends Component {
     // primary columns
     const cols = (
       <>
-        <td className='col_xs'>
+        <th className='col_xs'>
           <EyeCheckbox
             checked={this.context.allChecked}
             onClick={() => this.context.toggleAllChecked()}
             onCtrlClick={() => this.context.toggleAllChecked()}
             tooltipText='Show all paths'
           />
-        </td>
-        <td className='col_xs'>
+        </th>
+        <th className='col_xs'>
           <HighlighterCheckbox
             checked={this.context.allHighlighted}
             onClick={() => this.context.toggleAllHighlighted()}
             onCtrlClick={() => this.context.toggleAllHighlighted()}
             tooltipText='Highlight all paths'
           />
-        </td>
+        </th>
         <TableHeadCell
           className='col_s left'
           buttonClass='left'
@@ -534,14 +534,14 @@ class TableHeadCell extends Component {
   // display component
   render() {
     return (
-      <td className={this.props.className}>
+      <th className={this.props.className}>
         <SortButton
           text={this.props.text}
           tooltipText={this.props.tooltipText}
           fieldName={this.props.fieldName}
           className={this.props.buttonClass}
         />
-      </td>
+      </th>
     );
   }
 }

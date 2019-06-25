@@ -318,16 +318,16 @@ class TableHead extends Component {
     // extra 'super-grouping' row at top of table
     const extraRow = (
       <tr>
-        <td className='col_xs' />
-        <td className='col_l' />
-        <td className='col_s' />
-        <td className='col_m' />
-        <td className='col_m' />
-        <td className='col_s' />
-        <td className='col_xxl center' colSpan='6'>
+        <th className='col_xs' />
+        <th className='col_l' />
+        <th className='col_s' />
+        <th className='col_m' />
+        <th className='col_m' />
+        <th className='col_s' />
+        <th className='col_xxl center' colSpan='6'>
           <div className='line_sides'>Null DWPC distribution information</div>
-        </td>
-        <td className='col_l' />
+        </th>
+        <th className='col_l' />
       </tr>
     );
 
@@ -345,14 +345,14 @@ class TableHead extends Component {
     // primary columns
     const cols = (
       <>
-        <td className='col_xs'>
+        <th className='col_xs'>
           <Checkbox
             checked={this.context.allChecked}
             onClick={() => this.context.toggleAllChecked()}
             onCtrlClick={() => this.context.toggleAllChecked()}
             tooltipText='Show all paths'
           />
-        </td>
+        </th>
         <TableHeadCell
           className='col_l'
           buttonClass='left'
@@ -471,14 +471,14 @@ class TableHeadCell extends Component {
   // display component
   render() {
     return (
-      <td className={this.props.className}>
+      <th className={this.props.className}>
         <SortButton
           text={this.props.text}
           tooltipText={this.props.tooltipText}
           fieldName={this.props.fieldName}
           className={this.props.buttonClass}
         />
-      </td>
+      </th>
     );
   }
 }
