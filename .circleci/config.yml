@@ -39,7 +39,6 @@ jobs:
           command: |
             echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
             touch build/.nojekyll  # Disable Jekyll processing on GitHub Pages
-            echo search.het.io > build/CNAME  # set custom GitHub Pages domain
             gh-pages --dist build \
               --user "CircleCI Deploy Job <ci-build@circleci.com>" \
               --message \
