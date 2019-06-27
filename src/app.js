@@ -209,6 +209,11 @@ class App extends Component {
   render() {
     return (
       <>
+        <link
+          rel='stylesheet'
+          type='text/css'
+          href='https://het.io/global.css'
+        />
         <NodeSearch />
         <NodeResults />
         <MetapathResults />
