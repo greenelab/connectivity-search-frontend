@@ -242,7 +242,7 @@ export function transferQueryProps(
 }
 
 // compare two elements as primitives (eg number === number or string ===
-// string) or as arrays ifesc both are arrays
+// string) or as arrays if both are arrays
 export function compareElements(element1, element2) {
   if (Array.isArray(element1) && Array.isArray(element2))
     return compareArrays(element1, element2, true);
