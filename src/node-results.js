@@ -6,11 +6,12 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 import { MetanodeChip } from './chips.js';
 import { Tooltip } from './tooltip.js';
-import { TextButton } from './buttons.js';
+import { IconButton } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
 import { shortenUrl } from './util.js';
 import { sortCustom } from './util.js';
+import './node-results.css';
 
 // node results section component
 // details about source/target nodes
@@ -18,10 +19,10 @@ export class NodeResults extends Component {
   // display component
   render() {
     return (
-      <section>
+      <>
         <NodeCard label='Source Node' node={this.props.sourceNode} />
         <NodeCard label='Target Node' node={this.props.targetNode} />
-      </section>
+      </>
     );
   }
 }
@@ -97,7 +98,8 @@ class TableFull extends Component {
         );
       } else if (field === 'source') {
         // make link
-        const linkUrl = this.props.node.url || this.props.node.properties.url || '';
+        const linkUrl =
+          this.props.node.url || this.props.node.properties.url || '';
         let linkText = this.props.node.properties.source || linkUrl;
         linkText = shortenUrl(linkText);
         specialSecondCol = (
@@ -159,7 +161,7 @@ class TableFull extends Component {
     return fields.map((field, index) => {
       return (
         <tr key={index}>
-          <td className='col_s small light'>
+          <td className='col_m small light'>
             <Tooltip text={field.tooltipText}>{field.firstCol}</Tooltip>
           </td>
           <td>
@@ -173,12 +175,12 @@ class TableFull extends Component {
   // display component
   render() {
     return (
-      <table className='node_results_table'>
+      <table className='node_results_table left'>
         <tbody>
           {this.rows()}
           <tr>
             <td className='center' colSpan='2'>
-              <TextButton
+              <IconButton
                 text={this.state.showMore ? 'show less ' : 'show more '}
                 icon={this.state.showMore ? faAngleUp : faAngleDown}
                 className='link_button small'

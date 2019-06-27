@@ -45,9 +45,9 @@ export class Tooltip extends Component {
 
     // get x/y position of target to pass to tooltip popup
     const left =
-      target.getBoundingClientRect().left + document.documentElement.scrollLeft;
+      target.getBoundingClientRect().left;
     const top =
-      target.getBoundingClientRect().top + document.documentElement.scrollTop;
+      target.getBoundingClientRect().top + window.scrollY;
 
     // avoid scrunching tooltip too skinny when close to right side of view
     const x = Math.min(left, document.body.clientWidth - 200);

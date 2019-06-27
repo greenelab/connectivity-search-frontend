@@ -27,11 +27,7 @@ export function toGradient(number) {
   // pretty gradient
   let gradient = [
     'rgba(255, 255, 255, 0)',
-    'rgba(255, 249, 196, 1)',
-    'rgba(255, 236, 179, 1)',
-    'rgba(255, 224, 178, 1)',
-    'rgba(255, 204, 188, 1)',
-    'rgba(248, 187, 208, 1)'
+    'rgba(244, 143, 177, 1)'
   ];
 
   // split each gradient color into component rgba values

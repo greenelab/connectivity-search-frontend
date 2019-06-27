@@ -34,20 +34,20 @@ export class Button extends Component {
   }
 }
 
-// text button component
+// icon button component
 // link colored button with text and icon to right
-export class TextButton extends Component {
+export class IconButton extends Component {
   // display component
   render() {
     return (
       <Button
-        className={this.props.className + ' text_button small'}
+        className={this.props.className + ' blue small'}
         tooltipText={this.props.tooltipText}
         onClick={this.props.onClick}
         onCtrlClick={this.props.onCtrlClick}
       >
         {this.props.text && <span>{this.props.text}</span>}
-        <FontAwesomeIcon icon={this.props.icon} className='text_button_icon' />
+        <FontAwesomeIcon icon={this.props.icon} />
       </Button>
     );
   }

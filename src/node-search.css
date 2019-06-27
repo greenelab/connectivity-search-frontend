@@ -1,11 +1,10 @@
-.node_search_filter_button {
-  padding: 5px;
-  background: none;
-  border: none;
+.node_search_filters {
+  margin-bottom: 30px;
 }
-.node_search_filter_button:hover {
-  cursor: pointer;
-  background: #eeeeee;
+.node_search_filter_button {
+  margin: 0;
+  font-weight: 400;
+  color: #303030;
 }
 .node_search_filter_button_off {
   opacity: 0.25;
@@ -20,9 +19,6 @@
   text-align: left;
   position: relative;
 }
-.node_search_form:first-of-type {
-  margin-top: 40px !important;
-}
 .node_search_form_label {
   margin-bottom: 5px;
 }
@@ -33,15 +29,16 @@
 }
 .node_search_field_overlay {
   display: flex;
+  justify-content: flex-start;
+  align-items: center;
   position: absolute;
   left: 0;
   top: 0;
   right: 0;
   bottom: 0;
-  justify-content: flex-start;
-  align-items: center;
   padding: 10px !important;
   padding-right: 35px !important;
+  background: #e0e0e0;
   pointer-events: none;
 }
 .node_search_form_label {
@@ -49,13 +46,8 @@
   bottom: 100%;
 }
 .node_search_field {
-  background: #eeeeee;
   width: 100% !important;
   height: 100% !important;
-  transition: background 0.25s ease;
-}
-.node_search_field_focused {
-  background: #e0f7fa;
   transition: background 0.25s ease;
 }
 .node_search_field:before {
@@ -63,14 +55,15 @@
 }
 .node_search_field:after {
   border-bottom-color: #00bcd4 !important;
+  border-bottom-width: 2px !important;
 }
 .node_search_input,
 .node_search_input_blank {
   padding: 10px !important;
   padding-right: 35px !important;
+  color: #303030 !important;
 }
 .node_search_input_blank {
-  color: #eeeeee !important;
   overflow: hidden;
 }
 .node_search_icon {
@@ -82,16 +75,16 @@
   right: 0;
   top: 0;
   bottom: 0;
-  opacity: 0.25;
+  color: #808080;
   pointer-events: none;
 }
 .node_search_swap_button {
   width: 40px;
   height: 40px;
-  background: #eeeeee;
   border-radius: 20px;
-  margin: 5px !important;
+  margin: 10px !important;
   padding: 0 !important;
+  color: #606060;
 }
 .node_search_swap_button svg {
   transform: rotate(90deg);
@@ -112,7 +105,7 @@
   font-size: 16px !important;
 }
 .node_search_results_item_selected {
-  background: #e1f6fc !important;
+  background: #c0ecf8 !important;
 }
 .node_search_results_item_name {
   font-weight: 500;
@@ -121,7 +114,7 @@
 }
 .node_search_results_item_count {
   margin-left: auto;
-  color: #757575;
+  color: #808080;
   font-size: 0.75em;
   font-weight: 500;
   width: 40px;

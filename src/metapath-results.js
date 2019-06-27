@@ -11,7 +11,7 @@ import { faSortDown } from '@fortawesome/free-solid-svg-icons';
 
 import { metapathChips } from './chips.js';
 import { Button } from './buttons.js';
-import { TextButton } from './buttons.js';
+import { IconButton } from './buttons.js';
 import { Checkbox } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
 import { CollapsibleSection } from './collapsible-section.js';
@@ -32,14 +32,12 @@ export class MetapathResults extends Component {
   // display component
   render() {
     return (
-      <section>
-        <CollapsibleSection
-          label='Metapaths'
-          tooltipText='Metapaths of length <= 3 between the source and target node'
-        >
-          {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
-        </CollapsibleSection>
-      </section>
+      <CollapsibleSection
+        label='Metapaths'
+        tooltipText='Metapaths of length <= 3 between the source and target node'
+      >
+        {this.props.metapaths.length > 0 ? <TableFull /> : <TableEmpty />}
+      </CollapsibleSection>
     );
   }
 }
@@ -275,14 +273,14 @@ class TableFull extends Component {
         }}
       >
         <div className='table_attic'>
-          <TextButton
+          <IconButton
             text='.csv'
             icon={faDownload}
             className='link_button small'
             onClick={this.downloadCsv}
             tooltipText='Download table as .csv file'
           />
-          <TextButton
+          <IconButton
             text={this.state.showMore ? 'show less ' : 'show more '}
             icon={this.state.showMore ? faAngleLeft : faAngleRight}
             className='link_button small'
@@ -294,7 +292,7 @@ class TableFull extends Component {
           </div>
         </div>
         <div className='table_container' data-expanded={this.state.showMore}>
-          <table className='metapath_results_table'>
+          <table className='metapath_results_table center'>
             <TableHead />
             <TableBody />
           </table>
@@ -320,16 +318,16 @@ class TableHead extends Component {
     // extra 'super-grouping' row at top of table
     const extraRow = (
       <tr>
-        <td className='col_xs' />
-        <td className='col_l' />
-        <td className='col_s' />
-        <td className='col_m' />
-        <td className='col_m' />
-        <td className='col_s' />
-        <td className='col_xxl center' colSpan='6'>
-          <div className='divider'>Null DWPC distribution information</div>
-        </td>
-        <td className='col_l' />
+        <th className='col_xs' />
+        <th className='col_l' />
+        <th className='col_s' />
+        <th className='col_m' />
+        <th className='col_m' />
+        <th className='col_s' />
+        <th className='col_xxl center' colSpan='6'>
+          <div className='line_sides'>Null DWPC distribution information</div>
+        </th>
+        <th className='col_l' />
       </tr>
     );
 
@@ -347,14 +345,14 @@ class TableHead extends Component {
     // primary columns
     const cols = (
       <>
-        <td className='col_xs'>
+        <th className='col_xs'>
           <Checkbox
             checked={this.context.allChecked}
             onClick={() => this.context.toggleAllChecked()}
             onCtrlClick={() => this.context.toggleAllChecked()}
             tooltipText='Show all paths'
           />
-        </td>
+        </th>
         <TableHeadCell
           className='col_l'
           buttonClass='left'
@@ -473,14 +471,14 @@ class TableHeadCell extends Component {
   // display component
   render() {
     return (
-      <td className={this.props.className}>
+      <th className={this.props.className}>
         <SortButton
           text={this.props.text}
           tooltipText={this.props.tooltipText}
           fieldName={this.props.fieldName}
           className={this.props.buttonClass}
         />
-      </td>
+      </th>
     );
   }
 }

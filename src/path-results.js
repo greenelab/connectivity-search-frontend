@@ -12,7 +12,7 @@ import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { CollapsibleSection } from './collapsible-section.js';
 import { Button } from './buttons.js';
 import { DynamicField } from './dynamic-field.js';
-import { TextButton } from './buttons.js';
+import { IconButton } from './buttons.js';
 import { EyeCheckbox } from './buttons.js';
 import { HighlighterCheckbox } from './buttons.js';
 import { downloadCsv } from './util.js';
@@ -30,14 +30,12 @@ export class PathResults extends Component {
   // display component
   render() {
     return (
-      <section>
-        <CollapsibleSection
-          label='Paths'
-          tooltipText='Paths of the selected metapaths'
-        >
-          {this.props.pathQueries.length > 0 ? <TableFull /> : <TableEmpty />}
-        </CollapsibleSection>
-      </section>
+      <CollapsibleSection
+        label='Paths'
+        tooltipText='Paths of the selected metapaths'
+      >
+        {this.props.pathQueries.length > 0 ? <TableFull /> : <TableEmpty />}
+      </CollapsibleSection>
     );
   }
 }
@@ -410,14 +408,14 @@ class TableFull extends Component {
         }}
       >
         <div className='table_attic'>
-          <TextButton
+          <IconButton
             text='.csv'
             icon={faDownload}
             className='link_button small'
             onClick={this.downloadCsv}
             tooltipText='Download table as .csv file'
           />
-          <TextButton
+          <IconButton
             text={this.state.showMore ? 'show less ' : 'show more '}
             icon={this.state.showMore ? faAngleLeft : faAngleRight}
             className='link_button small'
@@ -431,7 +429,7 @@ class TableFull extends Component {
         </div>
         <div className='table_container' data-expanded={this.state.showMore}>
           <table
-            className='path_results_table'
+            className='path_results_table center'
             data-expanded={this.state.showMore}
           >
             <TableHead />
@@ -471,22 +469,22 @@ class TableHead extends Component {
     // primary columns
     const cols = (
       <>
-        <td className='col_xs'>
+        <th className='col_xs'>
           <EyeCheckbox
             checked={this.context.allChecked}
             onClick={() => this.context.toggleAllChecked()}
             onCtrlClick={() => this.context.toggleAllChecked()}
             tooltipText='Show all paths'
           />
-        </td>
-        <td className='col_xs'>
+        </th>
+        <th className='col_xs'>
           <HighlighterCheckbox
             checked={this.context.allHighlighted}
             onClick={() => this.context.toggleAllHighlighted()}
             onCtrlClick={() => this.context.toggleAllHighlighted()}
             tooltipText='Highlight all paths'
           />
-        </td>
+        </th>
         <TableHeadCell
           className='col_s left'
           buttonClass='left'
@@ -536,14 +534,14 @@ class TableHeadCell extends Component {
   // display component
   render() {
     return (
-      <td className={this.props.className}>
+      <th className={this.props.className}>
         <SortButton
           text={this.props.text}
           tooltipText={this.props.tooltipText}
           fieldName={this.props.fieldName}
           className={this.props.buttonClass}
         />
-      </td>
+      </th>
     );
   }
 }
@@ -677,7 +675,7 @@ class TableEmpty extends Component {
   // display component
   render() {
     return (
-      <table className='metapath_results_table'>
+      <table className='path_results_table'>
         <tbody>
           <tr>
             <td className='center light'>no results to show</td>

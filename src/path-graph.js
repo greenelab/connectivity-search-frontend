@@ -13,7 +13,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 import { CollapsibleSection } from './collapsible-section.js';
 import { NumberBox } from './number-box.js';
-import { TextButton } from './buttons.js';
+import { IconButton } from './buttons.js';
 import { downloadSvg } from './util.js';
 import { transferObjectProps } from './util.js';
 import { Tooltip } from './tooltip.js';
@@ -196,51 +196,51 @@ export class PathGraph extends Component {
       }
     }
     return (
-      <section>
-        <CollapsibleSection
-          label='Path Graph'
-          tooltipText='Graph of path results'
-        >
-          <div className='table_attic'>
-            <TextButton
-              text='reset'
-              icon={faPowerOff}
-              onClick={() => {
-                if (this.graph.current)
-                  this.graph.current.restartGraph();
-              }}
-              tooltipText='Completely restart graph'
-            />
-            <TextButton
-              text='unpin all'
-              icon={faMapMarkerAlt}
-              onClick={() => {
-                if (this.graph.current)
-                  this.graph.current.unpinAll();
-              }}
-              tooltipText='Unpin all nodes'
-            />
-            <TextButton
-              text='pin all'
-              icon={faMapMarker}
-              onClick={() => {
-                if (this.graph.current)
-                  this.graph.current.pinAll();
-              }}
-              tooltipText='Pin all nodes in their current position'
-            />
-            <TextButton
-              text='fit'
-              icon={faExpand}
-              onClick={this.fitView}
-              tooltipText='Fit the view to the contents of the graph'
-            />
-            <TextButton
-              text='.svg'
-              icon={faDownload}
-              onClick={this.downloadSvg}
-              tooltipText='Download the graph as an .svg file'
-            />
+      <CollapsibleSection
+        label='Path Graph'
+        tooltipText='Graph of path results'
+      >
+        <div className='table_attic'>
+          <IconButton
+            text='reset'
+            icon={faPowerOff}
+            onClick={() => {
+              if (this.graph.current)
+                this.graph.current.restartGraph();
+            }}
+            tooltipText='Completely restart graph'
+          />
+          <IconButton
+            text='unpin all'
+            icon={faMapMarkerAlt}
+            onClick={() => {
+              if (this.graph.current)
+                this.graph.current.unpinAll();
+            }}
+            tooltipText='Unpin all nodes'
+          />
+          <IconButton
+            text='pin all'
+            icon={faMapMarker}
+            onClick={() => {
+              if (this.graph.current)
+                this.graph.current.pinAll();
+            }}
+            tooltipText='Pin all nodes in their current position'
+          />
+          <IconButton
+            text='fit'
+            icon={faExpand}
+            onClick={this.fitView}
+            tooltipText='Fit the view to the contents of the graph'
+          />
+          <IconButton
+            text='.svg'
+            icon={faDownload}
+            onClick={this.downloadSvg}
+            tooltipText='Download the graph as an .svg file'
+          />
+          <span className='graph_dimensions nowrap'>
             <NumberBox
               tooltipText='Width of the container'
               min={minWidth}
@@ -250,7 +250,7 @@ export class PathGraph extends Component {
               onArrows={this.setWidth}
               onSubmit={this.setWidth}
             />
-            &times;
+            &nbsp;&times;&nbsp;
             <NumberBox
               tooltipText='Height of the container'
               min={minHeight}
@@ -260,36 +260,36 @@ export class PathGraph extends Component {
               onArrows={this.setHeight}
               onSubmit={this.setHeight}
             />
-            <TextButton
-              className='graph_expand_collapse_button'
-              text=''
-              icon={faExpandArrowsAlt}
-              onClick={this.expandContainer}
-              tooltipText='Fit the graph to the window'
-            />
-            <TextButton
-              className='graph_expand_collapse_button'
-              text=''
-              icon={faCompressArrowsAlt}
-              onClick={this.collapseContainer}
-              tooltipText='Fit the graph to the "Path Graph" section'
-            />
-            <span className='small light right'>
-              {this.state.nodeCount} nodes, {this.state.edgeCount} edges
-            </span>
-          </div>
-          <Graph
-            ref={this.graph}
-            width={this.state.width}
-            height={this.state.height}
-            sectionWidth={this.state.sectionWidth}
-            setGraphCounts={this.setGraphCounts}
-            setSelectedElement={this.setSelectedElement}
-            setHoveredElement={this.setHoveredElement}
+          </span>
+          <IconButton
+            className='graph_expand_collapse_button'
+            text=''
+            icon={faCompressArrowsAlt}
+            onClick={this.collapseContainer}
+            tooltipText='Fit the graph to the "Path Graph" section'
           />
-          <div id='graph_info_container'>{info}</div>
-        </CollapsibleSection>
-      </section>
+          <IconButton
+            className='graph_expand_collapse_button'
+            text=''
+            icon={faExpandArrowsAlt}
+            onClick={this.expandContainer}
+            tooltipText='Fit the graph to the window'
+          />
+          <span className='small light right'>
+            {this.state.nodeCount} nodes, {this.state.edgeCount} edges
+          </span>
+        </div>
+        <Graph
+          ref={this.graph}
+          width={this.state.width}
+          height={this.state.height}
+          sectionWidth={this.state.sectionWidth}
+          setGraphCounts={this.setGraphCounts}
+          setSelectedElement={this.setSelectedElement}
+          setHoveredElement={this.setHoveredElement}
+        />
+        <div id='graph_info_container'>{info}</div>
+      </CollapsibleSection>
     );
   }
 }

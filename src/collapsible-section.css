@@ -1,21 +1,35 @@
 .collapsible_section {
-  margin: 10px auto;
+  margin: 20px auto;
 }
-.collapsible_section_header {
+.collapsible_section_button {
   width: 100%;
-  text-align: left;
-  font-weight: 500;
+  margin: 0;
+  margin-bottom: 10px;
+  color: #303030;
+  position: relative;
+}
+.collapsible_section_button:before {
+  content: '';
+  position: absolute;
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #e0e0e0;
+  opacity: 1;
+  transition: opacity 0.25s ease;
+}
+.collapsible_section_button:hover:before,
+.collapsible_section_button:focus:before {
+  opacity: 0;
 }
 .collapsible_section[data-collapsed='true'] > *:not(:first-child) {
   display: none;
 }
-.collapsible_section_header {
+.collapsible_section_button {
   display: flex;
   align-items: center;
 }
-.collapsible_section_header > div {
+.collapsible_section_button > div {
   flex-grow: 1;
-}
-.collapsible_section_header > svg {
-  margin-right: 5px;
 }

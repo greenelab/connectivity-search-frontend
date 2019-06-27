@@ -11,6 +11,7 @@ import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 import { faDice } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
+import { CollapsibleSection } from './collapsible-section.js';
 import { MetanodeChip } from './chips.js';
 import { Tooltip } from './tooltip.js';
 import { Button } from './buttons.js';
@@ -47,11 +48,14 @@ export class NodeSearch extends Component {
   // display component
   render() {
     return (
-      <section className='center'>
-        <NodeSearchContext.Provider
-          value={{
-            filterString: this.state.filterString
-          }}
+      <NodeSearchContext.Provider
+        value={{
+          filterString: this.state.filterString
+        }}
+      >
+        <CollapsibleSection
+          label='Node Search'
+          tooltipText='Search the database for a source and target node'
         >
           <Filters
             filters={this.state.filters}
@@ -62,8 +66,8 @@ export class NodeSearch extends Component {
           <SwapButton />
           <RandomButton />
           <TargetNodeSearch />
-        </NodeSearchContext.Provider>
-      </section>
+        </CollapsibleSection>
+      </NodeSearchContext.Provider>
     );
   }
 }
@@ -192,7 +196,12 @@ class Filters extends Component {
       />
     ));
 
-    return <>{buttons}</>;
+    return (
+      <>
+        <div className='small light'>Filters</div>
+        <div className='node_search_filters'>{buttons}</div>
+      </>
+    );
   }
 }
 // connect component to global state
@@ -320,12 +329,10 @@ class SearchBox extends Component {
       searchNodesMetapaths(otherNodeId).then((results) =>
         this.setState({ searchResults: results || [] })
       );
-    } 
-    // otherwise, show normal search results based on search string
-    else {
+    } else {
+      // otherwise, show normal search results based on search string
       searchNodes(searchString, this.context.filterString, otherNodeId).then(
-        (results) =>
-          this.setState({ searchResults: results || [] })
+        (results) => this.setState({ searchResults: results || [] })
       );
     }
   }
@@ -455,7 +462,6 @@ class TextBox extends Component {
           InputProps={{
             classes: {
               root: 'node_search_field',
-              focused: 'node_search_field_focused',
               input: showOverlay
                 ? 'node_search_input_blank'
                 : 'node_search_input'
@@ -511,9 +517,7 @@ class Dropdown extends Component {
               {this.props.showMetapathCount && (
                 <span className='node_search_results_item_count'>
                   <PathIcon />
-                  <span>
-                    {result.metapath_count || 0}
-                  </span>
+                  <span>{result.metapath_count || 0}</span>
                 </span>
               )}
             </MenuItem>
