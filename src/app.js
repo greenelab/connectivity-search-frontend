@@ -2,7 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Test } from './table.js';
+import { Test } from './test.js';
 import { NodeSearch } from './node-search.js';
 import { NodeResults } from './node-results.js';
 import { MetapathResults } from './metapath-results.js';
@@ -21,6 +21,8 @@ import { updateMetapaths } from './actions.js';
 import { updatePathQueries } from './actions.js';
 import { cutString } from './util.js';
 import './styles.css';
+
+import './global.css';
 
 // main app component
 class App extends Component {
@@ -210,11 +212,11 @@ class App extends Component {
   render() {
     return (
       <>
-        <link
+        {/* <link
           rel='stylesheet'
           type='text/css'
           href='https://het.io/global.css'
-        />
+        /> */}
         {/* <NodeSearch /> */}
         {/* <NodeResults /> */}
         <Test/>
