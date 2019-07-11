@@ -2,6 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { Test } from './table.js';
 import { NodeSearch } from './node-search.js';
 import { NodeResults } from './node-results.js';
 import { MetapathResults } from './metapath-results.js';
@@ -214,11 +215,12 @@ class App extends Component {
           type='text/css'
           href='https://het.io/global.css'
         />
-        <NodeSearch />
-        <NodeResults />
-        <MetapathResults />
-        <PathResults />
-        <PathGraph />
+        {/* <NodeSearch /> */}
+        {/* <NodeResults /> */}
+        <Test/>
+        {/* <MetapathResults /> */}
+        {/* <PathResults /> */}
+        {/* <PathGraph /> */}
       </>
     );
   }
