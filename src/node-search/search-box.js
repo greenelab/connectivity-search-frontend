@@ -6,6 +6,8 @@ import { Context } from './context.js';
 import { Tooltip } from '../components/tooltip.js';
 import { TextBox } from './text-box.js';
 import { Dropdown } from './dropdown.js';
+import { searchNodes } from '../backend-queries.js';
+import { searchNodesMetapaths } from '../backend-queries.js';
 
 // search box component with dropdown autocomplete/autosuggest
 export class SearchBox extends Component {
@@ -28,7 +30,7 @@ export class SearchBox extends Component {
 
     // if one node selected and other node search box focused but empty,
     // show list of nodes in order of metapath count
-    if (searchString === '' && otherNodeId !== '') {
+    if (searchString === '' && otherNodeId) {
       searchNodesMetapaths(otherNodeId).then((results) =>
         this.setState({ searchResults: results || [] })
       );
@@ -38,7 +40,7 @@ export class SearchBox extends Component {
         (results) => this.setState({ searchResults: results || [] })
       );
     }
-  }
+  };
 
   // convert result/selection item to string to display in text box
   itemToString = (item) => {
@@ -46,7 +48,7 @@ export class SearchBox extends Component {
       return item.name;
     else
       return '';
-  }
+  };
 
   // display component
   render() {

@@ -88,7 +88,7 @@ export class MetanodeChip extends Component {
 }
 // connect component to global state
 MetanodeChip = connect((state) => ({
-  hetioStyles: state.app.hetioStyles
+  hetioStyles: state.hetioStyles
 }))(MetanodeChip);
 
 // metaedge 'chip' component
@@ -127,7 +127,7 @@ export class MetaedgeChip extends Component {
 }
 // connect component to global state
 MetaedgeChip = connect((state) => ({
-  metagraph: state.app.metagraph
+  metagraph: state.metagraph
 }))(MetaedgeChip);
 
 // get html of metapath in form of visualization chips
@@ -198,5 +198,5 @@ export class NodeChip extends Component {
 }
 // connect component to global state
 NodeChip = connect((state) => ({
-  hetioStyles: state.app.hetioStyles
+  hetioStyles: state.hetioStyles
 }))(NodeChip);

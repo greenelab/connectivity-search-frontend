@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 
 import { Context } from './context.js';
 import { FilterButton } from './filter-button.js';
-// import { SourceNodeSearch } from './source-node-search.js';
-// import { TargetNodeSearch } from './target-node-search';
-// import { SwapButton } from './swap-button.js';
+import { SourceNode } from './source-node.js';
+import { TargetNode } from './target-node.js';
+import { SwapButton } from './swap-button.js';
 // import { RandomButton } from './random-button.js';
 import { CollapsibleSection } from '../components/collapsible-section.js';
 import { sortCustom } from '../util/array.js';
 import { compareObjects } from '../util/object.js';
+import { copyObject } from '../util/object.js';
 
 import './index.css';
 
@@ -25,19 +26,20 @@ export class NodeSearch extends Component {
     this.state.filterString = '';
   }
 
+  // when component updates
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.filters.length === 0 && this.props.metagraph)
+    if (this.state.filters.length === 0 && this.props.metagraph.metanode_kinds)
       this.makeFilterList();
 
     if (!compareObjects(this.state.filters, prevState.filters))
       this.updateFilterString();
   }
 
-  //
+  // make filter list based on metagraph metanode types
   makeFilterList = () => {
     let filters = [];
     for (const filter of this.props.metagraph.metanode_kinds)
-      filters.push({ name: filter, active: false });
+      filters.push({ name: filter, active: true });
 
     // display filters in custom order
     const order = [
@@ -58,7 +60,7 @@ export class NodeSearch extends Component {
     this.setState({ filters: filters });
   };
 
-  //
+  // assemble and update filter string for search query
   updateFilterString = () => {
     const list = [];
     for (const filter of this.state.filters) {
@@ -66,7 +68,46 @@ export class NodeSearch extends Component {
         list.push(this.props.metagraph.kind_to_abbrev[filter.name]);
     }
 
-    this.setState({ filterList: list.join(',') });
+    this.setState({ filterString: list.join(',') });
+  };
+
+  // toggle the specified filter on/off
+  toggle = (name) => {
+    const newFilters = copyObject(this.state.filters);
+
+    for (const filter of newFilters) {
+      if (filter.name === name)
+        filter.active = !filter.active;
+    }
+
+    this.setState({ filters: newFilters });
+  };
+
+  // solo filter (turn all others off)
+  solo = (name) => {
+    let allOthersOff = true;
+
+    for (const filter of this.state.filters) {
+      if (filter.name !== name && filter.active) {
+        allOthersOff = false;
+        break;
+      }
+    }
+
+    const newFilters = copyObject(this.state.filters);
+
+    for (const filter of newFilters) {
+      if (allOthersOff)
+        filter.active = true;
+      else {
+        if (filter.name === name)
+          filter.active = true;
+        else
+          filter.active = false;
+      }
+    }
+
+    this.setState({ filters: newFilters });
   };
 
   // display component
@@ -97,10 +138,10 @@ export class NodeSearch extends Component {
         >
           <div className='small light'>Filters</div>
           <div className='node_search_filters'>{filterButtons}</div>
-          {/* <SourceNodeSearch />
+          <SourceNode />
           <SwapButton />
-          <RandomButton />
-          <TargetNodeSearch /> */}
+          {/* <RandomButton /> */}
+          <TargetNode />
         </CollapsibleSection>
       </Context.Provider>
     );
@@ -108,6 +149,6 @@ export class NodeSearch extends Component {
 }
 // connect component to global state
 NodeSearch = connect((state) => ({
-  metagraph: state.app.metagraph,
-  hetioDefinitions: state.app.hetioDefinitions
+  metagraph: state.metagraph,
+  hetioDefinitions: state.hetioDefinitions
 }))(NodeSearch);

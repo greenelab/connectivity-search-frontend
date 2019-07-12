@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { NodeSearch } from '../node-search';
 
 import { fetchDefinitions } from './actions.js';
-import './styles.css';
+import './index.css';
 
 import '../global.css';
 

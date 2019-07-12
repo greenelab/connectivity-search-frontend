@@ -10,7 +10,6 @@ import './filter-button.css';
 export class FilterButton extends Component {
   // display component
   render() {
-    console.log(this.props.active);
     return (
       <Button
         className='node_search_filter_button'

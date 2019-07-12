@@ -4,6 +4,8 @@ import TextField from '@material-ui/core/TextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
+import { MetanodeChip } from '../components/chips.js';
+
 // text box sub-component of search box component
 export class TextBox extends Component {
   // initialize component

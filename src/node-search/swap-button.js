@@ -4,14 +4,15 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 
-import { Button } from './buttons.js';
+import { Button } from '../components/buttons.js';
+import { swapSourceTargetNode } from './actions.js';
 
 // swap button component
 // switches source/target node
 export class SwapButton extends Component {
   // when user clicks button
   onClick = () => {
-    // this.props.dispatch(swapSourceTargetNodes());
+    this.props.dispatch(swapSourceTargetNode());
   };
 
   // display component

@@ -66,10 +66,10 @@ export function transferQueryProps(
 // make deep copy of object. ensures everything is clone/copy, not reference.
 // works for everything except circular refs, functions, and js Dates
 export function copyObject(object) {
-  if (object === undefined)
-    return;
-  else
+  if (typeof object === 'object')
     return JSON.parse(JSON.stringify(object));
+  else
+    return object;
 }
 
 // compare objects with stringify

@@ -3,16 +3,17 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { SearchBox } from './search-box.js';
+import { setSourceTargetNode } from './actions.js';
 
 // source node search box component
-export class SourceNodeSearch extends Component {
+export class SourceNode extends Component {
   // when user makes a new node selection
   onChange = (value) => {
-    // this.props.dispatch(updateSourceTargetNodes({ sourceNode: value }));
+    this.props.dispatch(setSourceTargetNode({ sourceNode: value }));
     // unfocus search box on selection
     if (value)
       document.activeElement.blur();
-  }
+  };
 
   // display component
   render() {
@@ -28,7 +29,7 @@ export class SourceNodeSearch extends Component {
   }
 }
 // connect component to global state
-SourceNodeSearch = connect((state) => ({
+SourceNode = connect((state) => ({
   node: state.sourceNode,
   otherNode: state.targetNode
-}))(SourceNodeSearch);
+}))(SourceNode);
