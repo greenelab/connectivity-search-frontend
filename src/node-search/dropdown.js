@@ -1,3 +1,11 @@
+import React from 'react';
+import { Component } from 'react';
+import Popper from '@material-ui/core/Popper';
+import Paper from '@material-ui/core/Paper';
+import MenuItem from '@material-ui/core/MenuItem';
+
+import { MetanodeChip } from '../components/chips.js';
+import { ReactComponent as PathIcon } from '../images/path.svg';
 
 // dropdown sub-component of search box component
 export class Dropdown extends Component {

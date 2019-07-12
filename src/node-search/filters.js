@@ -1,14 +1,12 @@
+import React from 'react';
+import { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { FilterButton } from './filter-button.js';
+
 // filter filter component
 // toggle buttons to specify which types of nodes to limit search to
 export class Filters extends Component {
-  // initialize component
-  constructor(props) {
-    super(props);
-
-    this.toggle = this.toggle.bind(this);
-    this.solo = this.solo.bind(this);
-  }
-
   componentDidUpdate(prevProps) {
     if (
       prevProps.metagraph.metanode_kinds === this.props.metagraph.metanode_kinds
@@ -42,27 +40,27 @@ export class Filters extends Component {
   }
 
   // checks whether all filters are active
-  allOn(filters) {
+  allOn = (filters) => {
     for (const filter of filters) {
       if (!filter.active)
         return false;
     }
 
     return true;
-  }
+  };
 
   // checks whether all filters besides the specified filter are off
-  allOthersOff(filters, type) {
+  allOthersOff = (filters, type) => {
     for (const filter of filters) {
       if (type !== filter.name && filter.active)
         return false;
     }
 
     return true;
-  }
+  };
 
   // toggles the specified filters on/off
-  toggle(type) {
+  toggle = (type) => {
     const newFilters = copyObject(this.props.filters);
 
     for (const filter of newFilters) {
@@ -71,10 +69,10 @@ export class Filters extends Component {
     }
 
     this.props.updateFilters(newFilters, this.toString(newFilters));
-  }
+  };
 
   // solo filter (turn all others off)
-  solo(type) {
+  solo = (type) => {
     const newFilters = copyObject(this.props.filters);
     const allOthersOff = this.allOthersOff(newFilters, type);
 
@@ -90,10 +88,10 @@ export class Filters extends Component {
     }
 
     this.props.updateFilters(newFilters, this.toString(newFilters));
-  }
+  };
 
   // turn state of filters into string query list of metanode metagraph
-  toString(filters) {
+  toString = (filters) => {
     if (this.allOn(filters))
       return '';
 
@@ -104,7 +102,7 @@ export class Filters extends Component {
     }
 
     return list.join(',');
-  }
+  };
 
   // display component
   render() {

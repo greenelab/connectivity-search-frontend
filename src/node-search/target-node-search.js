@@ -1,14 +1,14 @@
+import React from 'react';
+import { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { SearchBox } from './search-box.js';
+
 // source node search box component
 export class TargetNodeSearch extends Component {
-  // initialize component
-  constructor() {
-    super();
-    this.onChange = this.onChange.bind(this);
-  }
-
   // when user makes a new node selection
-  onChange(value) {
-    this.props.dispatch(updateSourceTargetNodes({ targetNode: value }));
+  onChange = (value) => {
+    // this.props.dispatch(updateSourceTargetNodes({ targetNode: value }));
     // unfocus search box on selection
     if (value)
       document.activeElement.blur();

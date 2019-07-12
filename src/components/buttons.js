@@ -26,6 +26,7 @@ export class Button extends Component {
             } else if (this.props.onClick)
               this.props.onClick();
           }}
+          data-disabled={this.props.disabled}
         >
           {this.props.children}
         </button>

@@ -16,7 +16,7 @@ window.sessionStorage.clear();
 
 // create global state store
 const reducer = combineReducers({
-  appReducer
+  app: appReducer
 });
 const store = createStore(reducer, compose(applyMiddleware(thunk, logger)));
 

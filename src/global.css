@@ -315,6 +315,12 @@ button > svg:not(:first-child) {
 button > svg:not(:last-child) {
   margin-right: 5px;
 }
+.button[data-disabled],
+button[data-disabled] {
+  opacity: 0.25;
+  filter: saturate(0.5);
+  /* text-decoration: line-through; */
+}
 
 /* -------------------------------------------------- */
 /* general utility styles */

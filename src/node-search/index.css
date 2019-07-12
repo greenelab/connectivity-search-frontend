@@ -1,16 +1,6 @@
 .node_search_filters {
   margin-bottom: 30px;
 }
-.node_search_filter_button {
-  margin: 0;
-  font-weight: 400;
-  color: #303030;
-}
-.node_search_filter_button_off {
-  opacity: 0.25;
-  filter: saturate(0.5);
-  text-decoration: line-through;
-}
 .node_search_form {
   display: block;
   width: 100%;

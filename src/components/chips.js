@@ -2,23 +2,23 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { ReactComponent as ArrowBoth } from '../images/arrow-icon-both.svg';
+import { ReactComponent as ArrowForward } from '../images/arrow-icon-forward.svg';
+import { ReactComponent as ArrowBackward } from '../images/arrow-icon-backward.svg';
+
+import { ReactComponent as Gene } from '../images/chip-gene.svg';
+import { ReactComponent as Compound } from '../images/chip-compound.svg';
+import { ReactComponent as Anatomy } from '../images/chip-anatomy.svg';
+import { ReactComponent as Disease } from '../images/chip-disease.svg';
+import { ReactComponent as Symptom } from '../images/chip-symptom.svg';
+import { ReactComponent as SideEffect } from '../images/chip-side-effect.svg';
+import { ReactComponent as BiologicalProcess } from '../images/chip-biological-process.svg';
+import { ReactComponent as CellularComponent } from '../images/chip-cellular-component.svg';
+import { ReactComponent as MolecularFunction } from '../images/chip-molecular-function.svg';
+import { ReactComponent as Pathway } from '../images/chip-pathway.svg';
+import { ReactComponent as PharmacologicClass } from '../images/chip-pharmacologic-class.svg';
+
 import './chips.css';
-
-import { ReactComponent as ArrowBoth } from './arrow-icon-both.svg';
-import { ReactComponent as ArrowForward } from './arrow-icon-forward.svg';
-import { ReactComponent as ArrowBackward } from './arrow-icon-backward.svg';
-
-import { ReactComponent as Gene } from './chip-gene.svg';
-import { ReactComponent as Compound } from './chip-compound.svg';
-import { ReactComponent as Anatomy } from './chip-anatomy.svg';
-import { ReactComponent as Disease } from './chip-disease.svg';
-import { ReactComponent as Symptom } from './chip-symptom.svg';
-import { ReactComponent as SideEffect } from './chip-side-effect.svg';
-import { ReactComponent as BiologicalProcess } from './chip-biological-process.svg';
-import { ReactComponent as CellularComponent } from './chip-cellular-component.svg';
-import { ReactComponent as MolecularFunction } from './chip-molecular-function.svg';
-import { ReactComponent as Pathway } from './chip-pathway.svg';
-import { ReactComponent as PharmacologicClass } from './chip-pharmacologic-class.svg';
 
 // metanode 'chip' component
 // colored circle with abbreviation text in middle
@@ -68,7 +68,9 @@ export class MetanodeChip extends Component {
 
     let fillColor = '#424242';
     let textColor = '#fafafa';
-    const style = this.props.hetioStyles[this.props.type];
+    let style = {};
+    if (this.props.hetioStyles)
+      style = this.props.hetioStyles[this.props.type];
     if (style && style.fill_color)
       fillColor = style.fill_color;
     if (style && style.text_color)
@@ -86,7 +88,7 @@ export class MetanodeChip extends Component {
 }
 // connect component to global state
 MetanodeChip = connect((state) => ({
-  hetioStyles: state.hetioStyles
+  hetioStyles: state.app.hetioStyles
 }))(MetanodeChip);
 
 // metaedge 'chip' component
@@ -109,7 +111,7 @@ export class MetaedgeChip extends Component {
     }
 
     let abbreviation = '';
-    if (this.props.metagraph.kind_to_abbrev)
+    if (this.props.metagraph && this.props.metagraph.kind_to_abbrev)
       abbreviation = this.props.metagraph.kind_to_abbrev[this.props.type];
 
     return (
@@ -125,7 +127,7 @@ export class MetaedgeChip extends Component {
 }
 // connect component to global state
 MetaedgeChip = connect((state) => ({
-  metagraph: state.metagraph
+  metagraph: state.app.metagraph
 }))(MetaedgeChip);
 
 // get html of metapath in form of visualization chips
@@ -175,7 +177,9 @@ export class NodeChip extends Component {
   render() {
     let fillColor = '#424242';
     let textColor = '#fafafa';
-    const style = this.props.hetioStyles[this.props.type];
+    const style = {};
+    if (this.props.hetioStyles)
+      style = this.props.hetioStyles[this.props.type];
     if (style && style.fill_color)
       fillColor = style.fill_color;
     if (style && style.text_color)
@@ -194,5 +198,5 @@ export class NodeChip extends Component {
 }
 // connect component to global state
 NodeChip = connect((state) => ({
-  hetioStyles: state.hetioStyles
+  hetioStyles: state.app.hetioStyles
 }))(NodeChip);

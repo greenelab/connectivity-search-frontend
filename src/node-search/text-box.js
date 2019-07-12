@@ -1,3 +1,8 @@
+import React from 'react';
+import { Component } from 'react';
+import TextField from '@material-ui/core/TextField';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 // text box sub-component of search box component
 export class TextBox extends Component {
@@ -7,29 +12,25 @@ export class TextBox extends Component {
 
     this.state = {};
     this.state.focused = false;
-
-    this.onInput = this.onInput.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onBlur = this.onBlur.bind(this);
   }
 
   // when user types into text box
-  onInput(event) {
+  onInput = (event) => {
     if (event.target.value === '')
       this.props.clearSelection();
-  }
+  };
 
   // when user focuses text box
-  onFocus(event) {
+  onFocus = (event) => {
     this.props.onFocus(event.target.value);
     this.props.openMenu();
     this.setState({ focused: true });
-  }
+  };
 
   // when user unfocuses text box
-  onBlur() {
+  onBlur = () => {
     this.setState({ focused: false });
-  }
+  };
 
   // display component
   render() {

@@ -1,16 +1,16 @@
+import React from 'react';
+import { Component } from 'react';
+import { connect } from 'react-redux';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faDice } from '@fortawesome/free-solid-svg-icons';
+
+import { Button } from './buttons.js';
 
 // random button component
 // picks random source/target node with metapaths
 export class RandomButton extends Component {
-  // initialize component
-  constructor() {
-    super();
-
-    this.onClick = this.onClick.bind(this);
-  }
-
   // when user clicks button
-  onClick() {
+  onClick = () => {
     getRandomNodePair()
       .then((results) => {
         return Promise.all([

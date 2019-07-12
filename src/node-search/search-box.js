@@ -1,3 +1,12 @@
+import React from 'react';
+import { Component } from 'react';
+import Downshift from 'downshift';
+
+import { Context } from './context.js';
+import { Tooltip } from '../components/tooltip.js';
+import { TextBox } from './text-box.js';
+import { Dropdown } from './dropdown.js';
+
 // search box component with dropdown autocomplete/autosuggest
 export class SearchBox extends Component {
   // initialize component
@@ -9,12 +18,10 @@ export class SearchBox extends Component {
 
     this.inputRef = React.createRef();
     this.formRef = React.createRef();
-
-    this.onInput = this.onInput.bind(this);
   }
 
   // when user types into or modifies text in text box
-  onInput(searchString) {
+  onInput = (searchString) => {
     let otherNodeId = '';
     if (this.props.otherNode && this.props.otherNode.id !== undefined)
       otherNodeId = this.props.otherNode.id;
@@ -34,7 +41,7 @@ export class SearchBox extends Component {
   }
 
   // convert result/selection item to string to display in text box
-  itemToString(item) {
+  itemToString = (item) => {
     if (item && item.name)
       return item.name;
     else
@@ -93,4 +100,4 @@ export class SearchBox extends Component {
   }
 }
 // connect component to context component
-SearchBox.contextType = NodeSearchContext;
+SearchBox.contextType = Context;
