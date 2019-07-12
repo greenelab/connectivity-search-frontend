@@ -1,0 +1,13 @@
+.node_search_form {
+  display: block;
+  width: 100%;
+  height: 40px !important;
+  margin: 0 auto !important;
+  text-align: left;
+  position: relative;
+}
+.node_search_form_label {
+  position: absolute;
+  margin-bottom: 5px;
+  bottom: 100%;
+}

@@ -9,6 +9,8 @@ import { Dropdown } from './dropdown.js';
 import { searchNodes } from '../backend-queries.js';
 import { searchNodesMetapaths } from '../backend-queries.js';
 
+import './search-box.css';
+
 // search box component with dropdown autocomplete/autosuggest
 export class SearchBox extends Component {
   // initialize component
@@ -30,7 +32,7 @@ export class SearchBox extends Component {
 
     // if one node selected and other node search box focused but empty,
     // show list of nodes in order of metapath count
-    if (searchString === '' && otherNodeId) {
+    if (searchString === '' && otherNodeId !== '') {
       searchNodesMetapaths(otherNodeId).then((results) =>
         this.setState({ searchResults: results || [] })
       );

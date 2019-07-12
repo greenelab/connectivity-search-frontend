@@ -7,6 +7,8 @@ import MenuItem from '@material-ui/core/MenuItem';
 import { MetanodeChip } from '../components/chips.js';
 import { ReactComponent as PathIcon } from '../images/path.svg';
 
+import './dropdown.css';
+
 // dropdown sub-component of search box component
 export class Dropdown extends Component {
   // display component

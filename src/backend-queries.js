@@ -33,7 +33,7 @@ export async function fetchJson(url, dontCache) {
     const response = await fetch(url);
     let json = {};
     if (response.ok)
-      json = response.json();
+      json = await response.json();
     else
       console.log(response);
 

@@ -7,7 +7,7 @@ import { FilterButton } from './filter-button.js';
 import { SourceNode } from './source-node.js';
 import { TargetNode } from './target-node.js';
 import { SwapButton } from './swap-button.js';
-// import { RandomButton } from './random-button.js';
+import { RandomButton } from './random-button.js';
 import { CollapsibleSection } from '../components/collapsible-section.js';
 import { sortCustom } from '../util/array.js';
 import { compareObjects } from '../util/object.js';
@@ -140,7 +140,7 @@ export class NodeSearch extends Component {
           <div className='node_search_filters'>{filterButtons}</div>
           <SourceNode />
           <SwapButton />
-          {/* <RandomButton /> */}
+          <RandomButton />
           <TargetNode />
         </CollapsibleSection>
       </Context.Provider>
