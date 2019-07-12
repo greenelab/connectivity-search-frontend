@@ -11,19 +11,19 @@ import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 import { faDice } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
-import { CollapsibleSection } from './collapsible-section.js';
-import { MetanodeChip } from './chips.js';
-import { Tooltip } from './tooltip.js';
-import { Button } from './buttons.js';
-import { searchNodes } from './backend-query.js';
-import { searchNodesMetapaths } from './backend-query.js';
-import { lookupNodeById } from './backend-query.js';
-import { getRandomNodePair } from './backend-query.js';
+import { CollapsibleSection } from './components/collapsible-section.js';
+import { MetanodeChip } from './components/chips.js';
+import { Tooltip } from './components/tooltip.js';
+import { Button } from './components/buttons.js';
+import { searchNodes } from './backend-queries.js';
+import { searchNodesMetapaths } from './backend-queries.js';
+import { lookupNodeById } from './backend-queries.js';
+import { getRandomNodePair } from './backend-queries.js';
 import { updateSourceTargetNodes } from './actions.js';
 import { swapSourceTargetNodes } from './actions.js';
-import { sortCustom } from './util.js';
-import { copyObject } from './util.js';
-import { ReactComponent as PathIcon } from './path.svg';
+import { sortCustom } from './util/array.js';
+import { copyObject } from './util/object.js';
+import { ReactComponent as PathIcon } from './images/path.svg';
 import './node-search.css';
 
 // node search section component

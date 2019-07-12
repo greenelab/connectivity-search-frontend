@@ -18,6 +18,7 @@ export class Test extends Component {
       <Table
         data={this.props.metapaths}
         defaultSortField='adjusted_p_value'
+        defaultSortUp={false}
         superContents={[
           '',
           '',
@@ -28,7 +29,7 @@ export class Test extends Component {
           <div className='line_sides'>Null DWPC distribution information</div>,
           ''
         ]}
-        superWidths={[30, 200, 80, 100, 100, 80, 600, 200]}
+        superWidths={[30, 200, 100, 100, 100, 100, 600, 200]}
         superAligns={[]}
         superColspans={[1, 1, 1, 1, 1, 1, 6, 1]}
         superTooltips={[
@@ -44,22 +45,38 @@ export class Test extends Component {
         headContents={[
           <FontAwesomeIcon className='fa-xs' icon={faCheck} />,
           'metapath',
-          'path count',
-          <span>
+          <>
+            path
+            <br />
+            count
+          </>,
+          <>
             adjusted
             <br />
             <i>p</i>-value
-          </span>,
+          </>,
           <>
             <i>p</i>-value
           </>,
           'DWPC',
-          'source degree',
-          'target degree',
+          <>
+            source
+            <br />
+            degree
+          </>,
+          <>
+            target
+            <br />
+            degree
+          </>,
           "# DWPC's",
-          "# non-0 DWPC's",
-          'non-0 mean',
-          <>non-0 &sigma;</>,
+          <>
+            # non-0
+            <br />
+            DWPC's
+          </>,
+          <>non-0<br/>mean</>,
+          <>non-0<br/>&sigma;</>,
           <a
             href='https://neo4j.het.io/browser/'
             target='_blank'
@@ -84,7 +101,7 @@ export class Test extends Component {
           'dgp_nonzero_sd',
           'cypher_query'
         ]}
-        headWidths={[30, 200, 80, 100, 100, 80]}
+        headWidths={[]}
         headAligns={['', 'left']}
         headTooltips={[
           'tooltip text',

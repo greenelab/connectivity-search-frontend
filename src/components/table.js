@@ -1,8 +1,8 @@
 import React from 'react';
 import { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
-import { faSortAmountDown } from '@fortawesome/free-solid-svg-icons';
+import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons';
+import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from './buttons.js';
 import { Tooltip } from './tooltip.js';
@@ -17,8 +17,18 @@ export class Table extends Component {
     super(props);
 
     this.state = {};
+    this.state.data = [];
     this.state.sortField = this.props.defaultSortField;
-    this.state.sortUp = false;
+    this.state.sortUp = this.props.defaultSortUp;
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.props.data !== prevProps.data ||
+      this.state.sortField !== prevState.sortField ||
+      this.state.sortUp !== prevState.sortUp
+    )
+      this.setState({ data: this.sortData(this.props.data) });
   }
 
   changeSort = (field) => {
@@ -33,10 +43,39 @@ export class Table extends Component {
     this.setState(newState);
   };
 
+  sortData = (data) => {
+    for (let index = 0; index < data.length; index++)
+      data[index].originalIndex = index;
+
+    data.sort((a, b) => this.standardCompare(a, b, this.state.sortField));
+
+    // reverse sort direction
+    if (this.state.sortUp)
+      data.reverse();
+
+    return data;
+  };
+
+  // compare function for sorting
+  standardCompare = (a, b, key) => {
+    // parse as numbers
+    const comparison = Number(a[key]) - Number(b[key]);
+    if (!Number.isNaN(comparison))
+      return comparison;
+
+    // otherwise parse as strings and compare alphabetically
+    if (a[key] < b[key])
+      return -1;
+    else if (a[key] > b[key])
+      return 1;
+    else
+      return 0;
+  };
+
   render() {
     return (
       <table>
-        <thead className='small'>
+        <thead>
           <Super
             contents={this.props.superContents}
             widths={this.props.superWidths}
@@ -57,7 +96,7 @@ export class Table extends Component {
         </thead>
         <tbody>
           <Body
-            data={this.props.data}
+            data={this.state.data}
             headContents={this.props.headContents}
             headFields={this.props.headFields}
             headAligns={this.props.headAligns}
@@ -98,7 +137,7 @@ class SuperCell extends Component {
       <Tooltip text={this.props.tooltip}>
         <th
           style={{ width: this.props.width }}
-          className={this.props.align}
+          className={'small ' + this.props.align}
           colSpan={this.props.colspan}
         >
           {this.props.content}
@@ -169,7 +208,7 @@ class HeadCell extends Component {
             className={'table_button ' + this.props.align}
             onClick={() => this.props.changeSort(this.props.field)}
           >
-            <span>{this.props.content}</span>
+            <span className='small'>{this.props.content}</span>
             <FontAwesomeIcon
               style={{
                 opacity: this.props.field === this.props.sortField ? 1 : 0.1
@@ -177,9 +216,9 @@ class HeadCell extends Component {
               icon={
                 this.props.field === this.props.sortField
                   ? this.props.sortUp
-                    ? faSortAmountUp
-                    : faSortAmountDown
-                  : faSortAmountUp
+                    ? faLongArrowAltUp
+                    : faLongArrowAltDown
+                  : faLongArrowAltUp
               }
             />
           </Button>
@@ -215,7 +254,8 @@ class BodyRow extends Component {
         return (
           <BodyCheckboxCell
             key={index}
-            value={this.props.datum[field]}
+            checked={this.props.datum[field] ? true : false}
+            content={this.props.headContents[index]}
             align={this.props.headAligns[index] || defaultAlign}
             tooltip={this.props.tooltips[index](this.props.datum) || ''}
           />
@@ -259,7 +299,9 @@ class BodyCheckboxCell extends Component {
       <Tooltip text={this.props.tooltip}>
         <td>
           <Button className={'table_button ' + this.props.align}>
-            {this.props.content}
+            <div style={{ opacity: this.props.checked ? 1 : 0.1 }}>
+              {this.props.content}
+            </div>
           </Button>
         </td>
       </Tooltip>

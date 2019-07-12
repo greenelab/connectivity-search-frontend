@@ -1,7 +1,29 @@
-// actions to update global state variables
+import { getMetagraph } from './backend-queries.js';
+import { getHetioDefinitions } from './backend-queries.js';
+import { getHetioStyles } from './backend-queries.js';
+import { getHetmechDefinitions } from './backend-queries.js';
+
+// get metagraph, hetio definitions, hetio styles, and hetmech definitions
+export function fetchDefinitions() {
+  return async function(dispatch) {
+    const metagraph = await getMetagraph();
+    const hetioDefinitions = await getHetioDefinitions();
+    const hetioStyles = await getHetioStyles();
+    const hetmechDefinitions = await getHetmechDefinitions();
+
+    dispatch(
+      setDefinitions({
+        metagraph: metagraph,
+        hetioDefinitions: hetioDefinitions,
+        hetioStyles: hetioStyles,
+        hetmechDefinitions: hetmechDefinitions
+      })
+    );
+  };
+}
 
 // set definitions
-export function setDefinitions({
+function setDefinitions({
   metagraph,
   hetioDefinitions,
   hetioStyles,
@@ -15,45 +37,5 @@ export function setDefinitions({
       hetioStyles: hetioStyles,
       hetmechDefinitions: hetmechDefinitions
     }
-  };
-}
-
-// update source and/or target node
-export function updateSourceTargetNodes({
-  sourceNode,
-  targetNode,
-  dontUpdateUrl
-}) {
-  return {
-    type: 'update_source_target_nodes',
-    payload: { sourceNode: sourceNode, targetNode: targetNode },
-    updateUrl: !dontUpdateUrl
-  };
-}
-
-// swap source/target node
-export function swapSourceTargetNodes() {
-  return {
-    type: 'swap_source_target_nodes',
-    updateUrl: false
-  };
-}
-
-// update metapaths
-export function updateMetapaths({ metapaths, dontUpdateUrl, preserveChecks }) {
-  return {
-    type: 'update_metapaths',
-    payload: { metapaths: metapaths },
-    updateUrl: !dontUpdateUrl,
-    preserveChecks: preserveChecks
-  };
-}
-
-// update path queries
-export function updatePathQueries({ pathQueries, preserveChecks }) {
-  return {
-    type: 'update_path_queries',
-    payload: { pathQueries: pathQueries },
-    preserveChecks: preserveChecks
   };
 }

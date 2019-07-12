@@ -10,48 +10,41 @@ const hetioDefinitions =
 const hetioStyles =
   'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51/describe/styles.json';
 // url for node search
-const nodeSearchServer = 'https://search-api.het.io/v1/nodes/';
+const nodeSearchUrl = 'https://search-api.het.io/v1/nodes/';
 // url for node search with results sorted by metapath count
-const nodeSearchMetapathsServer =
+const nodeSearchMetapathsUrl =
   'https://search-api.het.io/v1/count-metapaths-to/';
 // url for random node pair
-const randomNodeServer = 'https://search-api.het.io/v1/random-node-pair/';
+const randomNodeUrl = 'https://search-api.het.io/v1/random-node-pair/';
 // url for metapaths search
-const metapathSearchServer = 'https://search-api.het.io/v1/query-metapaths/';
+const metapathSearchUrl = 'https://search-api.het.io/v1/query-metapaths/';
 // url for paths search
-const pathSearchServer = 'https://search-api.het.io/v1/query-paths/';
+const pathSearchUrl = 'https://search-api.het.io/v1/query-paths/';
 
 // get resource at url and parse as json
-export function fetchJson(url, dontCache) {
-  // check if query has already been made during this session
-  // if so, use cache of that. if not, query server
-  const cachedResponse = window.sessionStorage.getItem(url);
-  if (cachedResponse && !dontCache)
-    return Promise.resolve(JSON.parse(cachedResponse));
-  else {
-    return fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          console.log('response', response.status);
-          return {};
-        } else
-          return response.json();
-      })
-      .then((results) => {
-        if (!dontCache) {
-          try {
-            // save response to cache. use try/catch in case storage
-            window.sessionStorage.setItem(url, JSON.stringify(results));
-          } catch (error) {
-            console.log(error, url);
-          }
-        }
-        return results || {};
-      })
-      .catch((error) => {
-        console.log(error, url);
-        return {};
-      });
+export async function fetchJson(url, dontCache) {
+  try {
+    // check if exact query has already been made during this session
+    // if so, use cache of that. if not, query server
+    const cachedResponse = window.sessionStorage.getItem(url);
+    if (cachedResponse && !dontCache)
+      return JSON.parse(cachedResponse);
+
+    const response = await fetch(url);
+    let json = {};
+    if (response.ok)
+      json = response.json();
+    else
+      console.log(response);
+
+    // save response to cache
+    if (!dontCache)
+      window.sessionStorage.setItem(url, JSON.stringify(json));
+
+    return json;
+  } catch (error) {
+    console.log(error, url);
+    return {};
   }
 }
 
@@ -72,14 +65,14 @@ export function getHetioStyles() {
 
 // get hetmech definitions
 export function getHetmechDefinitions() {
-  return Promise.resolve(hetmechDefinitions);
+  return hetmechDefinitions;
 }
 
 // lookup node by id
 export function lookupNodeById(id) {
   if (!id)
     return null;
-  const query = nodeSearchServer + id;
+  const query = nodeSearchUrl + id;
   return fetchJson(query);
 }
 
@@ -93,7 +86,7 @@ export function searchNodes(searchString, metatypes, otherNode) {
     params.set('metanodes', metatypes);
   if (otherNode)
     params.set('count-metapaths-to', otherNode);
-  const query = nodeSearchServer + '?' + params.toString();
+  const query = nodeSearchUrl + '?' + params.toString();
   return fetchJson(query).then((response) => {
     return response.results;
   });
@@ -101,7 +94,7 @@ export function searchNodes(searchString, metatypes, otherNode) {
 
 // search for nodes sorted by metapath count
 export function searchNodesMetapaths(otherNode) {
-  const query = nodeSearchMetapathsServer + otherNode;
+  const query = nodeSearchMetapathsUrl + otherNode;
   return fetchJson(query).then((response) => {
     return response.results;
   });
@@ -109,7 +102,7 @@ export function searchNodesMetapaths(otherNode) {
 
 // get random source/target node pair that has metapath(s)
 export function getRandomNodePair() {
-  const query = randomNodeServer;
+  const query = randomNodeUrl;
   return fetchJson(query, true).then((response) => {
     return response;
   });
@@ -120,7 +113,7 @@ export function searchMetapaths(sourceId, targetId) {
   const params = new URLSearchParams();
   params.set('source', sourceId);
   params.set('target', targetId);
-  const query = metapathSearchServer + '?' + params.toString();
+  const query = metapathSearchUrl + '?' + params.toString();
   return fetchJson(query).then((response) => {
     return response.path_counts;
   });
@@ -132,7 +125,7 @@ export function searchPaths(sourceId, targetId, metapath) {
   params.set('source', sourceId);
   params.set('target', targetId);
   params.set('metapath', metapath);
-  const query = pathSearchServer + '?' + params.toString();
+  const query = pathSearchUrl + '?' + params.toString();
   return fetchJson(query).then((response) => {
     return response;
   });

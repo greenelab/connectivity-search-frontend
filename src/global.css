@@ -408,24 +408,6 @@ td {
 td > * {
   vertical-align: middle;
 }
-.col_xs {
-  width: 30px;
-}
-.col_s {
-  width: 80px;
-}
-.col_m {
-  width: 100px;
-}
-.col_l {
-  width: 200px;
-}
-.col_xl {
-  width: 300px;
-}
-.col_xxl {
-  width: 600px;
-}
 
 /* -------------------------------------------------- */
 /* icon styles */
