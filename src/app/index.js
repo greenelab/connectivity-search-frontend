@@ -2,10 +2,12 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
+import { NodeSearch } from '../node-search';
+
 import { fetchDefinitions } from './actions.js';
 import './styles.css';
 
-// import './global.css';
+import '../global.css';
 
 // main app component
 class App extends Component {
@@ -21,12 +23,12 @@ class App extends Component {
   render() {
     return (
       <>
-        <link
+        {/* <link
           rel='stylesheet'
           type='text/css'
           href='https://het.io/global.css'
-        />
-        {/* <NodeSearch /> */}
+        /> */}
+        <NodeSearch />
       </>
     );
   }

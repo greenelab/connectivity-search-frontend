@@ -1,7 +1,7 @@
-import { getMetagraph } from './backend-queries.js';
-import { getHetioDefinitions } from './backend-queries.js';
-import { getHetioStyles } from './backend-queries.js';
-import { getHetmechDefinitions } from './backend-queries.js';
+import { getMetagraph } from '../backend-queries.js';
+import { getHetioDefinitions } from '../backend-queries.js';
+import { getHetioStyles } from '../backend-queries.js';
+import { getHetmechDefinitions } from '../backend-queries.js';
 
 // get metagraph, hetio definitions, hetio styles, and hetmech definitions
 export function fetchDefinitions() {

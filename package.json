@@ -39,6 +39,7 @@
     "eslint-plugin-html": "^5.0.5",
     "eslint-plugin-react": "^7.14.2",
     "puppeteer": "^1.18.1",
+    "redux-logger": "^3.0.6",
     "rewire": "^4.0.1"
   }
 }
