@@ -34,6 +34,6 @@ class App extends Component {
   }
 }
 // connect component to global state
-App = connect((state) => ({}))(App);
+App = connect()(App);
 
 export { App };

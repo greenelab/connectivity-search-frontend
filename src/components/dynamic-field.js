@@ -14,44 +14,40 @@ export class DynamicField extends Component {
     this.state = {};
     this.state.focused = false;
     this.field = React.createRef();
-
-    this.onClick = this.onClick.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onFocus = this.onFocus.bind(this);
   }
 
   // when field is clicked or touched
-  onClick(event) {
+  onClick = (event) => {
     // force click on link in field if link was target of click
     if (event && event.target && event.target.tagName.toLowerCase() === 'a')
       event.target.click();
     // force focus on field
     this.field.current.focus();
-  }
+  };
 
   // when field loses focus
-  onBlur() {
+  onBlur = () => {
     this.setState({ focused: false }, this.deselectAll);
-  }
+  };
 
   // when field is focused (tabbed to, clicked, etc)
-  onFocus() {
+  onFocus = () => {
     this.setState({ focused: true }, this.selectAll);
-  }
+  };
 
   // deselect any selected text in window
-  deselectAll() {
+  deselectAll = () => {
     window.getSelection().empty();
-  }
+  };
 
   // select contents of field
-  selectAll() {
+  selectAll = () => {
     // set delay for select to make sure component has rendered
     window.setTimeout(function() {
       window.getSelection().empty();
       window.getSelection().selectAllChildren(document.activeElement);
     }, 10);
-  }
+  };
 
   // display component
   render() {

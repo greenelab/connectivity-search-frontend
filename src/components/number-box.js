@@ -12,10 +12,6 @@ export class NumberBox extends Component {
 
     this.state = {};
     this.state.value = this.props.value;
-
-    this.onChange = this.onChange.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
-    this.onBlur = this.onBlur.bind(this);
   }
 
   // when component updates
@@ -25,42 +21,42 @@ export class NumberBox extends Component {
   }
 
   // when user changes field
-  onChange(event) {
+  onChange = (event) => {
     this.setState({ value: event.target.value });
     if (event.nativeEvent.data === undefined)
       this.onArrows(event.target.value);
     else
       this.onType(event.target.value);
-  }
+  };
 
   // when user presses key in box
-  onKeyPress(event) {
+  onKeyPress = (event) => {
     if (event.key.toLowerCase() === 'enter')
       event.target.blur();
-  }
+  };
 
   // when user un-focuses field
-  onBlur(event) {
+  onBlur = (event) => {
     this.onSubmit(event.target.value);
-  }
+  };
 
   // when box changed via arrow buttons or arrow keys
-  onArrows(value) {
+  onArrows = (value) => {
     if (this.props.onArrows)
       this.props.onArrows(value);
-  }
+  };
 
   // when box changed via typing or copy/paste
-  onType(value) {
+  onType = (value) => {
     if (this.props.onType)
       this.props.onType(value);
-  }
+  };
 
   // when box change submitted
-  onSubmit(value) {
+  onSubmit = (value) => {
     if (this.props.onSubmit)
       this.props.onSubmit(value);
-  }
+  };
 
   // display component
   render() {

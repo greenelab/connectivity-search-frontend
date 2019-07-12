@@ -6,7 +6,6 @@ import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faHighlighter } from '@fortawesome/free-solid-svg-icons';
 
 import { Tooltip } from './tooltip.js';
-import './buttons.css';
 
 // button component
 export class Button extends Component {

@@ -15,10 +15,6 @@ export class CollapsibleSection extends Component {
 
     this.state = {};
     this.state.collapsed = false;
-
-    this.loadState = this.loadState.bind(this);
-    this.saveState = this.saveState.bind(this);
-    this.toggle = this.toggle.bind(this);
   }
 
   // when component mounts
@@ -28,23 +24,23 @@ export class CollapsibleSection extends Component {
   }
 
   // load collapsed state from local storage if exists
-  loadState() {
+  loadState = () => {
     const key = this.props.label;
     return key && window.localStorage.getItem(key) === 'true';
-  }
+  };
 
   // save collapse state to local storage
-  saveState(collapsed) {
+  saveState = (collapsed) => {
     const key = this.props.label;
     if (key)
       window.localStorage.setItem(key, String(String(collapsed) === 'true'));
-  }
+  };
 
   // toggle collapse/expand
-  toggle() {
+  toggle = () => {
     this.setState({ collapsed: !this.state.collapsed });
     this.saveState(!this.state.collapsed);
-  }
+  };
 
   // display component
   render() {

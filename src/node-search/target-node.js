@@ -13,7 +13,7 @@ export class TargetNode extends Component {
     // unfocus search box on selection
     if (value)
       document.activeElement.blur();
-  }
+  };
 
   // display component
   render() {

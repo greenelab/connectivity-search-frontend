@@ -75,8 +75,16 @@ export class Test extends Component {
             <br />
             DWPC's
           </>,
-          <>non-0<br/>mean</>,
-          <>non-0<br/>&sigma;</>,
+          <>
+            non-0
+            <br />
+            mean
+          </>,
+          <>
+            non-0
+            <br />
+            &sigma;
+          </>,
           <a
             href='https://neo4j.het.io/browser/'
             target='_blank'
