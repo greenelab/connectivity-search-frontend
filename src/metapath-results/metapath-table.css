@@ -1,3 +1,6 @@
 .metapath_results_table .metanode_chip {
   margin: 0;
 }
+.metapath_results_table th {
+  height: 40px;
+}

@@ -60,7 +60,17 @@ export class NodeTable extends Component {
       .map((field) => ({
         firstCol: field,
         secondCol: String(this.props.node.properties[field])
-      }));
+      }))
+      .concat(
+        {
+          firstCol: 'identifier',
+          secondCol: String(this.props.node.identifier)
+        },
+        {
+          firstCol: 'id',
+          secondCol: String(this.props.node.id)
+        }
+      );
 
     return rows;
   };

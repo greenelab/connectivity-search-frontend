@@ -17,6 +17,160 @@ import './metapath-table.css';
 export class MetapathTable extends Component {
   // display component
   render() {
+    let superContents = [];
+    let superWidths = [];
+    let superAligns = [];
+    let superColspans = [];
+
+    if (this.props.showMore) {
+      superContents = [
+        '',
+        '',
+        '',
+        '',
+        '',
+        '',
+        <div className='line_sides'>Null DWPC distribution information</div>,
+        ''
+      ];
+      superWidths = [25, 200, 100, 100, 100, 100, 600, 200];
+      superAligns = [];
+      superColspans = [1, 1, 1, 1, 1, 1, 6, 1];
+    }
+
+    let headContents = [
+      <FontAwesomeIcon className='fa-xs' icon={faCheck} />,
+      'metapath',
+      <>
+        path
+        <br />
+        count
+      </>,
+      <>
+        adjusted
+        <br />
+        <i>p</i>-value
+      </>
+    ];
+    let headFields = [
+      'checked',
+      'metapath_metaedges',
+      'path_count',
+      'adjusted_p_value'
+    ];
+    const headWidths = [25, 200, 100, 100];
+    const headAligns = ['', 'left'];
+    const headTooltips = [
+      'Show/hide all paths',
+      this.props.tooltipDefinitions['metapath'],
+      this.props.tooltipDefinitions['path_count'],
+      this.props.tooltipDefinitions['adjusted_p_value'],
+      this.props.tooltipDefinitions['p_value'],
+      this.props.tooltipDefinitions['dwpc'],
+      this.props.tooltipDefinitions['dgp_source_degree'],
+      this.props.tooltipDefinitions['dgp_target_degree'],
+      this.props.tooltipDefinitions['dgp_n_dwpcs'],
+      this.props.tooltipDefinitions['dgp_n_nonzero_dwpcs'],
+      this.props.tooltipDefinitions['dgp_nonzero_mean'],
+      this.props.tooltipDefinitions['dgp_nonzero_sd'],
+      this.props.tooltipDefinitions['cypher_query']
+    ];
+
+    if (this.props.showMore) {
+      headContents = headContents.concat([
+        <>
+          <i>p</i>-value
+        </>,
+        'DWPC',
+        <>
+          source
+          <br />
+          degree
+        </>,
+        <>
+          target
+          <br />
+          degree
+        </>,
+        "# DWPC's",
+        <>
+          # non-0
+          <br />
+          DWPC's
+        </>,
+        <>
+          non-0
+          <br />
+          mean
+        </>,
+        <>
+          non-0
+          <br />
+          &sigma;
+        </>,
+        <a
+          href='https://neo4j.het.io/browser/'
+          target='_blank'
+          rel='noopener noreferrer'
+          onClick={(event) => event.stopPropagation()}
+        >
+          neo4j query
+        </a>
+      ]);
+      headFields = headFields.concat([
+        'p_value',
+        'dwpc',
+        'dgp_source_degree',
+        'dgp_target_degree',
+        'dgp_n_dwpcs',
+        'dgp_n_nonzero_dwpcs',
+        'dgp_nonzero_mean',
+        'dgp_nonzero_sd',
+        'cypher_query'
+      ]);
+    }
+
+    const bodyValues = [
+      null,
+      (datum) => metapathChips(datum.metapath_metaedges),
+      (datum) => toComma(datum.path_count),
+      (datum) => toExponential(datum.adjusted_p_value),
+      (datum) => toExponential(datum.p_value),
+      (datum) => toFixed(datum.dwpc),
+      (datum) => toComma(datum.dgp_source_degree),
+      (datum) => toComma(datum.dgp_target_degree),
+      (datum) => toComma(datum.dgp_n_dwpcs),
+      (datum) => toComma(datum.dgp_n_nonzero_dwpcs),
+      (datum) => toFixed(datum.dgp_nonzero_mean),
+      (datum) => toFixed(datum.dgp_nonzero_sd),
+      (datum) => cutString(datum.cypher_query, 16)
+    ];
+    const bodyFullValues = [
+      null,
+      (datum) => datum.metapath_name,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      (datum) => <textarea rows='4' cols='50' value={datum.cypher_query} />
+    ];
+    const bodyColors = [
+      null,
+      null,
+      null,
+      (datum) => toGradient(datum.adjusted_p_value),
+      (datum) => toGradient(datum.p_value)
+    ];
+    const bodyTooltips = [
+      (datum) => 'Show these ' + datum.path_count + ' paths in the paths table'
+    ];
+
     return (
       <div className='table_container' data-expanded={this.props.showMore}>
         <Table
@@ -24,148 +178,19 @@ export class MetapathTable extends Component {
           data={this.props.metapaths}
           defaultSortField='adjusted_p_value'
           defaultSortUp={false}
-          superContents={[
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            <div className='line_sides'>
-              Null DWPC distribution information
-            </div>,
-            ''
-          ]}
-          superWidths={[30, 200, 100, 100, 100, 100, 600, 200]}
-          superAligns={[]}
-          superColspans={[1, 1, 1, 1, 1, 1, 6, 1]}
-          headContents={[
-            <FontAwesomeIcon className='fa-xs' icon={faCheck} />,
-            'metapath',
-            <>
-              path
-              <br />
-              count
-            </>,
-            <>
-              adjusted
-              <br />
-              <i>p</i>-value
-            </>,
-            <>
-              <i>p</i>-value
-            </>,
-            'DWPC',
-            <>
-              source
-              <br />
-              degree
-            </>,
-            <>
-              target
-              <br />
-              degree
-            </>,
-            "# DWPC's",
-            <>
-              # non-0
-              <br />
-              DWPC's
-            </>,
-            <>
-              non-0
-              <br />
-              mean
-            </>,
-            <>
-              non-0
-              <br />
-              &sigma;
-            </>,
-            <a
-              href='https://neo4j.het.io/browser/'
-              target='_blank'
-              rel='noopener noreferrer'
-              onClick={(event) => event.stopPropagation()}
-            >
-              neo4j query
-            </a>
-          ]}
-          headFields={[
-            'checked',
-            'metapath_metaedges',
-            'path_count',
-            'adjusted_p_value',
-            'p_value',
-            'dwpc',
-            'dgp_source_degree',
-            'dgp_target_degree',
-            'dgp_n_dwpcs',
-            'dgp_n_nonzero_dwpcs',
-            'dgp_nonzero_mean',
-            'dgp_nonzero_sd',
-            'cypher_query'
-          ]}
-          headWidths={[]}
-          headAligns={['', 'left']}
-          headTooltips={[
-            'Show/hide all paths',
-            this.props.tooltipDefinitions['metapath'],
-            this.props.tooltipDefinitions['path_count'],
-            this.props.tooltipDefinitions['adjusted_p_value'],
-            this.props.tooltipDefinitions['p_value'],
-            this.props.tooltipDefinitions['dwpc'],
-            this.props.tooltipDefinitions['dgp_source_degree'],
-            this.props.tooltipDefinitions['dgp_target_degree'],
-            this.props.tooltipDefinitions['dgp_n_dwpcs'],
-            this.props.tooltipDefinitions['dgp_n_nonzero_dwpcs'],
-            this.props.tooltipDefinitions['dgp_nonzero_mean'],
-            this.props.tooltipDefinitions['dgp_nonzero_sd'],
-            this.props.tooltipDefinitions['cypher_query']
-          ]}
-          bodyValues={[
-            null,
-            (datum) => metapathChips(datum.metapath_metaedges),
-            (datum) => toComma(datum.path_count),
-            (datum) => toExponential(datum.adjusted_p_value),
-            (datum) => toExponential(datum.p_value),
-            (datum) => toFixed(datum.dwpc),
-            (datum) => toComma(datum.dgp_source_degree),
-            (datum) => toComma(datum.dgp_target_degree),
-            (datum) => toComma(datum.dgp_n_dwpcs),
-            (datum) => toComma(datum.dgp_n_nonzero_dwpcs),
-            (datum) => toFixed(datum.dgp_nonzero_mean),
-            (datum) => toFixed(datum.dgp_nonzero_sd),
-            (datum) => cutString(datum.cypher_query, 16)
-          ]}
-          bodyFullValues={[
-            null,
-            (datum) => datum.metapath_name,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            (datum) => (
-              <textarea rows='4' cols='50' value={datum.cypher_query} />
-            )
-          ]}
-          bodyColors={[
-            null,
-            null,
-            null,
-            (datum) => toGradient(datum.adjusted_p_value),
-            (datum) => toGradient(datum.p_value)
-          ]}
-          bodyTooltips={[
-            (datum) =>
-              'Show these ' + datum.path_count + ' paths in the paths table'
-          ]}
+          superContents={superContents}
+          superWidths={superWidths}
+          superAligns={superAligns}
+          superColspans={superColspans}
+          headContents={headContents}
+          headFields={headFields}
+          headWidths={headWidths}
+          headAligns={headAligns}
+          headTooltips={headTooltips}
+          bodyValues={bodyValues}
+          bodyFullValues={bodyFullValues}
+          bodyColors={bodyColors}
+          bodyTooltips={bodyTooltips}
         />
       </div>
     );

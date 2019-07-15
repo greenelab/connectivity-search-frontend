@@ -11,9 +11,6 @@ import { compareObjects } from '../util/object.js';
 
 import './table.css';
 
-const defaultWidth = 200;
-const defaultAlign = 'center';
-
 export class Table extends Component {
   constructor(props) {
     super(props);
@@ -122,8 +119,8 @@ class Super extends Component {
       <SuperCell
         key={index}
         content={content}
-        width={this.props.widths[index] || defaultWidth}
-        align={this.props.aligns[index] || defaultAlign}
+        width={this.props.widths[index]}
+        align={this.props.aligns[index]}
         colspan={this.props.colspans[index] || 1}
       />
     ));
@@ -139,8 +136,8 @@ class SuperCell extends Component {
   render() {
     return (
       <th
-        style={{ width: this.props.width }}
-        className={'small ' + this.props.align}
+        style={{ width: this.props.width || 'unset' }}
+        className={'small ' + (this.props.align || '')}
         colSpan={this.props.colspan}
       >
         {this.props.content}
@@ -158,8 +155,8 @@ class Head extends Component {
             key={index}
             content={content}
             field={this.props.fields || null}
-            width={this.props.widths[index] || defaultWidth}
-            align={this.props.aligns[index] || defaultAlign}
+            width={this.props.widths[index]}
+            align={this.props.aligns[index]}
             tooltip={this.props.tooltips[index] || ''}
           />
         );
@@ -169,8 +166,8 @@ class Head extends Component {
             key={index}
             content={content}
             field={this.props.fields[index] || null}
-            width={this.props.widths[index] || defaultWidth}
-            align={this.props.aligns[index] || defaultAlign}
+            width={this.props.widths[index]}
+            align={this.props.aligns[index]}
             tooltip={this.props.tooltips[index] || ''}
             sortField={this.props.sortField}
             sortUp={this.props.sortUp}
@@ -191,8 +188,8 @@ class HeadCheckboxCell extends Component {
   render() {
     return (
       <Tooltip text={this.props.tooltip}>
-        <th style={{ width: this.props.width }}>
-          <Button className={'table_button ' + this.props.align}>
+        <th style={{ width: this.props.width || 'unset' }}>
+          <Button className={'table_button ' + (this.props.align || '')}>
             {this.props.content}
           </Button>
         </th>
@@ -205,9 +202,9 @@ class HeadCell extends Component {
   render() {
     return (
       <Tooltip text={this.props.tooltip}>
-        <th style={{ width: this.props.width }}>
+        <th style={{ width: this.props.width || 'unset' }}>
           <Button
-            className={'table_button ' + this.props.align}
+            className={'table_button ' + (this.props.align || '')}
             onClick={() => this.props.changeSort(this.props.field)}
           >
             <span className='small'>{this.props.content}</span>
@@ -258,7 +255,7 @@ class BodyRow extends Component {
             key={index}
             checked={this.props.datum[field] ? true : false}
             content={this.props.headContents[index]}
-            align={this.props.headAligns[index] || defaultAlign}
+            align={this.props.headAligns[index]}
             tooltip={this.props.tooltips[index](this.props.datum) || ''}
           />
         );
@@ -276,7 +273,7 @@ class BodyRow extends Component {
                 ? this.props.fullValues[index](this.props.datum)
                 : this.props.datum[field]
             }
-            align={this.props.headAligns[index] || defaultAlign}
+            align={this.props.headAligns[index]}
             color={
               this.props.colors[index]
                 ? this.props.colors[index](this.props.datum)
@@ -300,7 +297,7 @@ class BodyCheckboxCell extends Component {
     return (
       <Tooltip text={this.props.tooltip}>
         <td>
-          <Button className={'table_button ' + this.props.align}>
+          <Button className={'table_button ' + (this.props.align || '')}>
             <div style={{ opacity: this.props.checked ? 1 : 0.1 }}>
               {this.props.content}
             </div>
