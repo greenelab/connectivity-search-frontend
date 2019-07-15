@@ -177,7 +177,7 @@ export class NodeChip extends Component {
   render() {
     let fillColor = '#424242';
     let textColor = '#fafafa';
-    const style = {};
+    let style = {};
     if (this.props.hetioStyles)
       style = this.props.hetioStyles[this.props.type];
     if (style && style.fill_color)

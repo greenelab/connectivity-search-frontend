@@ -9,7 +9,9 @@ import { setSourceTargetNode } from './actions.js';
 export class TargetNode extends Component {
   // when user makes a new node selection
   onChange = (value) => {
-    this.props.dispatch(setSourceTargetNode({ targetNode: value }));
+    this.props.dispatch(
+      setSourceTargetNode({ targetNode: value, updateUrl: true })
+    );
     // unfocus search box on selection
     if (value)
       document.activeElement.blur();

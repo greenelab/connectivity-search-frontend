@@ -7,6 +7,8 @@ import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons';
 import { Button } from './buttons.js';
 import { Tooltip } from './tooltip.js';
 import { DynamicField } from './dynamic-field.js';
+import { compareObjects } from '../util/object.js';
+
 import './table.css';
 
 const defaultWidth = 200;
@@ -22,9 +24,13 @@ export class Table extends Component {
     this.state.sortUp = this.props.defaultSortUp;
   }
 
+  componentDidMount() {
+    this.setState({ data: this.sortData(this.props.data) });
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (
-      this.props.data !== prevProps.data ||
+      !compareObjects(this.props.data, prevProps.data) ||
       this.state.sortField !== prevState.sortField ||
       this.state.sortUp !== prevState.sortUp
     )
@@ -74,14 +80,13 @@ export class Table extends Component {
 
   render() {
     return (
-      <table>
+      <table className={this.props.className}>
         <thead>
           <Super
             contents={this.props.superContents}
             widths={this.props.superWidths}
             aligns={this.props.superAligns}
             colspans={this.props.superColspans}
-            tooltips={this.props.superTooltips}
           />
           <Head
             contents={this.props.headContents}
@@ -120,7 +125,6 @@ class Super extends Component {
         width={this.props.widths[index] || defaultWidth}
         align={this.props.aligns[index] || defaultAlign}
         colspan={this.props.colspans[index] || 1}
-        tooltip={this.props.tooltips[index] || ''}
       />
     ));
 
@@ -134,15 +138,13 @@ class Super extends Component {
 class SuperCell extends Component {
   render() {
     return (
-      <Tooltip text={this.props.tooltip}>
-        <th
-          style={{ width: this.props.width }}
-          className={'small ' + this.props.align}
-          colSpan={this.props.colspan}
-        >
-          {this.props.content}
-        </th>
-      </Tooltip>
+      <th
+        style={{ width: this.props.width }}
+        className={'small ' + this.props.align}
+        colSpan={this.props.colspan}
+      >
+        {this.props.content}
+      </th>
     );
   }
 }

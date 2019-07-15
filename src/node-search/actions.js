@@ -2,11 +2,14 @@ import { getRandomNodePair } from '../backend-queries.js';
 import { lookupNodeById } from '../backend-queries.js';
 
 // set source and/or target node
-export function setSourceTargetNode({ sourceNode, targetNode, dontUpdateUrl }) {
+export function setSourceTargetNode({ sourceNode, targetNode, updateUrl }) {
   return {
     type: 'set_source_target_node',
-    payload: { sourceNode: sourceNode, targetNode: targetNode },
-    updateUrl: !dontUpdateUrl
+    payload: {
+      sourceNode: sourceNode,
+      targetNode: targetNode,
+      updateUrl: updateUrl
+    }
   };
 }
 
@@ -14,7 +17,7 @@ export function setSourceTargetNode({ sourceNode, targetNode, dontUpdateUrl }) {
 export function swapSourceTargetNode() {
   return {
     type: 'swap_source_target_node',
-    updateUrl: false
+    payload: { updateUrl: true }
   };
 }
 
@@ -28,7 +31,8 @@ export function fetchRandomNodePair() {
     dispatch(
       setSourceTargetNode({
         sourceNode: source,
-        targetNode: target
+        targetNode: target,
+        updateUrl: true
       })
     );
   };
