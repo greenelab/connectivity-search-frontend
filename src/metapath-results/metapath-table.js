@@ -130,6 +130,29 @@ export class MetapathTable extends Component {
       ]);
     }
 
+    const compareFunction = (field) => {
+      if (field === 'metapath_metaedges') {
+        return (a, b, key) => {
+          a = a[key];
+          b = b[key];
+          // first by length
+          if (a.length < b.length)
+            return -1;
+          else if (a.length > b.length)
+            return 1;
+          else {
+            // then alphabetically
+            if (a < b)
+              return -1;
+            else if (a > b)
+              return 1;
+            else
+              return 0;
+          }
+        };
+      } else
+        return null;
+    };
     const bodyValues = [
       null,
       (datum) => metapathChips(datum.metapath_metaedges),
@@ -187,6 +210,7 @@ export class MetapathTable extends Component {
           headWidths={headWidths}
           headAligns={headAligns}
           headTooltips={headTooltips}
+          compareFunction={compareFunction}
           bodyValues={bodyValues}
           bodyFullValues={bodyFullValues}
           bodyColors={bodyColors}

@@ -11,7 +11,9 @@ import { compareObjects } from '../util/object.js';
 
 import './table.css';
 
+//
 export class Table extends Component {
+  // initialize component
   constructor(props) {
     super(props);
 
@@ -21,10 +23,12 @@ export class Table extends Component {
     this.state.sortUp = this.props.defaultSortUp;
   }
 
+  // when component mounts
   componentDidMount() {
     this.setState({ data: this.sortData(this.props.data) });
   }
 
+  // when component updates
   componentDidUpdate(prevProps, prevState) {
     if (
       !compareObjects(this.props.data, prevProps.data) ||
@@ -34,6 +38,7 @@ export class Table extends Component {
       this.setState({ data: this.sortData(this.props.data) });
   }
 
+  //
   changeSort = (field) => {
     const newState = {};
     newState.sortField = field;
@@ -46,11 +51,19 @@ export class Table extends Component {
     this.setState(newState);
   };
 
+  //
   sortData = (data) => {
-    for (let index = 0; index < data.length; index++)
-      data[index].originalIndex = index;
+    // get compare function from props or standard/default compare
+    let compare;
+    if (this.props.compareFunction) {
+      compare =
+        this.props.compareFunction(this.state.sortField) ||
+        this.standardCompare;
+    } else
+      compare = this.standardCompare;
 
-    data.sort((a, b) => this.standardCompare(a, b, this.state.sortField));
+    // sort
+    data.sort((a, b) => compare(a, b, this.state.sortField));
 
     // reverse sort direction
     if (this.state.sortUp)
@@ -61,15 +74,17 @@ export class Table extends Component {
 
   // compare function for sorting
   standardCompare = (a, b, key) => {
+    a = a[key];
+    b = b[key];
     // parse as numbers
-    const comparison = Number(a[key]) - Number(b[key]);
+    const comparison = Number(a) - Number(b);
     if (!Number.isNaN(comparison))
       return comparison;
 
     // otherwise parse as strings and compare alphabetically
-    if (a[key] < b[key])
+    if (a < b)
       return -1;
-    else if (a[key] > b[key])
+    else if (a > b)
       return 1;
     else
       return 0;
@@ -121,7 +136,7 @@ class Super extends Component {
         content={content}
         width={this.props.widths[index]}
         align={this.props.aligns[index]}
-        colspan={this.props.colspans[index] || 1}
+        colspan={this.props.colspans[index]}
       />
     ));
 
@@ -138,7 +153,7 @@ class SuperCell extends Component {
       <th
         style={{ width: this.props.width || 'unset' }}
         className={'small ' + (this.props.align || '')}
-        colSpan={this.props.colspan}
+        colSpan={this.props.colspan || 1}
       >
         {this.props.content}
       </th>
@@ -154,10 +169,10 @@ class Head extends Component {
           <HeadCheckboxCell
             key={index}
             content={content}
-            field={this.props.fields || null}
+            field={this.props.fields}
             width={this.props.widths[index]}
             align={this.props.aligns[index]}
-            tooltip={this.props.tooltips[index] || ''}
+            tooltip={this.props.tooltips[index]}
           />
         );
       } else {
@@ -165,10 +180,10 @@ class Head extends Component {
           <HeadCell
             key={index}
             content={content}
-            field={this.props.fields[index] || null}
+            field={this.props.fields[index]}
             width={this.props.widths[index]}
             align={this.props.aligns[index]}
-            tooltip={this.props.tooltips[index] || ''}
+            tooltip={this.props.tooltips[index]}
             sortField={this.props.sortField}
             sortUp={this.props.sortUp}
             changeSort={this.props.changeSort}
@@ -187,7 +202,7 @@ class Head extends Component {
 class HeadCheckboxCell extends Component {
   render() {
     return (
-      <Tooltip text={this.props.tooltip}>
+      <Tooltip text={this.props.tooltip || ''}>
         <th style={{ width: this.props.width || 'unset' }}>
           <Button className={'table_button ' + (this.props.align || '')}>
             {this.props.content}
@@ -201,7 +216,7 @@ class HeadCheckboxCell extends Component {
 class HeadCell extends Component {
   render() {
     return (
-      <Tooltip text={this.props.tooltip}>
+      <Tooltip text={this.props.tooltip || ''}>
         <th style={{ width: this.props.width || 'unset' }}>
           <Button
             className={'table_button ' + (this.props.align || '')}
@@ -256,7 +271,11 @@ class BodyRow extends Component {
             checked={this.props.datum[field] ? true : false}
             content={this.props.headContents[index]}
             align={this.props.headAligns[index]}
-            tooltip={this.props.tooltips[index](this.props.datum) || ''}
+            tooltip={
+              this.props.tooltips[index]
+                ? this.props.tooltips[index](this.props.datum)
+                : ''
+            }
           />
         );
       } else {
@@ -295,7 +314,7 @@ class BodyRow extends Component {
 class BodyCheckboxCell extends Component {
   render() {
     return (
-      <Tooltip text={this.props.tooltip}>
+      <Tooltip text={this.props.tooltip || ''}>
         <td>
           <Button className={'table_button ' + (this.props.align || '')}>
             <div style={{ opacity: this.props.checked ? 1 : 0.1 }}>
@@ -311,12 +330,12 @@ class BodyCheckboxCell extends Component {
 class BodyCell extends Component {
   render() {
     return (
-      <Tooltip text={this.props.tooltip}>
-        <td style={{ background: this.props.color }}>
+      <Tooltip text={this.props.tooltip || ''}>
+        <td style={{ background: this.props.color || 'none' }}>
           <DynamicField
-            className={this.props.align}
-            value={this.props.value}
-            fullValue={this.props.fullValue}
+            className={this.props.align || ''}
+            value={this.props.value || '-'}
+            fullValue={this.props.fullValue || '-'}
           />
         </td>
       </Tooltip>
