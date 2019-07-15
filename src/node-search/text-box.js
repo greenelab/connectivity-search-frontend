@@ -62,7 +62,7 @@ export class TextBox extends Component {
             onChange: this.onInput
           })}
           inputRef={this.props.inputRef}
-          placeholder='id, name, or metanode'
+          placeholder='name or identifier'
           classes={{ root: 'node_search_field_container' }}
           InputProps={{
             classes: {

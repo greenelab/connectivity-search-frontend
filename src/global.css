@@ -335,7 +335,7 @@ button[data-disabled='true'] {
   color: #02b3e4;
 }
 .semibold {
-  font-weight: 600;
+  font-weight: 500;
 }
 .left {
   text-align: left !important;
@@ -403,13 +403,14 @@ table {
 th {
   position: sticky;
   top: 0;
-  z-index: 99;
+  font-weight: 500;
+  z-index: 9;
 }
 th,
 td {
   box-sizing: border-box;
   padding: 0;
-  height: 28px;
+  height: 25px;
 }
 td > * {
   vertical-align: middle;

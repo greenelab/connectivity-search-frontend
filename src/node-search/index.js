@@ -116,11 +116,7 @@ export class NodeSearch extends Component {
       <FilterButton
         key={index}
         name={filter.name}
-        tooltipText={
-          this.props.hetioDefinitions
-            ? this.props.hetioDefinitions.metanodes[filter.name]
-            : ''
-        }
+        tooltipText={this.props.tooltipDefinitions[filter.name]}
         active={filter.active}
         toggle={this.toggle}
         solo={this.solo}
@@ -150,5 +146,5 @@ export class NodeSearch extends Component {
 // connect component to global state
 NodeSearch = connect((state) => ({
   metagraph: state.metagraph,
-  hetioDefinitions: state.hetioDefinitions
+  tooltipDefinitions: state.tooltipDefinitions
 }))(NodeSearch);

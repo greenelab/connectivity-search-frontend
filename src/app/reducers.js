@@ -7,15 +7,6 @@ export function metagraph(state = {}, action) {
   }
 }
 
-export function hetioDefinitions(state = {}, action) {
-  switch (action.type) {
-    case 'set_definitions':
-      return action.payload.hetioDefinitions || {};
-    default:
-      return state;
-  }
-}
-
 export function hetioStyles(state = {}, action) {
   switch (action.type) {
     case 'set_definitions':
@@ -25,10 +16,10 @@ export function hetioStyles(state = {}, action) {
   }
 }
 
-export function hetmechDefinitions(state = {}, action) {
+export function tooltipDefinitions(state = {}, action) {
   switch (action.type) {
     case 'set_definitions':
-      return action.payload.hetmechDefinitions || {};
+      return action.payload.tooltipDefinitions || {};
     default:
       return state;
   }

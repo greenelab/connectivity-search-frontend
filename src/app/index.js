@@ -3,6 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { NodeSearch } from '../node-search';
+import { NodeResults } from '../node-results';
 
 import { fetchDefinitions } from './actions.js';
 import './index.css';
@@ -29,6 +30,7 @@ class App extends Component {
           href='https://het.io/global.css'
         /> */}
         <NodeSearch />
+        <NodeResults />
       </>
     );
   }

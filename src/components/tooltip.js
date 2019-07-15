@@ -1,12 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Component } from 'react';
-import Fade from '@material-ui/core/Fade';
 
 import './tooltip.css';
 
 // open delay in ms
-const delay = 1000;
+const delay = 500;
 
 // tooltip (helper text) popup component
 export class Tooltip extends Component {
@@ -27,7 +26,7 @@ export class Tooltip extends Component {
 
   // when mouse enters target
   onMouseEnter = (event) => {
-    const target = event.target;
+    const target = event.currentTarget;
     // delay opening tooltip
     window.setTimeout(() => this.openTooltip(target), delay);
     // track hover state
@@ -103,17 +102,15 @@ export class Tooltip extends Component {
 class Popup extends Component {
   render() {
     return ReactDOM.createPortal(
-      <Fade in={this.props.open}>
-        <div
-          className='tooltip'
-          style={{
-            left: this.props.x + 'px',
-            top: this.props.y + 'px'
-          }}
-        >
-          {this.props.text}
-        </div>
-      </Fade>,
+      <div
+        className='tooltip'
+        style={{
+          left: this.props.x + 'px',
+          top: this.props.y + 'px'
+        }}
+      >
+        {this.props.text}
+      </div>,
       document.body
     );
   }
