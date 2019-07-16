@@ -1,3 +1,5 @@
+import { compareElements } from './array.js';
+
 // loop through new array of objects. for each object, find object in old
 // array that matches all compare keys, and transfer specified keys from
 // old object to new
@@ -11,7 +13,7 @@ export function transferObjectProps(
     for (const oldElement of oldArray) {
       let matches = true;
       for (const compareKey of compareKeys) {
-        if (oldElement[compareKey] !== newElement[compareKey]) {
+        if (!compareElements(oldElement[compareKey], newElement[compareKey])) {
           matches = false;
           break;
         }
