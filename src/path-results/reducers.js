@@ -1,13 +1,24 @@
 import { assemblePath } from './assemble.js';
 import { textDescription } from './assemble.js';
+import { transferObjectProps } from '../util/object.js';
 
 export function paths(state = {}, action) {
   switch (action.type) {
     case 'set_paths':
-      const newPaths = action.payload.paths;
-      const nodes = { ...state, ...(action.payload.nodes || {}) };
+      let newPaths = action.payload.paths;
+
+      if (action.payload.preserveChecks) {
+        newPaths = transferObjectProps(
+          state.paths,
+          action.payload.paths,
+          ['node_ids', 'rel_ids'],
+          ['checked', 'highlighted']
+        );
+      }
+
+      const nodes = { ...state.nodes, ...(action.payload.nodes || {}) };
       const relationships = {
-        ...state,
+        ...state.relationships,
         ...(action.payload.relationships || {})
       };
 
@@ -18,7 +29,7 @@ export function paths(state = {}, action) {
 
       return newPaths || [];
     default:
-      return state;
+      return state.paths || [];
   }
 }
 

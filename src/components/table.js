@@ -64,8 +64,10 @@ export class Table extends Component {
     )
       compare = this.props.compareFunction(this.state.sortField);
 
+    const originalData = copyObject(data);
+
     // sort
-    data.sort((a, b) => compare(a, b, this.state.sortField));
+    data.sort((a, b) => compare(a, b, this.state.sortField, originalData));
 
     // reverse sort direction
     if (this.state.sortUp)
@@ -75,21 +77,33 @@ export class Table extends Component {
   };
 
   // compare function for sorting
-  standardCompare = (a, b, key) => {
-    a = a[key];
-    b = b[key];
+  standardCompare = (a, b, key, original) => {
+    // get values
+    const aValue = a[key];
+    const bValue = b[key];
+
+    // get original positions in array
+    const aIndex = original.findIndex((element) => compareObjects(element, a));
+    const bIndex = original.findIndex((element) => compareObjects(element, b));
+
     // parse as numbers
-    const comparison = Number(a) - Number(b);
-    if (!Number.isNaN(comparison))
-      return comparison;
+    const comparison = Number(aValue) - Number(bValue);
+    if (!Number.isNaN(comparison)) {
+      // if equal, preserve original order
+      if (comparison === 0)
+        return bIndex - aIndex;
+      else
+        return comparison;
+    }
 
     // otherwise parse as strings and compare alphabetically
-    if (a < b)
+    if (aValue < bValue)
       return -1;
-    else if (a > b)
+    else if (aValue > bValue)
       return 1;
     else
-      return 0;
+      return bIndex - aIndex;
+    // if equal, preserve original order
   };
 
   // toggles the specified checkbox on/off
@@ -340,6 +354,7 @@ class BodyRow extends Component {
             key={index}
             datum={this.props.datum}
             field={field}
+            content={this.context.headContents[index]}
             checked={this.props.datum[field] ? true : false}
             style={this.context.bodyStyles[index]}
             className={this.context.bodyClasses[index]}
@@ -351,6 +366,7 @@ class BodyRow extends Component {
           <BodyCell
             key={index}
             datum={this.props.datum}
+            field={field}
             value={this.context.bodyValues[index]}
             fullValue={this.context.bodyFullValues[index]}
             style={this.context.bodyStyles[index]}
@@ -367,27 +383,13 @@ BodyRow.contextType = TableContext;
 
 class BodyCheckboxCell extends Component {
   render() {
-    let style;
-    if (typeof this.props.style === 'function')
-      style = this.props.style(this.props.datum) || {};
-    else
-      style = this.props.style || {};
-
-    let className;
-    if (typeof this.props.className === 'function')
-      className = this.props.className(this.props.datum) || '';
-    else
-      className = this.props.className || '';
-
-    let tooltip;
-    if (typeof this.props.tooltip === 'function')
-      tooltip = this.props.tooltip(this.props.datum) || '';
-    else
-      tooltip = this.props.tooltip || '';
+    const style = propValOrFunc(this.props, 'style', 'datum', {});
+    const className = propValOrFunc(this.props, 'className', 'datum', '');
+    const tooltip = propValOrFunc(this.props, 'tooltip', 'datum', '');
 
     return (
       <Tooltip text={tooltip}>
-        <td style={style} className={className || ''}>
+        <td style={style} className={className}>
           <Button
             className={'table_button'}
             onClick={() =>
@@ -410,35 +412,34 @@ BodyCheckboxCell.contextType = TableContext;
 
 class BodyCell extends Component {
   render() {
-    let style;
-    if (typeof this.props.style === 'function')
-      style = this.props.style(this.props.datum) || {};
-    else
-      style = this.props.style || {};
-
-    let className;
-    if (typeof this.props.className === 'function')
-      className = this.props.className(this.props.datum) || '';
-    else
-      className = this.props.className || '';
-
-    let tooltip;
-    if (typeof this.props.tooltip === 'function')
-      tooltip = this.props.tooltip(this.props.datum) || '';
-    else
-      tooltip = this.props.tooltip || '';
+    const style = propValOrFunc(this.props, 'style', 'datum', {});
+    const className = propValOrFunc(this.props, 'className', 'datum', '');
+    const tooltip = propValOrFunc(this.props, 'tooltip', 'datum', '');
+    const value =
+      propValOrFunc(this.props, 'value', 'datum', '') ||
+      this.props.datum[this.props.field];
+    const fullValue =
+      propValOrFunc(this.props, 'fullValue', 'datum', '') ||
+      this.props.datum[this.props.field];
 
     return (
       <Tooltip text={tooltip}>
-        <td style={style} className={className || ''}>
-          <DynamicField
-            className={className || ''}
-            value={this.props.value || '-'}
-            fullValue={this.props.fullValue || '-'}
-          />
+        <td style={style} className={className}>
+          <DynamicField value={value} fullValue={fullValue} />
         </td>
       </Tooltip>
     );
   }
 }
 BodyCell.contextType = TableContext;
+
+// helper function to get value of prop, or value returned from prop function
+function propValOrFunc(props, prop, datum, blank) {
+  prop = props[prop];
+  datum = props[datum];
+
+  if (typeof prop === 'function')
+    return prop(datum) || blank;
+  else
+    return prop || blank;
+}

@@ -44,10 +44,10 @@ export class PathTable extends Component {
     const headStyles = [
       { width: 25 },
       { width: 25 },
-      { width: 100 },
+      { width: 75 },
       { width: 200 },
-      { width: 100 },
-      { width: 100 }
+      { width: 75 },
+      { width: 75 }
     ];
     const headClasses = [null, null, 'small', 'small left', 'small', 'small'];
     const headTooltips = [
@@ -63,11 +63,17 @@ export class PathTable extends Component {
       null,
       null,
       null,
-      (datum) => pathChips(datum.assembled, this.props.showMore),
+      (datum) => pathChips(datum.assembled || [], this.props.showMore),
       (datum) => toFixed(datum.score),
       (datum) => toFixed(datum.percent_of_DWPC)
     ];
-    const bodyClasses = [null, null, 'small', 'left'];
+    const bodyFullValues = [
+      null,
+      null,
+      null,
+      (datum) => datum.text_description
+    ];
+    const bodyClasses = [null, null, 'small', 'small left'];
     const bodyTooltips = [
       'Show this path in the graph',
       'Highlight this path in the graph'
@@ -87,6 +93,7 @@ export class PathTable extends Component {
           headClasses={headClasses}
           headTooltips={headTooltips}
           bodyValues={bodyValues}
+          bodyFullValues={bodyFullValues}
           bodyClasses={bodyClasses}
           bodyTooltips={bodyTooltips}
         />

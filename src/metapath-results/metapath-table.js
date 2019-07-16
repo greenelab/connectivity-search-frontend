@@ -233,6 +233,7 @@ export class MetapathTable extends Component {
       (datum) => ({ background: toGradient(datum.adjusted_p_value) }),
       (datum) => ({ background: toGradient(datum.p_value) })
     ];
+    const bodyClasses = [null, 'left'];
     const bodyTooltips = [
       (datum) => 'Show these ' + datum.path_count + ' paths in the paths table'
     ];
@@ -258,6 +259,7 @@ export class MetapathTable extends Component {
           bodyValues={bodyValues}
           bodyFullValues={bodyFullValues}
           bodyStyles={bodyStyles}
+          bodyClasses={bodyClasses}
           bodyTooltips={bodyTooltips}
         />
       </div>

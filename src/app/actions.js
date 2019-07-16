@@ -10,10 +10,10 @@ import { setMetapaths } from '../metapath-results/actions.js';
 
 // get metagraph, hetio definitions, hetio styles, and hetmech definitions
 export async function fetchDefinitions() {
-  const metagraph = await getMetagraph();
-  const hetioStyles = await getHetioStyles();
-  const hetioDefinitions = await getHetioDefinitions();
-  const hetmechDefinitions = await getHetmechDefinitions();
+  const metagraph = await getMetagraph() || {};
+  const hetioStyles = await getHetioStyles() || {};
+  const hetioDefinitions = await getHetioDefinitions() || {};
+  const hetmechDefinitions = await getHetmechDefinitions() || {};
 
   // combine definitions into single convenient tooltipText lookup
   let tooltipDefinitions = {};
@@ -95,13 +95,13 @@ export function loadStateFromUrl() {
       setSourceTargetNode({
         sourceNode: sourceNode,
         targetNode: targetNode,
-        dontUpdateUrl: true
+        updateUrl: false
       })
     );
     dispatch(
       setMetapaths({
         metapaths: metapaths,
-        dontUpdateUrl: true
+        updateUrl: false
       })
     );
   };

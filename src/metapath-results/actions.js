@@ -7,7 +7,7 @@ export async function fetchMetapaths({
   updateUrl,
   preserveChecks
 }) {
-  const metapaths = await searchMetapaths(sourceNodeId, targetNodeId);
+  const metapaths = await searchMetapaths(sourceNodeId, targetNodeId) || [];
   return {
     metapaths: metapaths,
     updateUrl: updateUrl,

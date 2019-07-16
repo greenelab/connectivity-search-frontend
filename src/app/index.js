@@ -33,6 +33,16 @@ class App extends Component {
 
   // when component updates
   componentDidUpdate(prevProps) {
+    // if target and source were swapped
+    const swapped =
+      compareObjects(prevProps.targetNode, this.props.sourceNode) &&
+      compareObjects(prevProps.sourceNode, this.props.targetNode);
+
+    // normally the updateUrl flag is set to true by the action that sets
+    // the new source/target state. the swap action does not set the flag,
+    // so it can be set here instead, so that url can also be updated with
+    // the new metapath abbreviations resulting from the swap
+
     // when source/target node change, update metapaths
     if (
       prevProps.sourceNode.id !== this.props.sourceNode.id ||
@@ -42,10 +52,12 @@ class App extends Component {
         fetchAndSetMetapaths({
           sourceNodeId: this.props.sourceNode.id,
           targetNodeId: this.props.targetNode.id,
+          updateUrl: swapped,
           preserveChecks: true
         })
       );
     }
+
     // when metapaths change, update paths
     if (!compareObjects(prevProps.metapaths, this.props.metapaths)) {
       this.props.dispatch(

@@ -14,11 +14,11 @@ export async function fetchPaths({
 
   for (const metapath of metapaths) {
     if (metapath.checked) {
-      const query = await searchPaths(
+      const query = (await searchPaths(
         sourceNodeId,
         targetNodeId,
         metapath.metapath_abbreviation
-      );
+      )) || { paths: [], nodes: {}, relationships: {} };
       paths = [...paths, ...query.paths];
       nodes = { ...nodes, ...query.nodes };
       relationships = { ...relationships, ...query.relationships };
