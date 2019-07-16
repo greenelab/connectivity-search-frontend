@@ -7,11 +7,12 @@ import { NodeResults } from '../node-results';
 import { MetapathResults } from '../metapath-results';
 import { PathResults } from '../path-results';
 import { cutString } from '../util/string.js';
-import { fetchDefinitions } from './actions.js';
 import { loadStateFromUrl } from './actions.js';
 import { compareObjects } from '../util/object';
-import { fetchMetapaths } from '../metapath-results/actions.js';
-import { fetchPaths } from '../path-results/actions';
+import { fetchAndSetDefinitions } from './actions.js';
+import { fetchAndSetMetapaths } from '../metapath-results/actions.js';
+import { fetchAndSetPaths } from '../path-results/actions';
+
 import './index.css';
 
 import '../global.css';
@@ -23,7 +24,7 @@ class App extends Component {
     super(props);
 
     // fetch definitions when page first loads
-    this.props.dispatch(fetchDefinitions());
+    this.props.dispatch(fetchAndSetDefinitions());
     // get parameters from url when page first loads
     this.loadStateFromUrl();
     // listen for back/forward navigation (history)
@@ -38,19 +39,21 @@ class App extends Component {
       prevProps.targetNode.id !== this.props.targetNode.id
     ) {
       this.props.dispatch(
-        fetchMetapaths({
-          sourceId: this.props.sourceNode.id,
-          targetId: this.props.targetNode.id
+        fetchAndSetMetapaths({
+          sourceNodeId: this.props.sourceNode.id,
+          targetNodeId: this.props.targetNode.id,
+          preserveChecks: true
         })
       );
     }
     // when metapaths change, update paths
     if (!compareObjects(prevProps.metapaths, this.props.metapaths)) {
       this.props.dispatch(
-        fetchPaths({
-          sourceId: this.props.sourceNode.id,
-          targetId: this.props.targetNode.id,
-          metapaths: this.props.metapaths
+        fetchAndSetPaths({
+          sourceNodeId: this.props.sourceNode.id,
+          targetNodeId: this.props.targetNode.id,
+          metapaths: this.props.metapaths,
+          preserveChecks: true
         })
       );
     }

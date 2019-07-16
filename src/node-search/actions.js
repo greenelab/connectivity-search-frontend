@@ -21,17 +21,17 @@ export function swapSourceTargetNode() {
   };
 }
 
-//
+// fetch random pair of source/target nodes
 export function fetchRandomNodePair() {
   return async function(dispatch) {
     const pair = await getRandomNodePair();
-    const source = await lookupNodeById(pair.source_id);
-    const target = await lookupNodeById(pair.target_id);
+    const sourceNode = await lookupNodeById(pair.source_id);
+    const targetNode = await lookupNodeById(pair.target_id);
 
     dispatch(
       setSourceTargetNode({
-        sourceNode: source,
-        targetNode: target,
+        sourceNode: sourceNode,
+        targetNode: targetNode,
         updateUrl: true
       })
     );

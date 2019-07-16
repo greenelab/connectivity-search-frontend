@@ -4,7 +4,8 @@ import { createStore } from 'redux';
 import { applyMiddleware } from 'redux';
 import { compose } from 'redux';
 import thunk from 'redux-thunk';
-import logger from 'redux-logger';
+import { createLogger } from 'redux-logger';
+
 import { Provider } from 'react-redux';
 
 import { Reducer } from './master-reducer.js';
@@ -12,6 +13,11 @@ import { App } from './app';
 
 // clear cache when app first starts (page refresh)
 window.sessionStorage.clear();
+
+// redux state logger
+const logger = createLogger({
+  collapsed: true
+});
 
 // create global state store
 const store = createStore(Reducer, compose(applyMiddleware(thunk, logger)));

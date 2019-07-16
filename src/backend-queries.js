@@ -109,10 +109,10 @@ export function getRandomNodePair() {
 }
 
 // search for metapaths by source/target id
-export function searchMetapaths(sourceId, targetId) {
+export function searchMetapaths(sourceNodeId, targetNodeId) {
   const params = new URLSearchParams();
-  params.set('source', sourceId);
-  params.set('target', targetId);
+  params.set('source', sourceNodeId);
+  params.set('target', targetNodeId);
   const query = metapathSearchUrl + '?' + params.toString();
   return fetchJson(query).then((response) => {
     return response.path_counts;
@@ -120,10 +120,10 @@ export function searchMetapaths(sourceId, targetId) {
 }
 
 // search for paths by metapaths
-export function searchPaths(sourceId, targetId, metapath) {
+export function searchPaths(sourceNodeId, targetNodeId, metapath) {
   const params = new URLSearchParams();
-  params.set('source', sourceId);
-  params.set('target', targetId);
+  params.set('source', sourceNodeId);
+  params.set('target', targetNodeId);
   params.set('metapath', metapath);
   const query = pathSearchUrl + '?' + params.toString();
   return fetchJson(query).then((response) => {

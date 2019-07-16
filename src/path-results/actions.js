@@ -1,43 +1,76 @@
 import { searchPaths } from '../backend-queries.js';
 
-export function fetchPaths({ sourceId, targetId, metapaths }) {
-  return async function(dispatch) {
-    let paths = [];
-    let nodes = {};
-    let relationships = {};
+// fetch paths function
+export async function fetchPaths({
+  sourceNodeId,
+  targetNodeId,
+  metapaths,
+  updateUrl,
+  preserveChecks
+}) {
+  let paths = [];
+  let nodes = {};
+  let relationships = {};
 
-    for (const metapath of metapaths) {
-      if (metapath.checked) {
-        const query = await searchPaths(
-          sourceId,
-          targetId,
-          metapath.metapath_abbreviation
-        );
-        paths = [...paths, ...query.paths];
-        nodes = { ...nodes, ...query.nodes };
-        relationships = { ...relationships, ...query.relationships };
-      }
+  for (const metapath of metapaths) {
+    if (metapath.checked) {
+      const query = await searchPaths(
+        sourceNodeId,
+        targetNodeId,
+        metapath.metapath_abbreviation
+      );
+      paths = [...paths, ...query.paths];
+      nodes = { ...nodes, ...query.nodes };
+      relationships = { ...relationships, ...query.relationships };
     }
+  }
 
-    dispatch(
-      setPaths({
-        paths: paths,
-        nodes: nodes,
-        relationships: relationships
-      })
-    );
+  return {
+    paths: paths,
+    nodes: nodes,
+    relationships: relationships,
+    updateUrl: updateUrl,
+    preserveChecks: preserveChecks
   };
 }
 
-// set definitions
-export function setPaths({ paths, nodes, relationships, updateUrl }) {
+// set paths action
+export function setPaths({
+  paths,
+  nodes,
+  relationships,
+  updateUrl,
+  preserveChecks
+}) {
   return {
     type: 'set_paths',
     payload: {
       paths: paths,
       nodes: nodes,
       relationships: relationships,
-      updateUrl: updateUrl
+      updateUrl: updateUrl,
+      preserveChecks: preserveChecks
     }
+  };
+}
+
+// fetch and set paths action creator
+export function fetchAndSetPaths({
+  sourceNodeId,
+  targetNodeId,
+  metapaths,
+  updateUrl,
+  preserveChecks
+}) {
+  return async function(dispatch) {
+    const paths = await fetchPaths({
+      sourceNodeId: sourceNodeId,
+      targetNodeId: targetNodeId,
+      metapaths: metapaths,
+      updateUrl: updateUrl,
+      preserveChecks: preserveChecks
+    });
+
+    dispatch(setPaths(paths));
   };
 }
