@@ -6,19 +6,21 @@ export function fetchMetapaths({ sourceId, targetId }) {
 
     dispatch(
       setMetapaths({
-        metapaths: metapaths
+        metapaths: metapaths,
+        preserveChecks: true
       })
     );
   };
 }
 
 // set definitions
-export function setMetapaths({ metapaths, updateUrl }) {
+export function setMetapaths({ metapaths, updateUrl, preserveChecks }) {
   return {
     type: 'set_metapaths',
     payload: {
       metapaths: metapaths,
-      updateUrl: updateUrl
+      updateUrl: updateUrl,
+      preserveChecks: preserveChecks
     }
   };
 }

@@ -55,9 +55,10 @@ function setDefinitions({ metagraph, hetioStyles, tooltipDefinitions }) {
   };
 }
 
-// update source/target nodes, checked metapaths, etc from url
-export function updateStateFromUrl() {
+// load source/target nodes, checked metapaths, etc from url
+export function loadStateFromUrl() {
   return async function(dispatch) {
+    console.log('hi');
     let params = new URLSearchParams(window.location.search);
     const sourceId = params.get('source');
     const targetId = params.get('target');
@@ -79,21 +80,25 @@ export function updateStateFromUrl() {
       return;
 
     // check metapaths based on url
-    for (const metapath of metapaths) {
-      if (metapathAbbrevs.includes(metapath.metapath_abbreviation))
-        metapath.checked = true;
+    if (metapathAbbrevs) {
+      for (const metapath of metapaths) {
+        if (metapathAbbrevs.includes(metapath.metapath_abbreviation))
+          metapath.checked = true;
+      }
     }
 
-    // update global state
+    // set global state
     dispatch(
       setSourceTargetNode({
         sourceNode: sourceNode,
-        targetNode: targetNode
+        targetNode: targetNode,
+        dontUpdateUrl: true
       })
     );
     dispatch(
       setMetapaths({
-        metapaths: metapaths
+        metapaths: metapaths,
+        dontUpdateUrl: true
       })
     );
   };

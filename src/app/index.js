@@ -8,7 +8,7 @@ import { MetapathResults } from '../metapath-results';
 import { PathResults } from '../path-results';
 import { cutString } from '../util/string.js';
 import { fetchDefinitions } from './actions.js';
-import { updateStateFromUrl } from './actions.js';
+import { loadStateFromUrl } from './actions.js';
 import { compareObjects } from '../util/object';
 import { fetchMetapaths } from '../metapath-results/actions.js';
 import { fetchPaths } from '../path-results/actions';
@@ -25,9 +25,9 @@ class App extends Component {
     // fetch definitions when page first loads
     this.props.dispatch(fetchDefinitions());
     // get parameters from url when page first loads
-    this.updateStateFromUrl();
+    this.loadStateFromUrl();
     // listen for back/forward navigation (history)
-    window.addEventListener('popstate', this.updateStateFromUrl);
+    window.addEventListener('popstate', this.loadStateFromUrl);
   }
 
   // when component updates
@@ -73,9 +73,9 @@ class App extends Component {
     document.title = title;
   };
 
-  // update source/target nodes, checked metapaths, etc from url
-  updateStateFromUrl = () => {
-    this.props.dispatch(updateStateFromUrl());
+  // load source/target nodes, checked metapaths, etc from url
+  loadStateFromUrl = () => {
+    this.props.dispatch(loadStateFromUrl());
   };
 
   // display component
