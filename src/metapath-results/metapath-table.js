@@ -18,53 +18,70 @@ import './metapath-table.css';
 export class MetapathTable extends Component {
   // display component
   render() {
-    const compareFunction = (field) => {
-      if (field === 'metapath_metaedges') {
-        return (a, b, key) => {
-          a = a[key];
-          b = b[key];
-          // first by length
-          if (a.length < b.length)
-            return -1;
-          else if (a.length > b.length)
-            return 1;
-          else {
-            // then alphabetically
-            if (a < b)
-              return -1;
-            else if (a > b)
-              return 1;
-            else
-              return 0;
-          }
-        };
-      } else
-        return null;
-    };
     const onChange = (newData) => {
       this.props.dispatch(
         setMetapaths({ metapaths: newData, updateUrl: true })
       );
     };
 
+    const sortFunctions = [
+      null,
+      (a, b, key) => {
+        a = a[key];
+        b = b[key];
+        // first by length
+        if (a.length < b.length)
+          return -1;
+        else if (a.length > b.length)
+          return 1;
+        else {
+          // then alphabetically
+          if (a < b)
+            return -1;
+          else if (a > b)
+            return 1;
+          else
+            return 0;
+        }
+      }
+    ];
+
     let superContents = [];
-    let superWidths = [];
-    let superAligns = [];
+    let superStyles = [];
+    let superClasses = [];
     let superColspans = [];
 
     if (this.props.showMore) {
       superContents = [
-        '',
-        '',
-        '',
-        '',
-        '',
-        '',
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
         <div className='line_sides'>Null DWPC distribution information</div>,
-        ''
+        null
       ];
-      superWidths = [25, 200, 100, 100, 100, 100, 600, 200];
-      superAligns = [];
+      superStyles = [
+        { width: 25 },
+        { width: 200 },
+        { width: 100 },
+        { width: 100 },
+        { width: 100 },
+        { width: 100 },
+        { width: 600 },
+        { width: 200 }
+      ];
+      superClasses = [
+        'small',
+        'small',
+        'small',
+        'small',
+        'small',
+        'small',
+        'small',
+        'small'
+      ];
       superColspans = [1, 1, 1, 1, 1, 1, 6, 1];
     }
 
@@ -76,11 +93,11 @@ export class MetapathTable extends Component {
         <br />
         count
       </>,
-      <>
+      <span>
         adjusted
         <br />
         <i>p</i>-value
-      </>
+      </span>
     ];
     let headFields = [
       'checked',
@@ -88,10 +105,29 @@ export class MetapathTable extends Component {
       'path_count',
       'adjusted_p_value'
     ];
-    const headWidths = [25, 200, 100, 100];
-    const headAligns = ['', 'left'];
+    const headStyles = [
+      { width: 25 },
+      { width: 200 },
+      { width: 100 },
+      { width: 100 }
+    ];
+    const headClasses = [
+      null,
+      'small left',
+      'small',
+      'small',
+      'small',
+      'small',
+      'small',
+      'small',
+      'small',
+      'small',
+      'small',
+      'small',
+      'small'
+    ];
     const headTooltips = [
-      'Show/hide all paths',
+      'Show/hide all metapaths',
       this.props.tooltipDefinitions['metapath'],
       this.props.tooltipDefinitions['path_count'],
       this.props.tooltipDefinitions['adjusted_p_value'],
@@ -190,12 +226,12 @@ export class MetapathTable extends Component {
       null,
       (datum) => <textarea rows='4' cols='50' value={datum.cypher_query} />
     ];
-    const bodyColors = [
+    const bodyStyles = [
       null,
       null,
       null,
-      (datum) => toGradient(datum.adjusted_p_value),
-      (datum) => toGradient(datum.p_value)
+      (datum) => ({ background: toGradient(datum.adjusted_p_value) }),
+      (datum) => ({ background: toGradient(datum.p_value) })
     ];
     const bodyTooltips = [
       (datum) => 'Show these ' + datum.path_count + ' paths in the paths table'
@@ -206,22 +242,22 @@ export class MetapathTable extends Component {
         <Table
           className='metapath_results_table'
           data={this.props.metapaths}
+          onChange={onChange}
+          sortFunctions={sortFunctions}
           defaultSortField='adjusted_p_value'
           defaultSortUp={false}
           superContents={superContents}
-          superWidths={superWidths}
-          superAligns={superAligns}
+          superStyles={superStyles}
+          superClasses={superClasses}
           superColspans={superColspans}
           headContents={headContents}
           headFields={headFields}
-          headWidths={headWidths}
-          headAligns={headAligns}
+          headStyles={headStyles}
+          headClasses={headClasses}
           headTooltips={headTooltips}
-          compareFunction={compareFunction}
-          onChange={onChange}
           bodyValues={bodyValues}
           bodyFullValues={bodyFullValues}
-          bodyColors={bodyColors}
+          bodyStyles={bodyStyles}
           bodyTooltips={bodyTooltips}
         />
       </div>

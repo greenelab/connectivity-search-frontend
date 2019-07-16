@@ -20,11 +20,9 @@ export class Table extends Component {
 
     this.state = {};
     this.state.data = [];
-    this.state.sortField = this.props.defaultSortField;
-    this.state.sortUp = this.props.defaultSortUp;
+    this.state.sortField = this.props.defaultSortField || '';
+    this.state.sortUp = this.props.defaultSortUp || true;
 
-    this.state.compareFunction =
-      this.props.compareFunction || this.standardCompare;
     this.state.onChange = this.props.onChange || (() => null);
   }
 
@@ -59,8 +57,12 @@ export class Table extends Component {
   //
   sortData = (data) => {
     // get compare function from props or standard/default compare
-    const compare =
-      this.props.compareFunction(this.state.sortField) || this.standardCompare;
+    let compare = this.standardCompare;
+    if (
+      this.props.compareFunction &&
+      this.props.compareFunction(this.state.sortField)
+    )
+      compare = this.props.compareFunction(this.state.sortField);
 
     // sort
     data.sort((a, b) => compare(a, b, this.state.sortField));
@@ -148,7 +150,7 @@ export class Table extends Component {
     return (
       <TableContext.Provider
         value={{
-          data: this.state.data,
+          data: this.state.data || [],
           sortField: this.state.sortField,
           sortUp: this.state.sortUp,
           toggleChecked: this.toggleChecked,
@@ -156,19 +158,20 @@ export class Table extends Component {
           allChecked: this.allChecked,
           toggleAll: this.toggleAll,
           changeSort: this.changeSort,
-          superContents: this.props.superContents,
-          superWidths: this.props.superWidths,
-          superAligns: this.props.superAligns,
-          superColspans: this.props.superColspans,
-          headContents: this.props.headContents,
-          headFields: this.props.headFields,
-          headWidths: this.props.headWidths,
-          headAligns: this.props.headAligns,
-          headTooltips: this.props.headTooltips,
-          bodyValues: this.props.bodyValues,
-          bodyFullValues: this.props.bodyFullValues,
-          bodyColors: this.props.bodyColors,
-          bodyTooltips: this.props.bodyTooltips
+          superContents: this.props.superContents || [],
+          superStyles: this.props.superStyles || [],
+          superClasses: this.props.superClasses || [],
+          superColspans: this.props.superColspans || [],
+          headContents: this.props.headContents || [],
+          headFields: this.props.headFields || [],
+          headStyles: this.props.headStyles || [],
+          headClasses: this.props.headClasses || [],
+          headTooltips: this.props.headTooltips || [],
+          bodyValues: this.props.bodyValues || [],
+          bodyFullValues: this.props.bodyFullValues || [],
+          bodyStyles: this.props.bodyStyles || [],
+          bodyClasses: this.props.bodyClasses || [],
+          bodyTooltips: this.props.bodyTooltips || []
         }}
       >
         <table className={this.props.className}>
@@ -192,8 +195,8 @@ class Super extends Component {
       <SuperCell
         key={index}
         content={content}
-        width={this.context.superWidths[index]}
-        align={this.context.superAligns[index]}
+        style={this.context.superStyles[index]}
+        className={this.context.superClasses[index]}
         colspan={this.context.superColspans[index]}
       />
     ));
@@ -210,8 +213,8 @@ class SuperCell extends Component {
   render() {
     return (
       <th
-        style={{ width: this.props.width || 'unset' }}
-        className={'small ' + (this.props.align || '')}
+        style={this.props.style || {}}
+        className={this.props.className || ''}
         colSpan={this.props.colspan || 1}
       >
         {this.props.content}
@@ -230,8 +233,8 @@ class Head extends Component {
             key={index}
             content={content}
             field={this.context.headFields[index]}
-            width={this.context.headWidths[index]}
-            align={this.context.headAligns[index]}
+            style={this.context.headStyles[index]}
+            className={this.context.headClasses[index]}
             tooltip={this.context.headTooltips[index]}
           />
         );
@@ -241,8 +244,8 @@ class Head extends Component {
             key={index}
             content={content}
             field={this.context.headFields[index]}
-            width={this.context.headWidths[index]}
-            align={this.context.headAligns[index]}
+            style={this.context.headStyles[index]}
+            className={this.context.headClasses[index]}
             tooltip={this.context.headTooltips[index]}
           />
         );
@@ -261,9 +264,12 @@ class HeadCheckboxCell extends Component {
   render() {
     return (
       <Tooltip text={this.props.tooltip || ''}>
-        <th style={{ width: this.props.width || 'unset' }}>
+        <th
+          style={this.props.style || {}}
+          className={this.props.className || ''}
+        >
           <Button
-            className={'table_button ' + (this.props.align || '')}
+            className='table_button'
             onClick={() => this.context.toggleAll(this.props.field)}
           >
             <span
@@ -285,23 +291,27 @@ class HeadCell extends Component {
   render() {
     return (
       <Tooltip text={this.props.tooltip || ''}>
-        <th style={{ width: this.props.width || 'unset' }}>
+        <th
+          style={this.props.style || {}}
+          className={this.props.className || ''}
+        >
           <Button
-            className={'table_button ' + (this.props.align || '')}
+            className='table_button'
             onClick={() => this.context.changeSort(this.props.field)}
           >
-            <span className='small'>{this.props.content}</span>
+            {this.props.content}
             <FontAwesomeIcon
               style={{
                 opacity: this.props.field === this.context.sortField ? 1 : 0.1
               }}
               icon={
                 this.props.field === this.context.sortField
-                  ? this.props.sortUp
+                  ? this.context.sortUp
                     ? faLongArrowAltUp
                     : faLongArrowAltDown
                   : faLongArrowAltUp
               }
+              className='fa-lg sort_icon'
             />
           </Button>
         </th>
@@ -331,40 +341,21 @@ class BodyRow extends Component {
             datum={this.props.datum}
             field={field}
             checked={this.props.datum[field] ? true : false}
-            content={this.context.headContents[index]}
-            align={this.context.headAligns[index]}
-            tooltip={
-              this.context.bodyTooltips[index]
-                ? this.context.bodyTooltips[index](this.props.datum)
-                : ''
-            }
+            style={this.context.bodyStyles[index]}
+            className={this.context.bodyClasses[index]}
+            tooltip={this.context.bodyTooltips[index]}
           />
         );
       } else {
         return (
           <BodyCell
             key={index}
-            value={
-              this.context.bodyValues[index]
-                ? this.context.bodyValues[index](this.props.datum)
-                : this.props.datum[field]
-            }
-            fullValue={
-              this.context.bodyFullValues[index]
-                ? this.context.bodyFullValues[index](this.props.datum)
-                : this.props.datum[field]
-            }
-            align={this.context.headAligns[index]}
-            color={
-              this.context.bodyColors[index]
-                ? this.context.bodyColors[index](this.props.datum)
-                : ''
-            }
-            tooltip={
-              this.context.bodyTooltips[index]
-                ? this.context.bodyTooltips[index](this.props.datum)
-                : ''
-            }
+            datum={this.props.datum}
+            value={this.context.bodyValues[index]}
+            fullValue={this.context.bodyFullValues[index]}
+            style={this.context.bodyStyles[index]}
+            className={this.context.bodyClasses[index]}
+            tooltip={this.context.bodyTooltips[index]}
           />
         );
       }
@@ -376,11 +367,29 @@ BodyRow.contextType = TableContext;
 
 class BodyCheckboxCell extends Component {
   render() {
+    let style;
+    if (typeof this.props.style === 'function')
+      style = this.props.style(this.props.datum) || {};
+    else
+      style = this.props.style || {};
+
+    let className;
+    if (typeof this.props.className === 'function')
+      className = this.props.className(this.props.datum) || '';
+    else
+      className = this.props.className || '';
+
+    let tooltip;
+    if (typeof this.props.tooltip === 'function')
+      tooltip = this.props.tooltip(this.props.datum) || '';
+    else
+      tooltip = this.props.tooltip || '';
+
     return (
-      <Tooltip text={this.props.tooltip || ''}>
-        <td>
+      <Tooltip text={tooltip}>
+        <td style={style} className={className || ''}>
           <Button
-            className={'table_button ' + (this.props.align || '')}
+            className={'table_button'}
             onClick={() =>
               this.context.toggleChecked(this.props.datum, this.props.field)
             }
@@ -401,11 +410,29 @@ BodyCheckboxCell.contextType = TableContext;
 
 class BodyCell extends Component {
   render() {
+    let style;
+    if (typeof this.props.style === 'function')
+      style = this.props.style(this.props.datum) || {};
+    else
+      style = this.props.style || {};
+
+    let className;
+    if (typeof this.props.className === 'function')
+      className = this.props.className(this.props.datum) || '';
+    else
+      className = this.props.className || '';
+
+    let tooltip;
+    if (typeof this.props.tooltip === 'function')
+      tooltip = this.props.tooltip(this.props.datum) || '';
+    else
+      tooltip = this.props.tooltip || '';
+
     return (
-      <Tooltip text={this.props.tooltip || ''}>
-        <td style={{ background: this.props.color || 'none' }}>
+      <Tooltip text={tooltip}>
+        <td style={style} className={className || ''}>
           <DynamicField
-            className={this.props.align || ''}
+            className={className || ''}
             value={this.props.value || '-'}
             fullValue={this.props.fullValue || '-'}
           />

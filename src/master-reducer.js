@@ -23,7 +23,7 @@ export function Reducer(state = {}, action) {
     sourceNode: sourceNode(newState, action),
     targetNode: targetNode(newState, action),
     metapaths: metapaths(newState.metapaths, action),
-    paths: paths(newState.paths, action),
+    paths: paths(newState, action),
     nodes: nodes(newState.nodes, action),
     relationships: relationships(newState.relationships, action)
   };

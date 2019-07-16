@@ -337,17 +337,20 @@ button[data-disabled='true'] {
 .semibold {
   font-weight: 500;
 }
-.left {
+.left,
+.left * {
   text-align: left !important;
   justify-content: left !important;
   justify-self: left !important;
 }
-.center {
+.center,
+.center * {
   text-align: center !important;
   justify-content: center !important;
   justify-self: center !important;
 }
-.right {
+.right,
+.right * {
   text-align: right !important;
   justify-content: right !important;
   justify-self: right !important;
