@@ -14,12 +14,13 @@ export function fetchMetapaths(sourceId, targetId) {
 }
 
 // set definitions
-export function setMetapaths({ metapaths, preserveChecks }) {
+export function setMetapaths({ metapaths, preserveChecks, updateUrl }) {
   return {
     type: 'set_metapaths',
     payload: {
       metapaths: metapaths,
-      preserveChecks: preserveChecks
+      preserveChecks: preserveChecks,
+      updateUrl: updateUrl
     }
   };
 }

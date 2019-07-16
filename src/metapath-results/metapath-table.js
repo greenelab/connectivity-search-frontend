@@ -11,12 +11,42 @@ import { toExponential } from '../util/format.js';
 import { toComma } from '../util/format.js';
 import { toGradient } from '../util/format.js';
 import { cutString } from '../util/string.js';
+import { setMetapaths } from './actions.js';
 
 import './metapath-table.css';
 
 export class MetapathTable extends Component {
   // display component
   render() {
+    const compareFunction = (field) => {
+      if (field === 'metapath_metaedges') {
+        return (a, b, key) => {
+          a = a[key];
+          b = b[key];
+          // first by length
+          if (a.length < b.length)
+            return -1;
+          else if (a.length > b.length)
+            return 1;
+          else {
+            // then alphabetically
+            if (a < b)
+              return -1;
+            else if (a > b)
+              return 1;
+            else
+              return 0;
+          }
+        };
+      } else
+        return null;
+    };
+    const onChange = (newData) => {
+      this.props.dispatch(
+        setMetapaths({ metapaths: newData, updateUrl: true })
+      );
+    };
+
     let superContents = [];
     let superWidths = [];
     let superAligns = [];
@@ -130,29 +160,6 @@ export class MetapathTable extends Component {
       ]);
     }
 
-    const compareFunction = (field) => {
-      if (field === 'metapath_metaedges') {
-        return (a, b, key) => {
-          a = a[key];
-          b = b[key];
-          // first by length
-          if (a.length < b.length)
-            return -1;
-          else if (a.length > b.length)
-            return 1;
-          else {
-            // then alphabetically
-            if (a < b)
-              return -1;
-            else if (a > b)
-              return 1;
-            else
-              return 0;
-          }
-        };
-      } else
-        return null;
-    };
     const bodyValues = [
       null,
       (datum) => metapathChips(datum.metapath_metaedges),
@@ -211,6 +218,7 @@ export class MetapathTable extends Component {
           headAligns={headAligns}
           headTooltips={headTooltips}
           compareFunction={compareFunction}
+          onChange={onChange}
           bodyValues={bodyValues}
           bodyFullValues={bodyFullValues}
           bodyColors={bodyColors}
