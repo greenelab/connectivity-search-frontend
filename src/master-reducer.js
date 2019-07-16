@@ -7,6 +7,10 @@ import { targetNode } from './node-search/reducers.js';
 
 import { metapaths } from './metapath-results/reducers.js';
 
+import { paths } from './path-results/reducers.js';
+import { nodes } from './path-results/reducers.js';
+import { relationships } from './path-results/reducers.js';
+
 import { copyObject } from './util/object.js';
 
 export function Reducer(state = {}, action) {
@@ -18,7 +22,10 @@ export function Reducer(state = {}, action) {
     tooltipDefinitions: tooltipDefinitions(newState.tooltipDefinitions, action),
     sourceNode: sourceNode(newState, action),
     targetNode: targetNode(newState, action),
-    metapaths: metapaths(newState.metapaths, action)
+    metapaths: metapaths(newState.metapaths, action),
+    paths: paths(newState.paths, action),
+    nodes: nodes(newState.nodes, action),
+    relationships: relationships(newState.relationships, action)
   };
 
   if (action.payload && action.payload.updateUrl === true)

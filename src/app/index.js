@@ -5,11 +5,13 @@ import { connect } from 'react-redux';
 import { NodeSearch } from '../node-search';
 import { NodeResults } from '../node-results';
 import { MetapathResults } from '../metapath-results';
+import { PathResults } from '../path-results';
 import { cutString } from '../util/string.js';
-
 import { fetchDefinitions } from './actions.js';
 import { updateStateFromUrl } from './actions.js';
+import { compareObjects } from '../util/object';
 import { fetchMetapaths } from '../metapath-results/actions.js';
+import { fetchPaths } from '../path-results/actions';
 import './index.css';
 
 import '../global.css';
@@ -30,16 +32,28 @@ class App extends Component {
 
   // when component updates
   componentDidUpdate(prevProps) {
-    // when source/target node change
+    // when source/target node change, update metapaths
     if (
       prevProps.sourceNode.id !== this.props.sourceNode.id ||
       prevProps.targetNode.id !== this.props.targetNode.id
     ) {
       this.props.dispatch(
-        fetchMetapaths(this.props.sourceNode.id, this.props.targetNode.id)
+        fetchMetapaths({
+          sourceId: this.props.sourceNode.id,
+          targetId: this.props.targetNode.id
+        })
       );
     }
-
+    // when metapaths change, update paths
+    if (!compareObjects(prevProps.metapaths, this.props.metapaths)) {
+      this.props.dispatch(
+        fetchPaths({
+          sourceId: this.props.sourceNode.id,
+          targetId: this.props.targetNode.id,
+          metapaths: this.props.metapaths
+        })
+      );
+    }
     this.updateTitle();
   }
 
@@ -62,7 +76,7 @@ class App extends Component {
   // update source/target nodes, checked metapaths, etc from url
   updateStateFromUrl = () => {
     this.props.dispatch(updateStateFromUrl());
-  }
+  };
 
   // display component
   render() {
@@ -76,6 +90,7 @@ class App extends Component {
         <NodeSearch />
         <NodeResults />
         <MetapathResults />
+        <PathResults />
       </>
     );
   }

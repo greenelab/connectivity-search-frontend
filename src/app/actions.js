@@ -59,49 +59,41 @@ function setDefinitions({ metagraph, hetioStyles, tooltipDefinitions }) {
 export function updateStateFromUrl() {
   return async function(dispatch) {
     let params = new URLSearchParams(window.location.search);
-    const source = params.get('source');
-    const target = params.get('target');
-    const metapaths = params.get('metapaths');
-    let checkedMetapaths;
-    if (metapaths)
-      checkedMetapaths = metapaths.split(',');
-    else
-      checkedMetapaths = [];
+    const sourceId = params.get('source');
+    const targetId = params.get('target');
+    const metapathAbbrevs = params.get('metapaths');
 
-    const newSourceNode = await lookupNodeById(source);
-    const newTargetNode = await lookupNodeById(target);
-    let newMetapaths = await searchMetapaths(source, target);
+    const sourceNode = await lookupNodeById(sourceId);
+    const targetNode = await lookupNodeById(targetId);
+    const metapaths = (await searchMetapaths(sourceId, targetId)) || [];
 
     // by the time awaits return, url may be different (eg if user
     // clicks back/forward quickly). if different, exit and allow more
     // recent call to change state
     params = new URLSearchParams(window.location.search);
     if (
-      params.get('source') !== source ||
-      params.get('target') !== target ||
-      params.get('metapaths') !== metapaths
+      params.get('source') !== sourceId ||
+      params.get('target') !== targetId ||
+      params.get('metapaths') !== metapathAbbrevs
     )
       return;
 
-    if (!newMetapaths)
-      newMetapaths = [];
-
     // check metapaths based on url
-    for (const newMetapath of newMetapaths) {
-      if (checkedMetapaths.includes(newMetapath.metapath_abbreviation))
-        newMetapath.checked = true;
+    for (const metapath of metapaths) {
+      if (metapathAbbrevs.includes(metapath.metapath_abbreviation))
+        metapath.checked = true;
     }
 
     // update global state
     dispatch(
       setSourceTargetNode({
-        sourceNode: newSourceNode,
-        targetNode: newTargetNode
+        sourceNode: sourceNode,
+        targetNode: targetNode
       })
     );
     dispatch(
       setMetapaths({
-        metapaths: newMetapaths
+        metapaths: metapaths
       })
     );
   };

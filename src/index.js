@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import { Provider } from 'react-redux';
 
-import { Reducer } from './reducer.js';
+import { Reducer } from './master-reducer.js';
 import { App } from './app';
 
 // clear cache when app first starts (page refresh)
