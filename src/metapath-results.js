@@ -8,6 +8,7 @@ import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faSort } from '@fortawesome/free-solid-svg-icons';
 import { faSortUp } from '@fortawesome/free-solid-svg-icons';
 import { faSortDown } from '@fortawesome/free-solid-svg-icons';
+import { faQuestionCircle } from '@fortawesome/free-solid-svg-icons';
 
 import { metapathChips } from './chips.js';
 import { Button } from './buttons.js';
@@ -25,6 +26,8 @@ import { sortCustom } from './util.js';
 import { copyObject } from './util.js';
 import { cutString } from './util.js';
 import { updateMetapaths } from './actions.js';
+import { Tooltip } from './tooltip.js';
+import { searchPaths } from './backend-query.js';
 import './metapath-results.css';
 
 // path results section component
@@ -133,7 +136,7 @@ class TableFull extends Component {
   // checks whether all metapaths besides the specified are unchecked
   allOthersUnchecked(id) {
     for (const metapath of this.props.metapaths) {
-      if (id !== metapath.id && metapath.checked)
+      if (id !== metapath.metapath_id && metapath.checked)
         return false;
     }
 
@@ -145,7 +148,7 @@ class TableFull extends Component {
     const newMetapaths = copyObject(this.props.metapaths);
 
     for (const metapath of newMetapaths) {
-      if (metapath.id === id)
+      if (metapath.metapath_id === id)
         metapath.checked = !metapath.checked;
     }
 
@@ -158,7 +161,7 @@ class TableFull extends Component {
     const allOthersUnchecked = this.allOthersUnchecked(id);
 
     for (const metapath of newMetapaths) {
-      if (allOthersUnchecked || id === metapath.id)
+      if (allOthersUnchecked || id === metapath.metapath_id)
         metapath.checked = true;
       else
         metapath.checked = false;
@@ -538,6 +541,7 @@ class TableBodyRow extends Component {
   // display component
   render() {
     const metapath = this.props.metapath;
+    const id = metapath.metapath_id;
 
     // primary columns
     const cols = (
@@ -545,8 +549,12 @@ class TableBodyRow extends Component {
         <td>
           <Checkbox
             checked={this.props.checked}
-            onClick={() => this.context.toggleChecked(this.props.metapath.id)}
-            onCtrlClick={() => this.context.soloChecked(this.props.metapath.id)}
+            onClick={() =>
+              this.context.toggleChecked(this.props.metapath.metapath_id)
+            }
+            onCtrlClick={() =>
+              this.context.soloChecked(this.props.metapath.metapath_id)
+            }
             tooltipText={
               'Show these ' +
               (this.props.metapath.path_count || '') +
@@ -559,11 +567,31 @@ class TableBodyRow extends Component {
           value={metapathChips(metapath.metapath_metaedges)}
           fullValue={metapath.metapath_name}
         />
-        <TableBodyCell value={metapath.path_count} />
+        <TableBodyCell
+          value={
+            metapath.path_count !== undefined ? (
+              metapath.path_count
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+        />
         <TableBodyCell
           style={{ backgroundColor: toGradient(metapath.adjusted_p_value) }}
-          value={toExponential(metapath.adjusted_p_value)}
-          fullValue={metapath.adjusted_p_value}
+          value={
+            metapath.adjusted_p_value !== undefined ? (
+              toExponential(metapath.adjusted_p_value)
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+          fullValue={
+            metapath.adjusted_p_value !== undefined ? (
+              metapath.adjusted_p_value
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
         />
       </>
     );
@@ -572,32 +600,129 @@ class TableBodyRow extends Component {
     const extraCols = (
       <>
         <TableBodyCell
-          style={{ backgroundColor: toGradient(metapath.p_value) }}
-          value={toExponential(metapath.p_value)}
-          fullValue={metapath.p_value}
-        />
-        <TableBodyCell
-          value={toFixed(metapath.dwpc)}
-          fullValue={metapath.dwpc}
-        />
-        <TableBodyCell value={metapath.dgp_source_degree} />
-        <TableBodyCell value={metapath.dgp_target_degree} />
-        <TableBodyCell value={toComma(metapath.dgp_n_dwpcs)} />
-        <TableBodyCell value={toComma(metapath.dgp_n_nonzero_dwpcs)} />
-        <TableBodyCell
-          value={toFixed(metapath.dgp_nonzero_mean)}
-          fullValue={metapath.dgp_nonzero_mean}
-        />
-        <TableBodyCell
-          value={toFixed(metapath.dgp_nonzero_sd)}
-          fullValue={metapath.dgp_nonzero_sd}
-        />
-        <TableBodyCell
-          value={cutString(metapath.cypher_query, 16)}
+          style={{
+            backgroundColor:
+              metapath.p_value !== undefined ? (
+                toGradient(metapath.p_value)
+              ) : (
+                <QuestionMark id={id} />
+              )
+          }}
+          value={
+            metapath.p_value !== undefined ? (
+              toExponential(metapath.p_value)
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
           fullValue={
-            <textarea rows='4' cols='50'>
-              {metapath.cypher_query}
-            </textarea>
+            metapath.p_value !== undefined ? (
+              metapath.p_value
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+        />
+        <TableBodyCell
+          value={
+            metapath.dwpc !== undefined ? (
+              toFixed(metapath.dwpc)
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+          fullValue={
+            metapath.dwpc !== undefined ? (
+              metapath.dwpc
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+        />
+        <TableBodyCell
+          value={
+            metapath.dgp_source_degree !== undefined ? (
+              metapath.dgp_source_degree
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+        />
+        <TableBodyCell
+          value={
+            metapath.dgp_target_degree !== undefined ? (
+              metapath.dgp_target_degree
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+        />
+        <TableBodyCell
+          value={
+            metapath.dgp_n_dwpcs !== undefined ? (
+              toComma(metapath.dgp_n_dwpcs)
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+        />
+        <TableBodyCell
+          value={
+            metapath.dgp_n_nonzero_dwpcs !== undefined ? (
+              toComma(metapath.dgp_n_nonzero_dwpcs)
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+        />
+        <TableBodyCell
+          value={
+            metapath.dgp_nonzero_mean !== undefined ? (
+              toFixed(metapath.dgp_nonzero_mean)
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+          fullValue={
+            metapath.dgp_nonzero_mean !== undefined ? (
+              metapath.dgp_nonzero_mean
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+        />
+        <TableBodyCell
+          value={
+            metapath.dgp_nonzero_sd !== undefined ? (
+              toFixed(metapath.dgp_nonzero_sd)
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+          fullValue={
+            metapath.dgp_nonzero_sd !== undefined ? (
+              metapath.dgp_nonzero_sd
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+        />
+        <TableBodyCell
+          value={
+            metapath.cypher_query !== undefined ? (
+              cutString(metapath.cypher_query, 16)
+            ) : (
+              <QuestionMark id={id} />
+            )
+          }
+          fullValue={
+            metapath.cypher_query !== undefined ? (
+              <textarea rows='4' cols='50'>
+                {metapath.cypher_query}
+              </textarea>
+            ) : (
+              <QuestionMark id={id} />
+            )
           }
         />
       </>
@@ -689,3 +814,59 @@ function makeMetapathsTable(metapaths) {
 
   return table;
 }
+
+// question mark component
+class QuestionMark extends Component {
+  // initialize component
+  constructor() {
+    super();
+
+    this.onClick = this.onClick.bind(this);
+  }
+
+  // when user clicks icon
+  onClick() {
+    this.props.dispatch((dispatch) => {
+      searchPaths(
+        this.props.sourceNode.id,
+        this.props.targetNode.id,
+        this.props.id
+      ).then((results) => {
+        const newMetapaths = copyObject(this.props.metapaths);
+        const index = newMetapaths.findIndex(
+          (metapath) => metapath.metapath_id === this.props.id
+        );
+        newMetapaths[index] = {
+          ...newMetapaths[index],
+          ...results.path_count_info
+        };
+
+        dispatch(
+          updateMetapaths({
+            metapaths: newMetapaths,
+            preserveChecks: true
+          })
+        );
+      });
+    });
+  }
+
+  // display component
+  render() {
+    return (
+      <Tooltip text='Click to compute and fill in data for this metapath'>
+        <FontAwesomeIcon
+          className='question_mark'
+          icon={faQuestionCircle}
+          onClick={this.onClick}
+        />
+      </Tooltip>
+    );
+  }
+}
+// connect component to global state
+QuestionMark = connect((state) => ({
+  sourceNode: state.sourceNode,
+  targetNode: state.targetNode,
+  metapaths: state.metapaths
+}))(QuestionMark);

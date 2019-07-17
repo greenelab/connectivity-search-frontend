@@ -1,3 +1,7 @@
 .metapath_results_table .metanode_chip {
   margin: 0;
 }
+.question_mark {
+  color: #c0c0c0;
+  cursor: pointer;
+}
