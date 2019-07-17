@@ -854,7 +854,7 @@ class QuestionMark extends Component {
   // display component
   render() {
     return (
-      <Tooltip text='Click to compute and fill in data for this metapath'>
+      <Tooltip text='The info for metapath was not pre-computed because it was below a threshold of importance. Click to compute it now.'>
         <FontAwesomeIcon
           className='question_mark'
           icon={faQuestionCircle}
