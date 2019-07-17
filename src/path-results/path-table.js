@@ -10,6 +10,7 @@ import { toFixed } from '../util/format';
 import { pathChips } from '../components/chips.js';
 import { setPaths } from './actions.js';
 
+// path table component
 export class PathTable extends Component {
   // display component
   render() {

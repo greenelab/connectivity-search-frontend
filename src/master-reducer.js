@@ -13,9 +13,12 @@ import { relationships } from './path-results/reducers.js';
 
 import { copyObject } from './util/object.js';
 
+// master combined reducer
 export function Reducer(state = {}, action) {
+  // make deep copy of old state into new state
   let newState = copyObject(state);
 
+  // assemble new state from individual reducers
   newState = {
     metagraph: metagraph(newState.metagraph, action),
     hetioStyles: hetioStyles(newState.hetioStyles, action),
@@ -28,6 +31,7 @@ export function Reducer(state = {}, action) {
     relationships: relationships(newState.relationships, action)
   };
 
+  // if explicitly specified, update url to match state
   if (action.payload && action.payload.updateUrl === true)
     updateUrl(newState);
 
@@ -43,6 +47,7 @@ function updateUrl(state) {
       checkedMetapaths.push(metapath.metapath_abbreviation);
   }
 
+  // sort to keep order predictable
   checkedMetapaths.sort();
 
   // new url

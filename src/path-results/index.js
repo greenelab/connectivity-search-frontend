@@ -16,6 +16,7 @@ export class PathResults extends Component {
     this.state.showMore = false;
   }
 
+  // toggle expanded table
   toggleShowMore = (event) => {
     if (event)
       event.preventDefault();

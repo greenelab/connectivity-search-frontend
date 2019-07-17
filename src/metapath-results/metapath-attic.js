@@ -8,8 +8,12 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '../components/buttons.js';
 import { download } from './download.js';
 
+// table "attic" component
+// contains buttons and info above table
 export class MetapathAttic extends Component {
+  // display component
   render() {
+    // results/selected info
     const metapathCount = this.props.metapaths.length;
     const metapathSelectedCount = this.props.metapaths.filter(
       (metapath) => metapath.checked
@@ -44,6 +48,7 @@ export class MetapathAttic extends Component {
     );
   }
 }
+// connect component to global state
 MetapathAttic = connect((state) => ({
   sourceNode: state.sourceNode,
   targetNode: state.targetNode,

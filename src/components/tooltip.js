@@ -97,7 +97,7 @@ export class Tooltip extends Component {
 }
 
 // popup component to display tooltip and text
-// make React 'portal' to append tooltip to body instead of parent
+// make React "portal" to append tooltip to body instead of parent
 // (allows tooltip to pop out of containing elements like tables)
 class Popup extends Component {
   render() {

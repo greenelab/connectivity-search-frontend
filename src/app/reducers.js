@@ -1,3 +1,4 @@
+// reducer for state.metagraph
 export function metagraph(state = {}, action) {
   switch (action.type) {
     case 'set_definitions':
@@ -7,6 +8,7 @@ export function metagraph(state = {}, action) {
   }
 }
 
+// reducer for state.hetioStyles
 export function hetioStyles(state = {}, action) {
   switch (action.type) {
     case 'set_definitions':
@@ -16,6 +18,7 @@ export function hetioStyles(state = {}, action) {
   }
 }
 
+// reducer for state.tooltipDefinitions
 export function tooltipDefinitions(state = {}, action) {
   switch (action.type) {
     case 'set_definitions':

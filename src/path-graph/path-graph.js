@@ -1221,7 +1221,7 @@ class SelectedInfo extends Component {
       tooltipText: tooltipText[field]
     }));
 
-    // get 'extra fields' from node/edge 'properties' field
+    // get "extra fields" from node/edge 'properties' field
     let extraFields = Object.keys(element.properties);
     // get first/second column text (key/value) for each field
     extraFields = extraFields.map((field) => ({

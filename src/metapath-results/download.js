@@ -2,6 +2,7 @@ import { makeFilenameFriendly } from '../util/string.js';
 import { sortCustom } from '../util/array.js';
 import { downloadCsv } from '../util/file.js';
 
+// download metapath table
 export function download(sourceNode, targetNode, metapaths) {
   if (!metapaths.length || !sourceNode.name || !targetNode.name)
     return;

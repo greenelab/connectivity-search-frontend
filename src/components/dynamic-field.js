@@ -4,8 +4,8 @@ import { Component } from 'react';
 import './dynamic-field.css';
 
 // expandable textbox-like component, similar to excel spreadsheet cell
-// when focused, field expands and prop 'fullValue' displayed,
-// otherwise, prop 'value' displayed (often 'fullValue' rounded off)
+// when focused, field expands and prop "fullValue" displayed,
+// otherwise, prop "value" displayed (often "fullValue" rounded off)
 export class DynamicField extends Component {
   // initialize component
   constructor() {
@@ -59,7 +59,7 @@ export class DynamicField extends Component {
     else
       displayValue = this.props.value;
 
-    // if value just text, set 'nowrap' to truncate with ellipsis
+    // if value just text, set "nowrap" to truncate with ellipsis
     if (typeof displayValue === 'string')
       displayValue = <span className='nowrap'>{displayValue}</span>;
 

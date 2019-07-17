@@ -8,7 +8,10 @@ import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '../components/buttons.js';
 import { download } from './download.js';
 
+// table "attic" component
+// contains buttons and info above table
 export class PathAttic extends Component {
+  // display component
   render() {
     const pathCount = this.props.paths.length;
     const pathSelectedCount = this.props.paths.filter((path) => path.checked)

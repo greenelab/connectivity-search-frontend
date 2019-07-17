@@ -1,3 +1,5 @@
+// reducer for state.sourceNode
+// takes whole state as input
 export function sourceNode(state = {}, action) {
   switch (action.type) {
     case 'set_source_target_node':
@@ -12,6 +14,8 @@ export function sourceNode(state = {}, action) {
   }
 }
 
+// reducer for state.targetNode
+// takes whole state as input
 export function targetNode(state = {}, action) {
   switch (action.type) {
     case 'set_source_target_node':

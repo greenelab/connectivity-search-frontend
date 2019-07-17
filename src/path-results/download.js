@@ -2,6 +2,7 @@ import { makeFilenameFriendly } from '../util/string.js';
 import { sortCustom } from '../util/array.js';
 import { downloadCsv } from '../util/file.js';
 
+// download path table
 export function download(sourceNode, targetNode, paths) {
   if (!paths.length || !sourceNode.name || !targetNode.name)
     return;

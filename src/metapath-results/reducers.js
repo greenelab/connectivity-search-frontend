@@ -1,19 +1,20 @@
 import { transferObjectProps } from '../util/object.js';
 
+// reducer for state.metapaths
 export function metapaths(state = [], action) {
   switch (action.type) {
     case 'set_metapaths':
-      let newMetapaths = action.payload.metapaths;
+      let metapaths = action.payload.metapaths;
 
       if (action.payload.preserveChecks) {
-        newMetapaths = transferObjectProps(
+        metapaths = transferObjectProps(
           state,
           action.payload.metapaths,
           ['id'],
           ['checked']
         );
       }
-      return newMetapaths || [];
+      return metapaths || [];
     default:
       return state;
   }

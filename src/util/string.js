@@ -6,7 +6,7 @@ export function cutString(string, n) {
     return string.substring(0, n - 3) + '...';
 }
 
-// remove unnecessary preceding 'www.' and etc from url
+// remove unnecessary preceding "www." and etc from url
 export function shortenUrl(url) {
   const regexes = ['^http://', '^https://', '^www.'];
   for (const regex of regexes)

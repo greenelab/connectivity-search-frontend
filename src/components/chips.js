@@ -20,9 +20,9 @@ import { ReactComponent as PharmacologicClass } from '../images/chip-pharmacolog
 
 import './chips.css';
 
-// metanode 'chip' component
+// metanode "chip" component
 // colored circle with abbreviation text in middle
-// eg (G) for 'gene'
+// eg (G) for "gene"
 export class MetanodeChip extends Component {
   // display component
   render() {
@@ -91,7 +91,7 @@ MetanodeChip = connect((state) => ({
   hetioStyles: state.hetioStyles
 }))(MetanodeChip);
 
-// metaedge 'chip' component
+// metaedge "chip" component
 // svg arrow with abbreviation text above
 export class MetaedgeChip extends Component {
   // display component
@@ -171,7 +171,7 @@ export function pathChips(path, expanded) {
   });
 }
 
-// node 'chip' component
+// node "chip" component
 export class NodeChip extends Component {
   // display component
   render() {

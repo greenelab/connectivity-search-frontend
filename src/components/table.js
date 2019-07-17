@@ -12,7 +12,13 @@ import { copyObject } from '../util/object.js';
 
 import './table.css';
 
-//
+// generic table component
+// contains three sections: super (row above head), head, and body
+// contents, styles, and classes can be specified for all sections
+// tooltips can be specified for head and body
+// colspans can be specified for super
+// custom sort function can be specified
+// supports img or font-awesome checkboxes
 export class Table extends Component {
   // initialize component
   constructor(props) {
@@ -41,7 +47,7 @@ export class Table extends Component {
       this.setState({ data: this.sortData(this.props.data) });
   }
 
-  //
+  // change which field table is sorted by
   changeSort = (field) => {
     const newState = {};
     newState.sortField = field;
@@ -54,7 +60,7 @@ export class Table extends Component {
     this.setState(newState);
   };
 
-  //
+  // sort table data based on sort field and direction
   sortData = (data) => {
     // get compare function from props or standard/default compare
     let compare = this.standardCompare;
@@ -106,7 +112,7 @@ export class Table extends Component {
     // if equal, preserve original order
   };
 
-  // toggles the specified checkbox on/off
+  // toggles checkbox on/off
   toggleChecked = (datum, field) => {
     const newData = copyObject(this.props.data);
 
@@ -140,7 +146,7 @@ export class Table extends Component {
     this.state.onChange(newData);
   };
 
-  // checks whether all are checked
+  // checks whether all checkboxes are checked
   allChecked = (field) => {
     for (const datum of this.props.data) {
       if (!datum[field])
@@ -150,6 +156,7 @@ export class Table extends Component {
     return true;
   };
 
+  // check or uncheck all checkboxes
   toggleAll = (field) => {
     const newData = copyObject(this.props.data);
 
@@ -160,6 +167,7 @@ export class Table extends Component {
     this.state.onChange(newData);
   };
 
+  // display component
   render() {
     return (
       <TableContext.Provider
@@ -203,7 +211,10 @@ export class Table extends Component {
 }
 const TableContext = React.createContext({});
 
+// super section
+// row above head row
 class Super extends Component {
+  // display component
   render() {
     const cells = this.context.superContents.map((content, index) => (
       <SuperCell
@@ -223,7 +234,9 @@ class Super extends Component {
 }
 Super.contextType = TableContext;
 
+// super cell
 class SuperCell extends Component {
+  // display component
   render() {
     return (
       <th
@@ -238,7 +251,10 @@ class SuperCell extends Component {
 }
 SuperCell.contextType = TableContext;
 
+// head section
+// contains sort buttons and field names
 class Head extends Component {
+  // display component
   render() {
     const cells = this.context.headContents.map((content, index) => {
       if (typeof content.type === 'function') {
@@ -274,7 +290,10 @@ class Head extends Component {
 }
 Head.contextType = TableContext;
 
+// head checkbox cell
+// contains specified checkbox
 class HeadCheckboxCell extends Component {
+  // display component
   render() {
     return (
       <Tooltip text={this.props.tooltip || ''}>
@@ -301,7 +320,10 @@ class HeadCheckboxCell extends Component {
 }
 HeadCheckboxCell.contextType = TableContext;
 
+// head cell
+// contains sort button
 class HeadCell extends Component {
+  // display component
   render() {
     return (
       <Tooltip text={this.props.tooltip || ''}>
@@ -335,7 +357,10 @@ class HeadCell extends Component {
 }
 HeadCell.contextType = TableContext;
 
+// body section
+// contains actual data
 class Body extends Component {
+  // display component
   render() {
     const rows = this.context.data.map((datum, index) => (
       <BodyRow key={index} datum={datum} />
@@ -345,7 +370,10 @@ class Body extends Component {
 }
 Body.contextType = TableContext;
 
+// one row in body
+// represents one datum of provided data
 class BodyRow extends Component {
+  // display component
   render() {
     const cells = this.context.headFields.map((field, index) => {
       if (typeof this.context.headContents[index].type === 'function') {
@@ -381,7 +409,10 @@ class BodyRow extends Component {
 }
 BodyRow.contextType = TableContext;
 
+// body checkbox cell
+// contains checkbox for column whose head is also a checkbox
 class BodyCheckboxCell extends Component {
+  // display component
   render() {
     const style = propValOrFunc(this.props, 'style', 'datum', {});
     const className = propValOrFunc(this.props, 'className', 'datum', '');
@@ -410,7 +441,10 @@ class BodyCheckboxCell extends Component {
 }
 BodyCheckboxCell.contextType = TableContext;
 
+// body cell
+// contains one piece of information from row/datum
 class BodyCell extends Component {
+  // display component
   render() {
     const style = propValOrFunc(this.props, 'style', 'datum', {});
     const className = propValOrFunc(this.props, 'className', 'datum', '');

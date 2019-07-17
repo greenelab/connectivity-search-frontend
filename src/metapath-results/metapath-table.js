@@ -15,6 +15,7 @@ import { setMetapaths } from './actions.js';
 
 import './metapath-table.css';
 
+// metapath table component
 export class MetapathTable extends Component {
   // display component
   render() {
@@ -266,6 +267,7 @@ export class MetapathTable extends Component {
     );
   }
 }
+// connect component to global state
 MetapathTable = connect((state) => ({
   metapaths: state.metapaths,
   tooltipDefinitions: state.tooltipDefinitions

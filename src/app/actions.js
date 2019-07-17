@@ -59,7 +59,7 @@ export function fetchAndSetDefinitions() {
   };
 }
 
-// load source/target nodes and checked metapath from url
+// load source/target nodes and checked metapaths from url
 export function loadStateFromUrl() {
   return async function(dispatch) {
     let params = new URLSearchParams(window.location.search);

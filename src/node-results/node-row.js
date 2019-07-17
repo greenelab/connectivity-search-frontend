@@ -4,8 +4,10 @@ import { Component } from 'react';
 import { Tooltip } from '../components/tooltip.js';
 import { DynamicField } from '../components/dynamic-field.js';
 
-//
+// node row component
+// contains one row of information
 export class NodeRow extends Component {
+  // display component
   render() {
     return (
       <tr>

@@ -9,7 +9,7 @@ import { shortenUrl } from '../util/string.js';
 import { NodeRow } from './node-row.js';
 import { IconButton } from '../components/buttons.js';
 
-// node 'card' component
+// node results table component
 // displays details about source/target node
 export class NodeTable extends Component {
   // initialize component
