@@ -11,6 +11,8 @@ import { paths } from './path-results/reducers.js';
 import { nodes } from './path-results/reducers.js';
 import { relationships } from './path-results/reducers.js';
 
+import { graph } from './path-graph/reducers.js';
+
 import { copyObject } from './util/object.js';
 
 // master combined reducer
@@ -28,7 +30,8 @@ export function Reducer(state = {}, action) {
     metapaths: metapaths(newState.metapaths, action),
     paths: paths(newState, action),
     nodes: nodes(newState.nodes, action),
-    relationships: relationships(newState.relationships, action)
+    relationships: relationships(newState.relationships, action),
+    graph: graph(newState, action)
   };
 
   // if explicitly specified, update url to match state
