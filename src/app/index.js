@@ -6,6 +6,7 @@ import { NodeSearch } from '../node-search';
 import { NodeResults } from '../node-results';
 import { MetapathResults } from '../metapath-results';
 import { PathResults } from '../path-results';
+import { PathGraph } from '../path-graph';
 import { cutString } from '../util/string.js';
 import { loadStateFromUrl } from './actions.js';
 import { compareObjects } from '../util/object';
@@ -106,6 +107,7 @@ class App extends Component {
         <NodeResults />
         <MetapathResults />
         <PathResults />
+        <PathGraph/>
       </>
     );
   }
