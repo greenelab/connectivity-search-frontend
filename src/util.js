@@ -16,6 +16,9 @@ export function toExponential(number) {
 
 // get html of number in regular form, rounded to 1 decimal digit
 export function toFixed(number) {
+  if (typeof number !== 'number')
+    return '-';
+
   return <span>{parseFloat(number).toFixed(1)}</span>;
 }
 
@@ -28,6 +31,7 @@ export function toComma(number) {
 export function toGradient(number) {
   if (typeof number !== 'number')
     return 'rgba(255, 255, 255, 0)';
+
   // pretty gradient
   let gradient = ['rgba(255, 255, 255, 0)', 'rgba(244, 143, 177, 1)'];
 

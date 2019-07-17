@@ -189,6 +189,10 @@ class TableFull extends Component {
     const comparison = Number(a[key]) - Number(b[key]);
     if (!Number.isNaN(comparison))
       return comparison;
+    if (Number.isNaN(Number(a[key])) && !Number.isNaN(Number(b[key])))
+      return 1;
+    if (!Number.isNaN(Number(a[key])) && Number.isNaN(Number(b[key])))
+      return -1;
 
     // otherwise parse as strings and compare alphabetically
     if (a[key] < b[key])
@@ -550,10 +554,14 @@ class TableBodyRow extends Component {
           <Checkbox
             checked={this.props.checked}
             onClick={() =>
-              this.context.toggleChecked(this.props.metapath.metapath_abbreviation)
+              this.context.toggleChecked(
+                this.props.metapath.metapath_abbreviation
+              )
             }
             onCtrlClick={() =>
-              this.context.soloChecked(this.props.metapath.metapath_abbreviation)
+              this.context.soloChecked(
+                this.props.metapath.metapath_abbreviation
+              )
             }
             tooltipText={
               'Show these ' +
@@ -685,7 +693,7 @@ class TableBodyRow extends Component {
           }
           fullValue={
             metapath.dgp_nonzero_mean !== undefined ? (
-              metapath.dgp_nonzero_mean
+              metapath.dgp_nonzero_mean || '-'
             ) : (
               <QuestionMark id={id} />
             )
@@ -701,7 +709,7 @@ class TableBodyRow extends Component {
           }
           fullValue={
             metapath.dgp_nonzero_sd !== undefined ? (
-              metapath.dgp_nonzero_sd
+              metapath.dgp_nonzero_sd || '-'
             ) : (
               <QuestionMark id={id} />
             )
@@ -838,7 +846,9 @@ class QuestionMark extends Component {
         );
         newMetapaths[index] = {
           ...newMetapaths[index],
-          ...results.path_count_info
+          ...results.path_count_info,
+          path_count:
+            newMetapaths[index].path_count || results.paths.length || 0
         };
 
         dispatch(
