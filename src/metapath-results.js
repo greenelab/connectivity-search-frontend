@@ -136,7 +136,7 @@ class TableFull extends Component {
   // checks whether all metapaths besides the specified are unchecked
   allOthersUnchecked(id) {
     for (const metapath of this.props.metapaths) {
-      if (id !== metapath.metapath_id && metapath.checked)
+      if (id !== metapath.metapath_abbreviation && metapath.checked)
         return false;
     }
 
@@ -148,7 +148,7 @@ class TableFull extends Component {
     const newMetapaths = copyObject(this.props.metapaths);
 
     for (const metapath of newMetapaths) {
-      if (metapath.metapath_id === id)
+      if (metapath.metapath_abbreviation === id)
         metapath.checked = !metapath.checked;
     }
 
@@ -161,7 +161,7 @@ class TableFull extends Component {
     const allOthersUnchecked = this.allOthersUnchecked(id);
 
     for (const metapath of newMetapaths) {
-      if (allOthersUnchecked || id === metapath.metapath_id)
+      if (allOthersUnchecked || id === metapath.metapath_abbreviation)
         metapath.checked = true;
       else
         metapath.checked = false;
@@ -541,7 +541,7 @@ class TableBodyRow extends Component {
   // display component
   render() {
     const metapath = this.props.metapath;
-    const id = metapath.metapath_id;
+    const id = metapath.metapath_abbreviation;
 
     // primary columns
     const cols = (
@@ -550,10 +550,10 @@ class TableBodyRow extends Component {
           <Checkbox
             checked={this.props.checked}
             onClick={() =>
-              this.context.toggleChecked(this.props.metapath.metapath_id)
+              this.context.toggleChecked(this.props.metapath.metapath_abbreviation)
             }
             onCtrlClick={() =>
-              this.context.soloChecked(this.props.metapath.metapath_id)
+              this.context.soloChecked(this.props.metapath.metapath_abbreviation)
             }
             tooltipText={
               'Show these ' +
@@ -834,7 +834,7 @@ class QuestionMark extends Component {
       ).then((results) => {
         const newMetapaths = copyObject(this.props.metapaths);
         const index = newMetapaths.findIndex(
-          (metapath) => metapath.metapath_id === this.props.id
+          (metapath) => metapath.metapath_abbreviation === this.props.id
         );
         newMetapaths[index] = {
           ...newMetapaths[index],
@@ -854,7 +854,7 @@ class QuestionMark extends Component {
   // display component
   render() {
     return (
-      <Tooltip text='The info for metapath was not pre-computed because it was below a threshold of importance. Click to compute it now.'>
+      <Tooltip text='The info for this metapath was not pre-computed because it was below a chosen threshold of importance. Click to compute it now.'>
         <FontAwesomeIcon
           className='question_mark'
           icon={faQuestionCircle}
