@@ -6,7 +6,7 @@ import Fade from '@material-ui/core/Fade';
 import './tooltip.css';
 
 // open delay in ms
-const delay = 1000;
+const delay = 500;
 
 // tooltip (helper text) popup component
 export class Tooltip extends Component {

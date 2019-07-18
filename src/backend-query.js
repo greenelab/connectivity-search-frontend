@@ -120,6 +120,7 @@ export function searchMetapaths(sourceId, targetId) {
   const params = new URLSearchParams();
   params.set('source', sourceId);
   params.set('target', targetId);
+  params.set('complete', '');
   const query = metapathSearchServer + '?' + params.toString();
   return fetchJson(query).then((response) => {
     return response.path_counts;

@@ -5,6 +5,8 @@ export function toExponential(number) {
   number = parseFloat(number).toExponential(1);
   const mantissa = parseFloat(number.split('e')[0]).toFixed(1);
   const exponent = parseInt(number.split('e')[1]);
+  if (isNaN(mantissa) || isNaN(exponent))
+    return <></>;
   return (
     <span>
       {mantissa} &times; 10<sup>{exponent}</sup>
@@ -14,6 +16,9 @@ export function toExponential(number) {
 
 // get html of number in regular form, rounded to 1 decimal digit
 export function toFixed(number) {
+  if (typeof number !== 'number')
+    return '-';
+
   return <span>{parseFloat(number).toFixed(1)}</span>;
 }
 
@@ -24,11 +29,11 @@ export function toComma(number) {
 
 // map number to css color (rgba or hex) based on specified gradient
 export function toGradient(number) {
+  if (typeof number !== 'number')
+    return 'rgba(255, 255, 255, 0)';
+
   // pretty gradient
-  let gradient = [
-    'rgba(255, 255, 255, 0)',
-    'rgba(244, 143, 177, 1)'
-  ];
+  let gradient = ['rgba(255, 255, 255, 0)', 'rgba(244, 143, 177, 1)'];
 
   // split each gradient color into component rgba values
   gradient = gradient.map((color) => {
@@ -81,7 +86,7 @@ export function toGradient(number) {
     'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')';
 
   // return color
-  return color || '#ffffff';
+  return color || 'rgba(255, 255, 255, 0)';
 }
 
 // downloads provided data as csv file
@@ -273,6 +278,8 @@ export function compareArrays(array1, array2, checkReverse) {
 
 // truncate string to character limit, insert ellipsis  if necessary
 export function cutString(string, n) {
+  string = string || '';
+  string = String(string);
   if (string.length <= n)
     return string;
   else
