@@ -1,4 +1,5 @@
 import { assembleGraph } from './assemble.js';
+import { transferObjectProps } from '../util/object.js';
 
 // reducer for state.graph
 // takes whole state as input
@@ -14,8 +15,15 @@ export function graph(state = {}, action) {
 
       const graph = assembleGraph(paths, nodes, relationships);
 
-      return graph || { nodes: {}, edges: {} };
+      transferObjectProps(
+        state.graph.nodes,
+        graph.nodes,
+        ['neo4j_id'],
+        ['x', 'y', 'fx', 'fy', 'vx', 'vy']
+      );
+
+      return graph || { nodes: [], edges: [] };
     default:
-      return state.graph || { nodes: {}, edges: {} };
+      return state.graph || { nodes: [], edges: [] };
   }
 }

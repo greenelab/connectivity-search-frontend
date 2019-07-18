@@ -1,7 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import * as d3 from 'd3';
 
 import { GraphDefs } from './defs.js';
 import { GraphEdgeLineHighlights } from './edge-line-highlights.js';
@@ -10,7 +9,10 @@ import { GraphEdgeLines } from './edge-lines.js';
 import { GraphEdgeLabels } from './edge-labels.js';
 import { GraphNodeCircles } from './node-circles.js';
 import { GraphNodeLabels } from './node-labels.js';
-import { minZoom, maxZoom } from './constants.js';
+
+import { createSimulation } from './simulation.js';
+import { createViewHandler } from './view-handler.js';
+import { createNodeDragHandler } from './node-drag-handler.js';
 
 import './graph.css';
 
@@ -21,88 +23,34 @@ export class Graph extends Component {
     super();
 
     this.state = {};
-    this.state.nodeDragHandler = null;
   }
   // when component mounts
   componentDidMount() {
-    const svg = d3.select('#graph');
+    this.createGraph();
+  }
 
-    // create physics simulation for nodes to detangle and prettify layout
-    // const simulation = d3
-    //   .forceSimulation()
-    //   .force(
-    //     'link',
-    //     d3
-    //       .forceLink()
-    //       .distance(nodeDistance)
-    //       .id((d) => d.neo4j_id)
-    //   )
-    //   .force(
-    //     'collide',
-    //     d3
-    //       .forceCollide()
-    //       .radius(nodeRadius)
-    //       .strength(1)
-    //   )
-    //   .force('charge', d3.forceManyBody().strength(-nodeRepulsion))
-    //   .force('center', d3.forceCenter(0, 0));
-    // simulation.on('tick', this.onSimulationTick);
+  // when component updates
+  componentDidUpdate() {
+    const data = this.props.graph;
+    this.state.simulation.nodes(data.nodes);
+    this.state.simulation.force('link').links(data.edges);
+    this.state.simulation.restart();
+  }
 
-    // create handler for panning and zooming view
-    const viewZoomHandler = d3
-      .zoom()
-      .scaleExtent([minZoom, maxZoom])
-      .on('zoom', this.onViewZoom);
-    svg.call(viewZoomHandler);
-
-    // handle clicks on background
-    svg.on('click', this.onViewClick);
-
-    // create handler for dragging nodes
-    const nodeDragHandler = d3
-      .drag()
-      .on('drag', this.onNodeDrag)
-      .on('start', this.onNodeDragStart)
-      .on('end', this.onNodeDragEnd);
-
+  // initialize graph. create simulation and event handlers
+  createGraph = () => {
+    const simulation = createSimulation();
+    const viewHandler = createViewHandler();
+    const nodeDragHandler = createNodeDragHandler(simulation);
     // store the above objects to be referenced on graph updates
     this.setState(
       {
-        // simulation: simulation,
-        viewZoomHandler: viewZoomHandler,
+        simulation: simulation,
+        viewHandler: viewHandler,
         nodeDragHandler: nodeDragHandler
       }
       // this.resetView
     );
-  }
-
-  // when view panned or zoomed by user
-  onViewZoom = () => {
-    d3.select('#graph_view').attr('transform', d3.event.transform);
-  };
-
-  // when node dragged by user
-  onNodeDragStart = () => {
-    // this.state.simulation.alphaTarget(1).restart();
-  };
-
-  // when node dragged by user
-  onNodeDrag = (d) => {
-    d.fx = d3.event.x;
-    d.fy = d3.event.y;
-  };
-
-  // when node dragged by user
-  onNodeDragEnd = () => {
-    // this.state.simulation.alphaTarget(0).restart();
-  };
-
-  // when view/background is clicked by user
-  onViewClick = () => {
-    // this.deselectAll();
-    // this.updateNodeCircles();
-    // this.updateEdgeLines();
-    // this.props.setSelectedElement(null);
   };
 
   // display component
@@ -155,8 +103,7 @@ export class Graph extends Component {
 // connect component to global state
 Graph = connect(
   (state) => ({
-    sourceNode: state.sourceNode,
-    targetNode: state.targetNode
+    graph: state.graph
   }),
   null,
   null,
