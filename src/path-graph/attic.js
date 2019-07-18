@@ -28,10 +28,10 @@ export class GraphAttic extends Component {
           <IconButton
             text='reset'
             icon={faPowerOff}
-            // onClick={() => {
-            //   if (this.graph.current)
-            //     this.graph.current.restartGraph();
-            // }}
+            onClick={() => {
+              if (this.props.graphRef.current)
+                this.props.graphRef.current.restartGraph();
+            }}
             tooltipText='Completely restart graph'
           />
           <IconButton

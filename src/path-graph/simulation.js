@@ -54,19 +54,15 @@ export function updateSimulation(simulation, data, reheat) {
 }
 
 // fix source and target nodes in nice starting positions
-export function pinSourceAndTargetNodes(data) {
+export function pinSourceTarget(data) {
   data.nodes.forEach((node) => {
     if (node.neo4j_id === data.source_neo4j_id) {
-      if (!node.fx)
-        node.fx = -nodeDistance * 2;
-      if (!node.fy)
-        node.fy = 0;
+      node.fx = -nodeDistance * 2;
+      node.fy = 0;
     }
     if (node.neo4j_id === data.target_neo4j_id) {
-      if (!node.fx)
-        node.fx = nodeDistance * 2;
-      if (!node.fy)
-        node.fy = 0;
+      node.fx = nodeDistance * 2;
+      node.fy = 0;
     }
   });
 }
@@ -86,5 +82,16 @@ export function pinAll(data) {
   data.nodes.forEach((node) => {
     node.fx = node.x;
     node.fy = node.y;
+  });
+}
+
+// reset position of nodes to center
+export function resetAll(data) {
+  data.nodes.forEach((node) => {
+    // set position to 0,0
+    // add a bit of random offset to prevent nodes from "exploding" outward
+    // due to them being right on top of each other
+    node.x = -nodeRadius + Math.random() * 2 * nodeRadius;
+    node.y = -nodeRadius + Math.random() * 2 * nodeRadius;
   });
 }

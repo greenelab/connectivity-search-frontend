@@ -1,6 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
+import * as d3 from 'd3';
 
 import { GraphDefs } from './defs.js';
 import { GraphEdgeLineHighlights } from './edge-line-highlights.js';
@@ -9,12 +10,12 @@ import { GraphEdgeLines } from './edge-lines.js';
 import { GraphEdgeLabels } from './edge-labels.js';
 import { GraphNodeCircles } from './node-circles.js';
 import { GraphNodeLabels } from './node-labels.js';
-
 import { createSimulation } from './simulation.js';
 import { updateSimulation } from './simulation.js';
-import { pinSourceAndTargetNodes } from './simulation.js';
+import { pinSourceTarget } from './simulation.js';
 import { unpinAll } from './simulation.js';
 import { pinAll } from './simulation.js';
+import { resetAll } from './simulation';
 import { createViewHandler } from './view.js';
 import { createNodeDragHandler } from './node-drag.js';
 import { resetView } from './view.js';
@@ -46,7 +47,7 @@ export class Graph extends Component {
 
     // only pin source/target nodes when adding first path to graph
     if (prevProps.graph.nodes.length === 0)
-      pinSourceAndTargetNodes(this.props.graph);
+      pinSourceTarget(this.props.graph);
   }
 
   // initialize graph. create simulation and event handlers
@@ -63,6 +64,15 @@ export class Graph extends Component {
       },
       this.resetView
     );
+  };
+
+  // completely restart graph
+  restartGraph = () => {
+    this.resetView();
+    this.unpinAll();
+    resetAll(this.props.graph);
+    pinSourceTarget(this.props.graph);
+    this.state.simulation.alpha(1).restart();
   };
 
   // reset view
@@ -91,6 +101,52 @@ export class Graph extends Component {
     downloadSvg(svg);
   };
 
+  // when node or edge clicked by user
+  onNodeEdgeClick = (d) => {
+    d3.event.stopPropagation();
+
+    this.deselectAll();
+    if (!d.selected)
+      d.selected = true;
+
+    // this.updateNodeCircles();
+    // this.updateEdgeLines();
+
+    this.props.setSelectedElement(d);
+  };
+
+  // when node or edge hovered by user
+  onNodeEdgeHover = (d) => {
+    d3.event.stopPropagation();
+
+    d.hovered = true;
+
+    // this.updateNodeCircles();
+    // this.updateEdgeLines();
+
+    this.props.setHoveredElement(d);
+  };
+
+  // when node or edge unhovered by user
+  onNodeEdgeUnhover = (d) => {
+    d3.event.stopPropagation();
+
+    d.hovered = false;
+
+    // this.updateNodeCircles();
+    // this.updateEdgeLines();
+
+    this.props.setHoveredElement(null);
+  };
+
+  // deselect all elements
+  deselectAll = () => {
+    for (const node of this.props.graph.nodes)
+      node.selected = undefined;
+    for (const edge of this.props.graph.edges)
+      edge.selected = undefined;
+  };
+
   // display component
   render() {
     // calculate x position of graph container
@@ -102,7 +158,6 @@ export class Graph extends Component {
       if (left < minLeft)
         left = minLeft;
     }
-
     return (
       <div id='graph_container' style={{ height: this.props.height }}>
         <svg
@@ -121,13 +176,31 @@ export class Graph extends Component {
               <GraphNodeCircleHighlights />
             </g>
             <g id='graph_edge_line_layer'>
-              <GraphEdgeLines />
+              <GraphEdgeLines
+                // pass selectedElement and hoveredElement as props
+                // to make sure component rerenders any time they change
+                selectedElement={this.props.selectedElement}
+                hoveredElement={this.props.hoveredElement}
+              />
             </g>
             <g id='graph_edge_label_layer'>
-              <GraphEdgeLabels />
+              <GraphEdgeLabels
+                onNodeEdgeClick={this.onNodeEdgeClick}
+                onNodeEdgeHover={this.onNodeEdgeHover}
+                onNodeEdgeUnhover={this.onNodeEdgeUnhover}
+              />
             </g>
             <g id='graph_node_circle_layer'>
-              <GraphNodeCircles nodeDragHandler={this.state.nodeDragHandler} />
+              <GraphNodeCircles
+                nodeDragHandler={this.state.nodeDragHandler}
+                onNodeEdgeClick={this.onNodeEdgeClick}
+                onNodeEdgeHover={this.onNodeEdgeHover}
+                onNodeEdgeUnhover={this.onNodeEdgeUnhover}
+                // pass selectedElement and hoveredElement as props
+                // to make sure component rerenders any time they change
+                selectedElement={this.props.selectedElement}
+                hoveredElement={this.props.hoveredElement}
+              />
             </g>
             <g id='graph_node_label_layer'>
               <GraphNodeLabels />

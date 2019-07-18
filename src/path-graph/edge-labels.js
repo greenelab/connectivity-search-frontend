@@ -21,9 +21,9 @@ export class GraphEdgeLabels extends Component {
     edgeLabels
       .enter()
       .append('text')
-      // .on('click', this.onNodeEdgeClick)
-      // .on('mouseenter', this.onNodeEdgeHover)
-      // .on('mouseleave', this.onNodeEdgeUnhover)
+      .on('click', this.props.onNodeEdgeClick)
+      .on('mouseenter', this.props.onNodeEdgeHover)
+      .on('mouseleave', this.props.onNodeEdgeUnhover)
       .merge(edgeLabels)
       .attr('class', 'graph_edge_label')
       .attr('font-size', edgeFontSize)

@@ -19,6 +19,8 @@ export class PathGraph extends Component {
     this.state.width = 640;
     this.state.height = 480;
     this.state.sectionWidth = 640;
+    this.state.selectedElement = null;
+    this.state.hoveredElement = null;
 
     this.graphRef = React.createRef();
   }
@@ -86,6 +88,16 @@ export class PathGraph extends Component {
     this.setState({ sectionWidth: ReactDOM.findDOMNode(this).clientWidth });
   };
 
+  //
+  setSelectedElement = (element) => {
+    this.setState({ selectedElement: element });
+  };
+
+  //
+  setHoveredElement = (element) => {
+    this.setState({ hoveredElement: element });
+  };
+
   // display component
   render() {
     return (
@@ -103,10 +115,14 @@ export class PathGraph extends Component {
           expandContainer={this.expandContainer}
         />
         <Graph
+          ref={this.graphRef}
           width={this.state.width}
           height={this.state.height}
           sectionWidth={this.state.sectionWidth}
-          ref={this.graphRef}
+          setSelectedElement={this.setSelectedElement}
+          setHoveredElement={this.setHoveredElement}
+          selectedElement={this.state.selectedElement}
+          hoveredElement={this.state.hoveredElement}
         />
         <SelectedInfo />
       </CollapsibleSection>
