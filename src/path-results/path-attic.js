@@ -50,6 +50,7 @@ export class PathAttic extends Component {
     );
   }
 }
+// connect component to global state
 PathAttic = connect((state) => ({
   sourceNode: state.sourceNode,
   targetNode: state.targetNode,

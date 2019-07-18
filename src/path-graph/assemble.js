@@ -1,5 +1,5 @@
 // construct graph object with relevant properties for each node/edge
-export function assembleGraph(paths, nodes, relationships) {
+export function assembleGraph(paths = [], nodes = {}, relationships = {}) {
   // empty graph object
   const graph = {
     source_neo4j_id: null,
@@ -8,12 +8,8 @@ export function assembleGraph(paths, nodes, relationships) {
     edges: []
   };
 
-  // if null explicitly provided as argument, return empty graph object
-  if (paths === null)
-    return graph;
-
   // if paths not valid, exit
-  if (!paths || paths.length <= 0)
+  if (!paths || !paths.length)
     return graph;
 
   // get source/target nodes from first path

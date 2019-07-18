@@ -1,0 +1,8 @@
+#graph_container {
+  margin-top: 5px;
+  position: relative;
+}
+#graph {
+  border: solid #e0e0e0 2px;
+  position: absolute;
+}

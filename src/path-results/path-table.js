@@ -102,6 +102,7 @@ export class PathTable extends Component {
     );
   }
 }
+// connect component to global state
 PathTable = connect((state) => ({
   paths: state.paths,
   tooltipDefinitions: state.tooltipDefinitions

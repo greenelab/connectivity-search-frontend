@@ -11,7 +11,7 @@ export class Button extends Component {
     return (
       <Tooltip text={this.props.tooltipText}>
         <button
-          className={this.props.className}
+          className={this.props.className || ''}
           onClick={(event) => {
             if (event.ctrlKey) {
               if (this.props.onCtrlClick)
@@ -38,7 +38,7 @@ export class IconButton extends Component {
   render() {
     return (
       <Button
-        className={this.props.className + ' blue small'}
+        className={(this.props.className || '') + ' blue small'}
         tooltipText={this.props.tooltipText}
         onClick={this.props.onClick}
         onCtrlClick={this.props.onCtrlClick}

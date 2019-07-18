@@ -14,8 +14,8 @@ export function graph(state = {}, action) {
 
       const graph = assembleGraph(paths, nodes, relationships);
 
-      return graph || [];
+      return graph || { nodes: {}, edges: {} };
     default:
-      return state.graph || [];
+      return state.graph || { nodes: {}, edges: {} };
   }
 }

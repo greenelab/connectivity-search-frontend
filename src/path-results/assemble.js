@@ -1,5 +1,8 @@
 // construct path object with relevant properties for each node/edge entry
-export function assemblePath(path, nodes, edges) {
+export function assemblePath(path = {}, nodes = {}, edges = {}) {
+  if (!path.node_ids || !path.rel_ids)
+    return [];
+
   const pathNodes = [];
   for (const nodeId of path.node_ids) {
     const node = nodes[nodeId];
