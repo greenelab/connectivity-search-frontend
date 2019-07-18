@@ -86,7 +86,7 @@ export class GraphAttic extends Component {
             text=''
             icon={faCompressArrowsAlt}
             onClick={this.props.collapseContainer}
-            tooltipText='Fit the graph to the "Path Graph" section'
+            tooltipText='Fit the graph to the "Graph" section'
           />
           <IconButton
             className='graph_expand_collapse_button'

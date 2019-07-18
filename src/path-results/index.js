@@ -3,8 +3,8 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { CollapsibleSection } from '../components/collapsible-section.js';
-import { PathAttic } from './path-attic.js';
-import { PathTable } from './path-table.js';
+import { PathAttic } from './attic.js';
+import { PathTable } from './table.js';
 
 // path results section component
 export class PathResults extends Component {

@@ -13,7 +13,7 @@ import { toGradient } from '../util/format.js';
 import { cutString } from '../util/string.js';
 import { setMetapaths } from './actions.js';
 
-import './metapath-table.css';
+import './table.css';
 
 // metapath table component
 export class MetapathTable extends Component {

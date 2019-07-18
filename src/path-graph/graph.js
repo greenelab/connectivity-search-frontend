@@ -1,27 +1,110 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
+import * as d3 from 'd3';
+
+import { GraphDefs } from './defs.js';
+import { GraphEdgeLineHighlights } from './edge-line-highlights.js';
+import { GraphNodeCircleHighlights } from './node-circle-highlights.js';
+import { GraphEdgeLines } from './edge-lines.js';
+import { GraphEdgeLabels } from './edge-labels.js';
+import { GraphNodeCircles } from './node-circles.js';
+import { GraphNodeLabels } from './node-labels.js';
+import { minZoom, maxZoom } from './constants.js';
 
 import './graph.css';
 
-const minZoom = 0.25;
-const maxZoom = 4;
-const nodeRadius = 25;
-const nodeDistance = 100;
-const nodeCharLimit = 25;
-const nodeFontSize = 8;
-const nodeRepulsion = 200;
-const edgeFontSize = 8;
-const edgeThickness = 2;
-const edgeArrowSize = 10;
-const edgeSpreadDistance = 20;
-const edgeSpreadAngle = (45 / 360) * 2 * Math.PI;
-const inkColor = '#424242';
-const backgroundColor = '#fafafa';
-const highlightColor = '#ffcc00';
-
 // graph component
 export class Graph extends Component {
+  // initialize component
+  constructor() {
+    super();
+
+    this.state = {};
+    this.state.nodeDragHandler = null;
+  }
+  // when component mounts
+  componentDidMount() {
+    const svg = d3.select('#graph');
+
+    // create physics simulation for nodes to detangle and prettify layout
+    // const simulation = d3
+    //   .forceSimulation()
+    //   .force(
+    //     'link',
+    //     d3
+    //       .forceLink()
+    //       .distance(nodeDistance)
+    //       .id((d) => d.neo4j_id)
+    //   )
+    //   .force(
+    //     'collide',
+    //     d3
+    //       .forceCollide()
+    //       .radius(nodeRadius)
+    //       .strength(1)
+    //   )
+    //   .force('charge', d3.forceManyBody().strength(-nodeRepulsion))
+    //   .force('center', d3.forceCenter(0, 0));
+    // simulation.on('tick', this.onSimulationTick);
+
+    // create handler for panning and zooming view
+    const viewZoomHandler = d3
+      .zoom()
+      .scaleExtent([minZoom, maxZoom])
+      .on('zoom', this.onViewZoom);
+    svg.call(viewZoomHandler);
+
+    // handle clicks on background
+    svg.on('click', this.onViewClick);
+
+    // create handler for dragging nodes
+    const nodeDragHandler = d3
+      .drag()
+      .on('drag', this.onNodeDrag)
+      .on('start', this.onNodeDragStart)
+      .on('end', this.onNodeDragEnd);
+
+    // store the above objects to be referenced on graph updates
+    this.setState(
+      {
+        // simulation: simulation,
+        viewZoomHandler: viewZoomHandler,
+        nodeDragHandler: nodeDragHandler
+      }
+      // this.resetView
+    );
+  }
+
+  // when view panned or zoomed by user
+  onViewZoom = () => {
+    d3.select('#graph_view').attr('transform', d3.event.transform);
+  };
+
+  // when node dragged by user
+  onNodeDragStart = () => {
+    // this.state.simulation.alphaTarget(1).restart();
+  };
+
+  // when node dragged by user
+  onNodeDrag = (d) => {
+    d.fx = d3.event.x;
+    d.fy = d3.event.y;
+  };
+
+  // when node dragged by user
+  onNodeDragEnd = () => {
+    // this.state.simulation.alphaTarget(0).restart();
+  };
+
+  // when view/background is clicked by user
+  onViewClick = () => {
+    // this.deselectAll();
+    // this.updateNodeCircles();
+    // this.updateEdgeLines();
+    // this.props.setSelectedElement(null);
+  };
+
   // display component
   render() {
     // calculate x position of graph container
@@ -34,33 +117,6 @@ export class Graph extends Component {
         left = minLeft;
     }
 
-    // title text
-    const title =
-      (this.props.sourceNode.name || '___') +
-      ' → ' +
-      (this.props.targetNode.name || '___');
-
-    // description text
-    const description = [
-      'Graph visualization of the connectivity between ',
-      this.props.sourceNode.name || '___',
-      ' (',
-      this.props.sourceNode.metanode || '___',
-      ') and ',
-      this.props.targetNode.name || '___',
-      ' (',
-      this.props.targetNode.metanode || '___',
-      '). ',
-      '\n\n',
-      'Created at ',
-      window.location.href,
-      '\n\n',
-      'This subgraph of Hetionet v1.0 was created from paths between the ',
-      'specified source/target nodes that occurred more than expected ',
-      'by chance. ',
-      'See https://het.io for more information. '
-    ].join('');
-
     return (
       <div id='graph_container' style={{ height: this.props.height }}>
         <svg
@@ -70,44 +126,26 @@ export class Graph extends Component {
           height={this.props.height}
           style={{ left: left }}
         >
-          <title>{title}</title>
-          <desc>{description}</desc>
-          <defs>
-            <style>
-              {`
-            @import url('https://fonts.googleapis.com/css?family=Raleway:400,500,700');
-            @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700&text=0123456789');
-            * {
-              font-family: 'Montserrat', 'Raleway', sans-serif;
-            }
-          `}
-            </style>
-            <marker
-              id='graph_arrowhead'
-              viewBox='0 0 100 100'
-              refX='80'
-              refY='50'
-              orient='auto'
-              markerUnits='userSpaceOnUse'
-              markerWidth={edgeArrowSize}
-              markerHeight={edgeArrowSize}
-            >
-              <path
-                d='
-              M 0 0
-              L 100 50
-              L 0 100'
-                fill={inkColor}
-              />
-            </marker>
-          </defs>
+          <GraphDefs />
           <g id='graph_view'>
-            <g id='graph_edge_line_highlight_layer' />
-            <g id='graph_node_circle_highlight_layer' />
-            <g id='graph_edge_line_layer' />
-            <g id='graph_edge_label_layer' />
-            <g id='graph_node_circle_layer' />
-            <g id='graph_node_label_layer' />
+            <g id='graph_edge_line_highlight_layer'>
+              <GraphEdgeLineHighlights />
+            </g>
+            <g id='graph_node_circle_highlight_layer'>
+              <GraphNodeCircleHighlights />
+            </g>
+            <g id='graph_edge_line_layer'>
+              <GraphEdgeLines />
+            </g>
+            <g id='graph_edge_label_layer'>
+              <GraphEdgeLabels />
+            </g>
+            <g id='graph_node_circle_layer'>
+              <GraphNodeCircles nodeDragHandler={this.state.nodeDragHandler} />
+            </g>
+            <g id='graph_node_label_layer'>
+              <GraphNodeLabels />
+            </g>
           </g>
         </svg>
       </div>

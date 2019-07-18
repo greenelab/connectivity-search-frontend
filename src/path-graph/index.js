@@ -3,15 +3,10 @@ import { Component } from 'react';
 import ReactDOM from 'react-dom';
 
 import { CollapsibleSection } from '../components/collapsible-section.js';
-
-import { GraphAttic } from './graph-attic.js';
+import { GraphAttic } from './attic.js';
 import { Graph } from './graph.js';
 import { SelectedInfo } from './selected-info.js';
-
-const minWidth = 240;
-const minHeight = 240;
-const maxWidth = 3840;
-const maxHeight = 2160;
+import { minWidth, minHeight, maxWidth, maxHeight } from './constants.js';
 
 // path graph section component
 export class PathGraph extends Component {

@@ -3,8 +3,8 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { CollapsibleSection } from '../components/collapsible-section.js';
-import { MetapathAttic } from './metapath-attic.js';
-import { MetapathTable } from './metapath-table.js';
+import { MetapathAttic } from './attic.js';
+import { MetapathTable } from './table.js';
 
 // path results section component
 export class MetapathResults extends Component {

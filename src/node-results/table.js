@@ -6,7 +6,7 @@ import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 import { sortCustom } from '../util/array.js';
 import { shortenUrl } from '../util/string.js';
-import { NodeRow } from './node-row.js';
+import { NodeRow } from './row.js';
 import { IconButton } from '../components/buttons.js';
 
 // node results table component

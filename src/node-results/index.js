@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { CollapsibleSection } from '../components/collapsible-section.js';
-import { NodeTable } from './node-table.js';
+import { NodeTable } from './table.js';
 
 import './index.css';
 

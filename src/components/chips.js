@@ -18,6 +18,8 @@ import { ReactComponent as MolecularFunction } from '../images/chip-molecular-fu
 import { ReactComponent as Pathway } from '../images/chip-pathway.svg';
 import { ReactComponent as PharmacologicClass } from '../images/chip-pharmacologic-class.svg';
 
+import { Tooltip } from './tooltip.js';
+
 import './chips.css';
 
 // metanode "chip" component
@@ -77,12 +79,14 @@ export class MetanodeChip extends Component {
       textColor = style.text_color;
 
     return (
-      <div className='metanode_chip' style={{ color: textColor }}>
-        <svg viewBox='0 0 100 100'>
-          <circle cx='50' cy='50' r='49' fill={fillColor} />
-        </svg>
-        {icon}
-      </div>
+      <Tooltip text={this.props.type}>
+        <div className='metanode_chip' style={{ color: textColor }}>
+          <svg viewBox='0 0 100 100'>
+            <circle cx='50' cy='50' r='49' fill={fillColor} />
+          </svg>
+          {icon}
+        </div>
+      </Tooltip>
     );
   }
 }
@@ -115,13 +119,15 @@ export class MetaedgeChip extends Component {
       abbreviation = this.props.metagraph.kind_to_abbrev[this.props.type];
 
     return (
-      <div
-        className='metaedge_chip'
-        data-name={this.props.type}
-        data-abbreviation={abbreviation}
-      >
-        {icon}
-      </div>
+      <Tooltip text={this.props.type}>
+        <div
+          className='metaedge_chip'
+          data-name={this.props.type}
+          data-abbreviation={abbreviation}
+        >
+          {icon}
+        </div>
+      </Tooltip>
     );
   }
 }
@@ -186,13 +192,15 @@ export class NodeChip extends Component {
       textColor = style.text_color;
 
     return (
-      <span
-        className='node_chip'
-        style={{ background: fillColor, color: textColor }}
-        data-expanded={this.props.expanded}
-      >
-        {this.props.name}
-      </span>
+      <Tooltip text={this.props.name}>
+        <span
+          className='node_chip'
+          style={{ background: fillColor, color: textColor }}
+          data-expanded={this.props.expanded}
+        >
+          {this.props.name}
+        </span>
+      </Tooltip>
     );
   }
 }
