@@ -37,3 +37,34 @@ function onSimulationTick() {
   d3.selectAll('.graph_node_circle').each(positionNode);
   d3.selectAll('.graph_node_label').each(positionNode);
 }
+
+// update simulation with new data
+export function updateSimulation(simulation, data, reheat) {
+  // reimport nodes
+  simulation.nodes(data.nodes);
+  // rebuild node links
+  simulation.force('link').links(data.edges);
+  // reheat simulation
+  if (reheat)
+    simulation.alpha(1).restart();
+  else
+    simulation.restart();
+}
+
+// fix source and target nodes in nice starting positions
+export function pinSourceAndTargetNodes(data) {
+  data.nodes.forEach((node) => {
+    if (node.neo4j_id === data.source_neo4j_id) {
+      if (!node.fx)
+        node.fx = -nodeDistance * 2;
+      if (!node.fy)
+        node.fy = 0;
+    }
+    if (node.neo4j_id === data.target_neo4j_id) {
+      if (!node.fx)
+        node.fx = nodeDistance * 2;
+      if (!node.fy)
+        node.fy = 0;
+    }
+  });
+}

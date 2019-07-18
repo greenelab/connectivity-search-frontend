@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as d3 from 'd3';
 
 import { cutString } from '../util/string.js';
+
 import {
   nodeRadius,
   backgroundColor,

@@ -11,8 +11,13 @@ import { GraphNodeCircles } from './node-circles.js';
 import { GraphNodeLabels } from './node-labels.js';
 
 import { createSimulation } from './simulation.js';
-import { createViewHandler } from './view-handler.js';
-import { createNodeDragHandler } from './node-drag-handler.js';
+import { updateSimulation } from './simulation.js';
+import { pinSourceAndTargetNodes } from './simulation.js';
+import { createViewHandler } from './view.js';
+import { createNodeDragHandler } from './node-drag.js';
+import { resetView } from './view.js';
+import { fitView } from './view.js';
+import { downloadSvg } from '../util/file.js';
 
 import './graph.css';
 
@@ -30,11 +35,13 @@ export class Graph extends Component {
   }
 
   // when component updates
-  componentDidUpdate() {
-    const data = this.props.graph;
-    this.state.simulation.nodes(data.nodes);
-    this.state.simulation.force('link').links(data.edges);
-    this.state.simulation.restart();
+  componentDidUpdate(prevProps) {
+    updateSimulation(
+      this.state.simulation,
+      this.props.graph,
+      this.props.graph.nodes.length !== prevProps.graph.nodes.length
+    );
+    pinSourceAndTargetNodes(this.props.graph);
   }
 
   // initialize graph. create simulation and event handlers
@@ -48,9 +55,25 @@ export class Graph extends Component {
         simulation: simulation,
         viewHandler: viewHandler,
         nodeDragHandler: nodeDragHandler
-      }
-      // this.resetView
+      },
+      this.resetView
     );
+  };
+
+  // reset view
+  resetView = () => {
+    resetView(this.state.viewHandler);
+  };
+
+  // fit view
+  fitView = () => {
+    fitView(this.state.viewHandler);
+  };
+
+  // download graph
+  downloadGraph = () => {
+    const svg = document.getElementById('graph');
+    downloadSvg(svg);
   };
 
   // display component
@@ -103,6 +126,7 @@ export class Graph extends Component {
 // connect component to global state
 Graph = connect(
   (state) => ({
+    paths: state.paths,
     graph: state.graph
   }),
   null,

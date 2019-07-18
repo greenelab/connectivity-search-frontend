@@ -6,6 +6,7 @@ import { CollapsibleSection } from '../components/collapsible-section.js';
 import { GraphAttic } from './attic.js';
 import { Graph } from './graph.js';
 import { SelectedInfo } from './selected-info.js';
+
 import { minWidth, minHeight, maxWidth, maxHeight } from './constants.js';
 
 // path graph section component
@@ -18,6 +19,8 @@ export class PathGraph extends Component {
     this.state.width = 640;
     this.state.height = 480;
     this.state.sectionWidth = 640;
+
+    this.graphRef = React.createRef();
   }
 
   // when component mounts
@@ -25,6 +28,17 @@ export class PathGraph extends Component {
     this.updateSectionWidth();
     this.collapseContainer(true);
     window.addEventListener('resize', this.updateSectionWidth);
+  }
+
+  // when component updates
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.width !== prevState.width ||
+      this.state.height !== prevState.height
+    ) {
+      if (this.graphRef.current)
+        this.graphRef.current.fitView();
+    }
   }
 
   // set width of graph container
@@ -80,10 +94,7 @@ export class PathGraph extends Component {
         tooltipText='Graph visualization of path results'
       >
         <GraphAttic
-          minWidth={minWidth}
-          minHeight={minHeight}
-          maxWidth={maxWidth}
-          maxHeight={maxHeight}
+          graphRef={this.graphRef}
           width={this.state.width}
           height={this.state.height}
           setWidth={this.setWidth}
@@ -95,6 +106,7 @@ export class PathGraph extends Component {
           width={this.state.width}
           height={this.state.height}
           sectionWidth={this.state.sectionWidth}
+          ref={this.graphRef}
         />
         <SelectedInfo />
       </CollapsibleSection>

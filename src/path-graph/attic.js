@@ -12,6 +12,8 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { IconButton } from '../components/buttons.js';
 import { NumberBox } from '../components/number-box.js';
 
+import { minWidth, minHeight, maxWidth, maxHeight } from './constants.js';
+
 // graph attic component
 // contains buttons and info above table
 export class GraphAttic extends Component {
@@ -53,20 +55,26 @@ export class GraphAttic extends Component {
           <IconButton
             text='fit'
             icon={faExpand}
-            // onClick={this.fitView}
+            onClick={() => {
+              if (this.props.graphRef.current)
+                this.props.graphRef.current.fitView();
+            }}
             tooltipText='Fit the view to the contents of the graph'
           />
           <IconButton
             text='.svg'
             icon={faDownload}
-            // onClick={this.downloadSvg}
+            onClick={() => {
+              if (this.props.graphRef.current)
+                this.props.graphRef.current.downloadGraph();
+            }}
             tooltipText='Download the graph as an .svg file'
           />
           <NumberBox
             tooltipText='Width of the container'
-            min={this.props.minWidth}
+            min={minWidth}
             step='5'
-            max={this.props.maxWidth}
+            max={maxWidth}
             value={this.props.width}
             onArrows={this.props.setWidth}
             onSubmit={this.props.setWidth}
@@ -74,9 +82,9 @@ export class GraphAttic extends Component {
           &nbsp;&times;&nbsp;
           <NumberBox
             tooltipText='Height of the container'
-            min={this.props.minHeight}
+            min={minHeight}
             step='5'
-            max={this.props.maxHeight}
+            max={maxHeight}
             value={this.props.height}
             onArrows={this.props.setHeight}
             onSubmit={this.props.setHeight}
@@ -85,14 +93,22 @@ export class GraphAttic extends Component {
             className='graph_expand_collapse_button'
             text=''
             icon={faCompressArrowsAlt}
-            onClick={this.props.collapseContainer}
-            tooltipText='Fit the graph to the "Graph" section'
+            onClick={() => {
+              this.props.collapseContainer();
+              if (this.props.graphRef.current)
+                this.props.graphRef.current.fitView();
+            }}
+            tooltipText='Fit the graph to the page column'
           />
           <IconButton
             className='graph_expand_collapse_button'
             text=''
             icon={faExpandArrowsAlt}
-            onClick={this.props.expandContainer}
+            onClick={() => {
+              this.props.expandContainer();
+              if (this.props.graphRef.current)
+                this.props.graphRef.current.fitView();
+            }}
             tooltipText='Fit the graph to the window'
           />
           <span className='small light right'>
