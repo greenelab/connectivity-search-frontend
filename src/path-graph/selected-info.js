@@ -63,24 +63,20 @@ export class SelectedInfo extends Component {
     const fields = this.getFields();
 
     const rows = fields.map((field, index) => (
-      <tr key={index}>
+      <div key={index} className='graph_info_field'>
         <Tooltip text={field.firstCol}>
-          <td className='small light'>{field.firstCol}</td>
+          <div className='small light'>{field.firstCol}</div>
         </Tooltip>
-        <td className='small'>{field.secondCol}</td>
-      </tr>
+        <div className='small'>{field.secondCol}</div>
+      </div>
     ));
     return (
-      <table id='graph_info_table'>
-        <tbody>
-          {rows.length === 0 && (
-            <tr>
-              <td className='light'>Click on or hover over a node or edge</td>
-            </tr>
-          )}
-          {rows}
-        </tbody>
-      </table>
+      <div id='graph_info_table'>
+        {rows.length === 0 && (
+          <div className='light'>Click on or hover over a node or edge</div>
+        )}
+        {rows}
+      </div>
     );
   }
 }

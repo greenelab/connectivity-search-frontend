@@ -1,8 +1,26 @@
 #graph_info_table {
-  border: solid #e0e0e0 2px;
-  min-height: 200px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  outline: solid #e0e0e0 2px;
+  margin-top: 10px;
+  height: 150px;
+  /* overflow-y: auto; */
+}
+.graph_info_field {
+  height: 16px;
+  /* padding: 0 5px; */
+}
+.graph_info_field > div {
+  display: inline-block;
+  text-align: left;
+  vertical-align: top;
+}
+.graph_info_field > div:first-child {
+  width: 100px;
+}
+.graph_info_field > div:last-child {
+  width: 220px;
 }
 
-#graph_info_table td {
-  height: 15px;
-}
