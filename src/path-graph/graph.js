@@ -13,6 +13,8 @@ import { GraphNodeLabels } from './node-labels.js';
 import { createSimulation } from './simulation.js';
 import { updateSimulation } from './simulation.js';
 import { pinSourceAndTargetNodes } from './simulation.js';
+import { unpinAll } from './simulation.js';
+import { pinAll } from './simulation.js';
 import { createViewHandler } from './view.js';
 import { createNodeDragHandler } from './node-drag.js';
 import { resetView } from './view.js';
@@ -41,7 +43,10 @@ export class Graph extends Component {
       this.props.graph,
       this.props.graph.nodes.length !== prevProps.graph.nodes.length
     );
-    pinSourceAndTargetNodes(this.props.graph);
+
+    // only pin source/target nodes when adding first path to graph
+    if (prevProps.graph.nodes.length === 0)
+      pinSourceAndTargetNodes(this.props.graph);
   }
 
   // initialize graph. create simulation and event handlers
@@ -68,6 +73,16 @@ export class Graph extends Component {
   // fit view
   fitView = () => {
     fitView(this.state.viewHandler);
+  };
+
+  // unpin all
+  unpinAll = () => {
+    unpinAll(this.props.graph, this.state.simulation);
+  };
+
+  // pin all
+  pinAll = () => {
+    pinAll(this.props.graph);
   };
 
   // download graph

@@ -22,6 +22,8 @@ export function createSimulation() {
         .radius(nodeRadius)
         .strength(1)
     )
+    .force('centerX', d3.forceX(0).strength(0.01))
+    .force('centerY', d3.forceY(0).strength(0.01))
     .force('charge', d3.forceManyBody().strength(-nodeRepulsion));
   simulation.on('tick', onSimulationTick);
   return simulation;
@@ -66,5 +68,23 @@ export function pinSourceAndTargetNodes(data) {
       if (!node.fy)
         node.fy = 0;
     }
+  });
+}
+
+// unpin all nodes
+export function unpinAll(data, simulation) {
+  data.nodes.forEach((node) => {
+    node.fx = null;
+    node.fy = null;
+  });
+
+  simulation.alpha(1).restart();
+}
+
+// pin all nodes
+export function pinAll(data) {
+  data.nodes.forEach((node) => {
+    node.fx = node.x;
+    node.fy = node.y;
   });
 }

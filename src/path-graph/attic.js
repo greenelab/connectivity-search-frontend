@@ -37,19 +37,19 @@ export class GraphAttic extends Component {
           <IconButton
             text='unpin'
             icon={faMapMarkerAlt}
-            // onClick={() => {
-            //   if (this.graph.current)
-            //     this.graph.current.unpinAll();
-            // }}
+            onClick={() => {
+              if (this.props.graphRef.current)
+                this.props.graphRef.current.unpinAll();
+            }}
             tooltipText='Unpin all nodes'
           />
           <IconButton
             text='pin'
             icon={faMapMarker}
-            // onClick={() => {
-            //   if (this.graph.current)
-            //     this.graph.current.pinAll();
-            // }}
+            onClick={() => {
+              if (this.props.graphRef.current)
+                this.props.graphRef.current.pinAll();
+            }}
             tooltipText='Pin all nodes in their current position'
           />
           <IconButton
