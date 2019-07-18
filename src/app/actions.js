@@ -31,6 +31,7 @@ export async function fetchDefinitions() {
     };
   }
   tooltipDefinitions = { ...tooltipDefinitions, ...hetmechDefinitions };
+  tooltipDefinitions['neo4j_id'] = tooltipDefinitions['id'];
 
   return {
     metagraph: metagraph,

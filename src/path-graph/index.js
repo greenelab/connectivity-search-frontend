@@ -124,7 +124,10 @@ export class PathGraph extends Component {
           selectedElement={this.state.selectedElement}
           hoveredElement={this.state.hoveredElement}
         />
-        <SelectedInfo />
+        <SelectedInfo
+          selectedElement={this.state.selectedElement}
+          hoveredElement={this.state.hoveredElement}
+        />
       </CollapsibleSection>
     );
   }

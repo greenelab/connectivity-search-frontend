@@ -24,10 +24,6 @@ export function graph(state = {}, action) {
 
       return graph || { nodes: [], edges: [] };
 
-    case 'set_graph':
-      const g = action.payload.graph;
-      return g || { nodes: [], edges: [] };
-
     default:
       return state.graph || { nodes: [], edges: [] };
   }
