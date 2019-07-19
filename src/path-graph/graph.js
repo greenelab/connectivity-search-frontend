@@ -45,15 +45,15 @@ export class Graph extends Component {
       this.props.graph.nodes.length !== prevProps.graph.nodes.length
     );
 
-    // only pin source/target nodes when adding first path to graph
+    // when adding first path to graph, restart graph
     if (prevProps.graph.nodes.length === 0)
-      pinSourceTarget(this.props.graph);
+      this.restartGraph();
   }
 
   // initialize graph. create simulation and event handlers
   createGraph = () => {
     const simulation = createSimulation();
-    const viewHandler = createViewHandler();
+    const viewHandler = createViewHandler(this.onViewClick, this.fitView);
     const nodeDragHandler = createNodeDragHandler(simulation);
     // store the above objects to be referenced on graph updates
     this.setState(
@@ -109,33 +109,20 @@ export class Graph extends Component {
     if (!d.selected)
       d.selected = true;
 
-    // this.updateNodeCircles();
-    // this.updateEdgeLines();
-
     this.props.setSelectedElement(d);
   };
 
   // when node or edge hovered by user
   onNodeEdgeHover = (d) => {
     d3.event.stopPropagation();
-
     d.hovered = true;
-
-    // this.updateNodeCircles();
-    // this.updateEdgeLines();
-
     this.props.setHoveredElement(d);
   };
 
   // when node or edge unhovered by user
   onNodeEdgeUnhover = (d) => {
     d3.event.stopPropagation();
-
     d.hovered = false;
-
-    // this.updateNodeCircles();
-    // this.updateEdgeLines();
-
     this.props.setHoveredElement(null);
   };
 
@@ -145,6 +132,12 @@ export class Graph extends Component {
       node.selected = undefined;
     for (const edge of this.props.graph.edges)
       edge.selected = undefined;
+  };
+
+  // on view click
+  onViewClick = () => {
+    this.deselectAll();
+    this.props.setSelectedElement(null);
   };
 
   // display component
