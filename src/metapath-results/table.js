@@ -28,27 +28,29 @@ export class MetapathTable extends Component {
       );
     };
 
-    const sortFunctions = [
-      null,
-      (a, b, key) => {
-        a = a[key];
-        b = b[key];
-        // first by length
-        if (a.length < b.length)
-          return -1;
-        else if (a.length > b.length)
-          return 1;
-        else {
-          // then alphabetically
-          if (a < b)
+    const sortFunction = (field) => {
+      // sort metapaths
+      if (field === 'metapath_metaedges') {
+        return (a, b, key) => {
+          a = a[key];
+          b = b[key];
+          // first by length
+          if (a.length < b.length)
             return -1;
-          else if (a > b)
+          else if (a.length > b.length)
             return 1;
-          else
-            return 0;
-        }
+          else {
+          // then alphabetically
+            if (a < b)
+              return -1;
+            else if (a > b)
+              return 1;
+            else
+              return 0;
+          }
+        };
       }
-    ];
+    };
 
     let superContents = [];
     let superStyles = [];
@@ -302,7 +304,7 @@ export class MetapathTable extends Component {
           className='metapath_results_table'
           data={this.props.metapaths}
           onChange={onChange}
-          sortFunctions={sortFunctions}
+          sortFunction={sortFunction}
           defaultSortField='adjusted_p_value'
           defaultSortUp={false}
           superContents={superContents}

@@ -22,7 +22,7 @@ export class RandomButton extends Component {
     return (
       <Button
         tooltipText='Get random source/target node pair that has at least one
-        metapath result'
+        precomputed metapath result'
         className='node_search_round_button'
         onClick={this.onClick}
       >

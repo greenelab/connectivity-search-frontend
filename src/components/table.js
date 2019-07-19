@@ -63,12 +63,12 @@ export class Table extends Component {
   // sort table data based on sort field and direction
   sortData = (data) => {
     // get compare function from props or standard/default compare
-    let compare = this.standardCompare;
-    if (
-      this.props.compareFunction &&
-      this.props.compareFunction(this.state.sortField)
-    )
-      compare = this.props.compareFunction(this.state.sortField);
+    let compare;
+    if (this.props.sortFunction)
+      compare = this.props.sortFunction(this.state.sortField);
+
+    if (typeof compare !== 'function')
+      compare = this.defaultSort;
 
     const originalData = copyObject(data);
 
@@ -85,14 +85,18 @@ export class Table extends Component {
   };
 
   // compare function for sorting
-  standardCompare = (a, b, key, sortUp, original) => {
+  defaultSort = (a, b, key, sortUp, original) => {
     // get values
-    const aValue = Number(a[key]);
-    const bValue = Number(b[key]);
+    const aValue = a[key];
+    const bValue = b[key];
+
+    // get values
+    const aNum = Number(aValue);
+    const bNum = Number(bValue);
 
     // get whether a and b are numbers
-    const aIsNum = !Number.isNaN(aValue);
-    const bIsNum = !Number.isNaN(bValue);
+    const aIsNum = !Number.isNaN(aNum);
+    const bIsNum = !Number.isNaN(bNum);
 
     // get original positions in array
     const aIndex = original.findIndex((element) => compareObjects(element, a));
@@ -101,8 +105,8 @@ export class Table extends Component {
     // if both are numbers, compare by values, or by index if values are the
     // same (to preserve original order)
     if (aIsNum && bIsNum) {
-      if (aValue - bValue !== 0)
-        return aValue - bValue;
+      if (aNum - bNum !== 0)
+        return aNum - bNum;
       else
         return sortUp ? bIndex - aIndex : aIndex - bIndex;
     }
