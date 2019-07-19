@@ -3,6 +3,7 @@ import { Component } from 'react';
 
 import { sortCustom } from '../util/array.js';
 import { Tooltip } from '../components/tooltip.js';
+import { DynamicField } from '../components/dynamic-field.js';
 
 import './selected-info.css';
 
@@ -60,22 +61,47 @@ export class SelectedInfo extends Component {
   };
   // display component
   render() {
-    const fields = this.getFields();
+    let fields = this.getFields();
 
-    const rows = fields.map((field, index) => (
-      <div key={index} className='graph_info_field'>
+    fields = fields.map((field, index) => (
+      <React.Fragment key={index}>
         <Tooltip text={field.firstCol}>
-          <div className='small light'>{field.firstCol}</div>
+          <td className='small light'>{field.firstCol}</td>
         </Tooltip>
-        <div className='small'>{field.secondCol}</div>
-      </div>
+        <td>
+          <DynamicField value={field.secondCol} className='left small nowrap' />
+        </td>
+      </React.Fragment>
     ));
+
+    // make rows in groups of two (or one if screen size small)
+    const groups = window.innerWidth >= 640 ? 2 : 1;
+    const rows = new Array(Math.ceil(fields.length / groups))
+      .fill()
+      .map(() => fields.splice(0, groups))
+      .map((field, index) => <tr key={index}>{field}</tr>);
+
+    let display;
+    if (rows.length) {
+      display = (
+        <table id='graph_info_table'>
+          <tbody>{rows}</tbody>
+        </table>
+      );
+    } else {
+      display = (
+        <div id='graph_info_placeholder' className='center light'>
+          Click on or hover over a node or edge
+        </div>
+      );
+    }
+
     return (
-      <div id='graph_info_table'>
-        {rows.length === 0 && (
-          <div className='light'>Click on or hover over a node or edge</div>
-        )}
-        {rows}
+      <div
+        id='graph_info_table_container'
+        style={{ alignItems: rows.length ? 'flex-start' : 'center' }}
+      >
+        {display}
       </div>
     );
   }

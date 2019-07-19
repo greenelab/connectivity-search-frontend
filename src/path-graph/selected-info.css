@@ -1,26 +1,19 @@
-#graph_info_table {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-wrap: wrap;
+#graph_info_table_container {
   outline: solid #e0e0e0 2px;
   margin-top: 10px;
-  height: 150px;
-  /* overflow-y: auto; */
+  min-height: 120px;
+  display: flex;
+  justify-content: center;
+  padding: 5px;
 }
-.graph_info_field {
+#graph_info_table td {
   height: 16px;
-  /* padding: 0 5px; */
 }
-.graph_info_field > div {
-  display: inline-block;
-  text-align: left;
-  vertical-align: top;
+#graph_info_table td:nth-child(1),
+#graph_info_table td:nth-child(3) {
+  width: 10%;
 }
-.graph_info_field > div:first-child {
-  width: 100px;
+#graph_info_table td:nth-child(2),
+#graph_info_table td:nth-child(4) {
+  width: 40%;
 }
-.graph_info_field > div:last-child {
-  width: 220px;
-}
-

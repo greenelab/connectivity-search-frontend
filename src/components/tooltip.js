@@ -18,10 +18,6 @@ export class Tooltip extends Component {
     this.state.x = 0;
     this.state.y = 0;
     this.state.opacity = 0;
-
-    this.onMouseEnter = this.onMouseEnter.bind(this);
-    this.openTooltip = this.openTooltip.bind(this);
-    this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
   // when mouse enters target
