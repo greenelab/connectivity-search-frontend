@@ -16,8 +16,6 @@ import { fetchAndSetPaths } from '../path-results/actions';
 
 import './index.css';
 
-import '../global.css';
-
 // main app component
 class App extends Component {
   // initialize component
@@ -98,16 +96,17 @@ class App extends Component {
   render() {
     return (
       <>
-        {/* <link
+        {/* load global, site-wide styles from het.io */}
+        <link
           rel='stylesheet'
           type='text/css'
           href='https://het.io/global.css'
-        /> */}
+        />
         <NodeSearch />
         <NodeResults />
         <MetapathResults />
         <PathResults />
-        <PathGraph/>
+        <PathGraph />
       </>
     );
   }
