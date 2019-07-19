@@ -88,7 +88,7 @@ class App extends Component {
       const params = new URLSearchParams(window.location.search);
       const source = params.get('source');
       const target = params.get('target');
-      const metapaths = params.get('metapaths') || '';
+      let metapaths = params.get('metapaths');
 
       const promises = [
         lookupNodeById(source),
@@ -110,8 +110,8 @@ class App extends Component {
           )
             return;
 
-          if (!newMetapaths)
-            newMetapaths = [];
+          if (!metapaths)
+            metapaths = '';
 
           // check metapaths based on url
           for (const newMetapath of newMetapaths) {
