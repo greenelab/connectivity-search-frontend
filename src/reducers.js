@@ -44,7 +44,7 @@ export function Reducer(prevState, action) {
         transferObjectProps(
           prevState.metapaths,
           newState.metapaths,
-          ['id'],
+          ['metapath_id'],
           ['checked']
         );
       }

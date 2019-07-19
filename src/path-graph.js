@@ -955,16 +955,13 @@ export class Graph extends Component {
     // if pathQueries not valid, exit
     if (
       !pathQueries ||
-      pathQueries.length <= 0 ||
-      !pathQueries[0].paths ||
-      pathQueries[0].paths.length <= 0
+      pathQueries.length <= 0
     )
       return graph;
 
-    // get source/target nodes from first path in pathQueries
-    const firstPath = pathQueries[0].paths[0];
-    graph.source_neo4j_id = firstPath.node_ids[0];
-    graph.target_neo4j_id = firstPath.node_ids[firstPath.node_ids.length - 1];
+    // get source/target nodes from first path query
+    graph.source_neo4j_id = pathQueries[0].source_id;
+    graph.target_neo4j_id = pathQueries[0].target_id;
 
     // loop through all paths in pathQueries
     for (const pathQuery of pathQueries) {
