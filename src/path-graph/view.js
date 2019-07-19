@@ -2,7 +2,8 @@ import * as d3 from 'd3';
 
 import { minZoom, maxZoom, nodeRadius } from './constants.js';
 
-export function createViewHandler(onViewClick, fitView) {
+// create view handler
+export function createViewHandler(onClick, onDblClick) {
   const svg = d3.select('#graph');
   // create handler for panning and zooming view
   const viewHandler = d3
@@ -10,9 +11,9 @@ export function createViewHandler(onViewClick, fitView) {
     .scaleExtent([minZoom, maxZoom])
     .on('zoom', onViewChange);
   svg.call(viewHandler);
-  svg.on('click', onViewClick);
+  svg.on('click', onClick);
   svg.on('dblclick.zoom', null);
-  svg.on('dblclick', fitView);
+  svg.on('dblclick', onDblClick);
 
   return viewHandler;
 }

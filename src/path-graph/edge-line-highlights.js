@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 
 import { highlightColor, edgeArrowSize } from './constants.js';
 
+// graph edge line highlight updater
 export class GraphEdgeLineHighlights extends Component {
   // when component updates
   componentDidUpdate() {

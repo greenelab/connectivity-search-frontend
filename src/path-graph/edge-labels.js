@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 
 import { edgeFontSize, inkColor } from './constants.js';
 
+// graph edge label text updater
 export class GraphEdgeLabels extends Component {
   // when component updates
   componentDidUpdate() {

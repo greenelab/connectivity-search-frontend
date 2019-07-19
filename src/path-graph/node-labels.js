@@ -12,6 +12,7 @@ import {
   nodeCharLimit
 } from './constants.js';
 
+// graph node label text updater
 export class GraphNodeLabels extends Component {
   // when component updates
   componentDidUpdate() {

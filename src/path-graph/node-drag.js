@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 
+// create node drag handler
 export function createNodeDragHandler(simulation) {
   const nodeDragHandler = d3
     .drag()

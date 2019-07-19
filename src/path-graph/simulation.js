@@ -4,6 +4,7 @@ import { positionNode, positionEdge, positionEdgeLabel } from './position.js';
 
 import { nodeDistance, nodeRadius, nodeRepulsion } from './constants.js';
 
+// create physics simulation
 export function createSimulation() {
   // create physics simulation for nodes to detangle and prettify layout
   const simulation = d3

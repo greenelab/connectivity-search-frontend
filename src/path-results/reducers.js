@@ -9,6 +9,7 @@ export function paths(state = {}, action) {
     case 'set_paths':
       let paths = action.payload.paths;
 
+      // transfer checkbox states from previous to next
       if (action.payload.preserveChecks) {
         paths = transferObjectProps(
           state.paths,
@@ -18,6 +19,7 @@ export function paths(state = {}, action) {
         );
       }
 
+      // include new node/relationship details to use in assemblePath
       const nodes = { ...state.nodes, ...(action.payload.nodes || {}) };
       const relationships = {
         ...state.relationships,
@@ -39,6 +41,7 @@ export function paths(state = {}, action) {
 export function nodes(state = {}, action) {
   switch (action.type) {
     case 'set_paths':
+      // add new node details to master store
       return { ...state, ...(action.payload.nodes || {}) };
     default:
       return state;
@@ -49,6 +52,7 @@ export function nodes(state = {}, action) {
 export function relationships(state = {}, action) {
   switch (action.type) {
     case 'set_paths':
+      // add new relationship details to master store
       return { ...state, ...(action.payload.relationships || {}) };
     default:
       return state;

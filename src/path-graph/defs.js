@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { edgeArrowSize, inkColor } from './constants.js';
 
+// graph definitions/header component
 export class GraphDefs extends Component {
   // display component
   render() {

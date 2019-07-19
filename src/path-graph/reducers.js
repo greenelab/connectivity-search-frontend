@@ -15,6 +15,7 @@ export function graph(state = {}, action) {
 
       const graph = assembleGraph(paths, nodes, relationships);
 
+      // transfer over physics simulation details from previous to next state
       transferObjectProps(
         state.graph.nodes,
         graph.nodes,

@@ -6,6 +6,7 @@ export function metapaths(state = [], action) {
     case 'set_metapaths':
       let metapaths = action.payload.metapaths;
 
+      // transfer checkbox states from previous to next
       if (action.payload.preserveChecks) {
         metapaths = transferObjectProps(
           state,

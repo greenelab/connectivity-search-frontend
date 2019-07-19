@@ -15,7 +15,7 @@ export function positionNode(d, i, s) {
   d3.select(node).attr('transform', 'translate(' + d.x + ',' + d.y + ')');
 }
 
-// position edge line between source/target node
+// position edge line between start/end nodes of edge
 export function positionEdge(d, i, s) {
   let x1 = d.source.x;
   let y1 = d.source.y;

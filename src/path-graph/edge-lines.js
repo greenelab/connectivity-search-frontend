@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 
 import { inkColor, edgeThickness } from './constants.js';
 
+// graph edge line updater
 export class GraphEdgeLines extends Component {
   // when component updates
   componentDidUpdate() {

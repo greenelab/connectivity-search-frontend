@@ -5,6 +5,7 @@ import * as d3 from 'd3';
 
 import { nodeRadius, highlightColor, edgeArrowSize } from './constants.js';
 
+// graph node circle highlight updater
 export class GraphNodeCircleHighlights extends Component {
   // when component updates
   componentDidUpdate() {
