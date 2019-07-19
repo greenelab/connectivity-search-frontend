@@ -1,5 +1,7 @@
 // truncate string to character limit, insert ellipsis  if necessary
 export function cutString(string, n) {
+  if (typeof string !== 'string')
+    return '-';
   if (string.length <= n)
     return string;
   else
@@ -17,6 +19,8 @@ export function shortenUrl(url) {
 
 // make OS-friendly filename
 export function makeFilenameFriendly(string) {
+  if (typeof string !== 'string')
+    return '-';
   // remove leading and trailing whitespace
   string = string.trim();
   // replace special characters with dashes

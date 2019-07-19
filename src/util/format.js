@@ -2,9 +2,16 @@ import React from 'react';
 
 // get html of number in exponential form
 export function toExponential(number) {
+  if (typeof number !== 'number')
+    return '-';
+
   number = parseFloat(number).toExponential(1);
   const mantissa = parseFloat(number.split('e')[0]).toFixed(1);
   const exponent = parseInt(number.split('e')[1]);
+
+  if (isNaN(mantissa) || isNaN(exponent))
+    return '-';
+
   return (
     <span>
       {mantissa} &times; 10<sup>{exponent}</sup>
@@ -14,18 +21,25 @@ export function toExponential(number) {
 
 // get html of number in regular form, rounded to 1 decimal digit
 export function toFixed(number) {
+  if (typeof number !== 'number')
+    return '-';
   return <span>{parseFloat(number).toFixed(1)}</span>;
 }
 
 // split many-digit number by comma (or other, depending on locale)
 export function toComma(number) {
+  if (typeof number !== 'number')
+    return '-';
   return Number(number).toLocaleString();
 }
 
 // map number to css color based on specified gradient
 export function toGradient(number) {
+  if (typeof number !== 'number')
+    return 'rgba(255, 255, 255, 0)';
+
   // pretty gradient
-  let gradient = ['rgba(255, 255, 255, 0)', 'rgba(244, 143, 177, 1)'];
+  let gradient = ['rgba(255, 255, 255, 0)', 'rgba(244, 143, 177, 0.5)'];
 
   // split each gradient color into component rgba values
   gradient = gradient.map((color) => {
@@ -78,5 +92,5 @@ export function toGradient(number) {
     'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')';
 
   // return color
-  return color || '#ffffff';
+  return color || 'rgba(255, 255, 255, 0)';
 }

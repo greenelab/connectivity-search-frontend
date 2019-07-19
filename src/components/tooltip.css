@@ -14,7 +14,6 @@
   user-select: none;
   pointer-events: none;
   z-index: 99999;
-  transition: opacity 1s ease;
 }
 @media (hover: none) {
   .tooltip {

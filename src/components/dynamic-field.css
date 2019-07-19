@@ -4,9 +4,9 @@
   justify-content: center;
   align-items: center;
   width: 100%;
+  min-height: 100%;
   min-width: 100%;
   max-width: 100%;
-  padding: 2px 10px;
   word-break: break-word;
 }
 .dynamic_field[data-expanded='true'],

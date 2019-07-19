@@ -3,15 +3,18 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 
 import { Table } from '../components/table.js';
 import { metapathChips } from '../components/chips.js';
+import { Tooltip } from '../components/tooltip.js';
 import { toFixed } from '../util/format';
 import { toExponential } from '../util/format.js';
 import { toComma } from '../util/format.js';
 import { toGradient } from '../util/format.js';
 import { cutString } from '../util/string.js';
 import { setMetapaths } from './actions.js';
+import { fetchAndSetMetapathMissingData } from './actions.js';
 
 import './table.css';
 
@@ -197,20 +200,71 @@ export class MetapathTable extends Component {
       ]);
     }
 
+    const compute = (datum) => (
+      <Tooltip text='The data for this metapath was not pre-computed because it was below a certain threshold of importance. Click to compute it now.'>
+        <button
+          className='small metapath_results_compute'
+          onClick={() =>
+            this.props.dispatch(
+              fetchAndSetMetapathMissingData({
+                sourceNodeId: this.props.sourceNode.id,
+                targetNodeId: this.props.targetNode.id,
+                metapaths: this.props.metapaths,
+                metapathId: datum.metapath_id,
+                preserveChecks: true
+              })
+            )
+          }
+        >
+          <FontAwesomeIcon className='fa-sm' icon={faQuestion} />
+        </button>
+      </Tooltip>
+    );
     const bodyValues = [
       null,
       (datum) => metapathChips(datum.metapath_metaedges),
-      (datum) => toComma(datum.path_count),
-      (datum) => toExponential(datum.adjusted_p_value),
-      (datum) => toExponential(datum.p_value),
-      (datum) => toFixed(datum.dwpc),
-      (datum) => toComma(datum.dgp_source_degree),
-      (datum) => toComma(datum.dgp_target_degree),
-      (datum) => toComma(datum.dgp_n_dwpcs),
-      (datum) => toComma(datum.dgp_n_nonzero_dwpcs),
-      (datum) => toFixed(datum.dgp_nonzero_mean),
-      (datum) => toFixed(datum.dgp_nonzero_sd),
-      (datum) => cutString(datum.cypher_query, 16)
+      (datum) =>
+        datum.path_count !== undefined
+          ? toComma(datum.path_count)
+          : compute(datum),
+      (datum) =>
+        datum.path_count !== undefined
+          ? toExponential(datum.adjusted_p_value)
+          : compute(datum),
+      (datum) =>
+        datum.path_count !== undefined
+          ? toExponential(datum.p_value)
+          : compute(datum),
+      (datum) =>
+        datum.path_count !== undefined ? toFixed(datum.dwpc) : compute(datum),
+      (datum) =>
+        datum.path_count !== undefined
+          ? toComma(datum.dgp_source_degree)
+          : compute(datum),
+      (datum) =>
+        datum.path_count !== undefined
+          ? toComma(datum.dgp_target_degree)
+          : compute(datum),
+      (datum) =>
+        datum.path_count !== undefined
+          ? toComma(datum.dgp_n_dwpcs)
+          : compute(datum),
+      (datum) =>
+        datum.path_count !== undefined
+          ? toComma(datum.dgp_n_nonzero_dwpcs)
+          : compute(datum),
+      (datum) =>
+        datum.path_count !== undefined
+          ? toFixed(datum.dgp_nonzero_mean)
+          : compute(datum),
+      (datum) =>
+        datum.path_count !== undefined
+          ? toFixed(datum.dgp_nonzero_sd)
+          : compute(datum),
+      (datum) =>
+        datum.path_count !== undefined
+          ? cutString(datum.cypher_query, 16)
+          : compute(datum)
     ];
     const bodyFullValues = [
       null,
@@ -269,6 +323,8 @@ export class MetapathTable extends Component {
 }
 // connect component to global state
 MetapathTable = connect((state) => ({
+  sourceNode: state.sourceNode,
+  targetNode: state.targetNode,
   metapaths: state.metapaths,
   tooltipDefinitions: state.tooltipDefinitions
 }))(MetapathTable);

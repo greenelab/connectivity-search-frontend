@@ -27,7 +27,7 @@ export class Table extends Component {
     this.state = {};
     this.state.data = [];
     this.state.sortField = this.props.defaultSortField || '';
-    this.state.sortUp = this.props.defaultSortUp || true;
+    this.state.sortUp = this.props.defaultSortUp || false;
 
     this.state.onChange = this.props.onChange || (() => null);
   }
@@ -73,7 +73,9 @@ export class Table extends Component {
     const originalData = copyObject(data);
 
     // sort
-    data.sort((a, b) => compare(a, b, this.state.sortField, originalData));
+    data.sort((a, b) =>
+      compare(a, b, this.state.sortField, this.state.sortUp, originalData)
+    );
 
     // reverse sort direction
     if (this.state.sortUp)
@@ -83,33 +85,43 @@ export class Table extends Component {
   };
 
   // compare function for sorting
-  standardCompare = (a, b, key, original) => {
+  standardCompare = (a, b, key, sortUp, original) => {
     // get values
-    const aValue = a[key];
-    const bValue = b[key];
+    const aValue = Number(a[key]);
+    const bValue = Number(b[key]);
+
+    // get whether a and b are numbers
+    const aIsNum = !Number.isNaN(aValue);
+    const bIsNum = !Number.isNaN(bValue);
 
     // get original positions in array
     const aIndex = original.findIndex((element) => compareObjects(element, a));
     const bIndex = original.findIndex((element) => compareObjects(element, b));
 
-    // parse as numbers
-    const comparison = Number(aValue) - Number(bValue);
-    if (!Number.isNaN(comparison)) {
-      // if equal, preserve original order
-      if (comparison === 0)
-        return bIndex - aIndex;
+    // if both are numbers, compare by values, or by index if values are the
+    // same (to preserve original order)
+    if (aIsNum && bIsNum) {
+      if (aValue - bValue !== 0)
+        return aValue - bValue;
       else
-        return comparison;
+        return sortUp ? bIndex - aIndex : aIndex - bIndex;
     }
 
-    // otherwise parse as strings and compare alphabetically
+    // if one is a number and the other is not, always put the NaN vertically
+    // below the number
+    if (!aIsNum && bIsNum)
+      return sortUp ? -1 : 1;
+    if (aIsNum && !bIsNum)
+      return sortUp ? 1 : -1;
+
+    // if neither are numbers, compare alphabetically, or by index if values
+    // are the same (to preserve original order)
     if (aValue < bValue)
       return -1;
     else if (aValue > bValue)
       return 1;
     else
-      return bIndex - aIndex;
-    // if equal, preserve original order
+      return sortUp ? bIndex - aIndex : aIndex - bIndex;
   };
 
   // toggles checkbox on/off

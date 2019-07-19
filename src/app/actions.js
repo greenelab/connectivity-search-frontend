@@ -64,9 +64,9 @@ export function fetchAndSetDefinitions() {
 export function loadStateFromUrl() {
   return async function(dispatch) {
     let params = new URLSearchParams(window.location.search);
-    const sourceNodeId = params.get('source') || null;
-    const targetNodeId = params.get('target') || null;
-    const metapathAbbrevs = params.get('metapaths') || '';
+    const sourceNodeId = params.get('source');
+    const targetNodeId = params.get('target');
+    let metapathAbbrevs = params.get('metapaths');
 
     const sourceNode = await lookupNodeById(sourceNodeId);
     const targetNode = await lookupNodeById(targetNodeId);
@@ -82,6 +82,9 @@ export function loadStateFromUrl() {
       params.get('metapaths') !== metapathAbbrevs
     )
       return;
+
+    if (!metapathAbbrevs)
+      metapathAbbrevs = '';
 
     // check metapaths based on url
     for (const metapath of metapaths) {

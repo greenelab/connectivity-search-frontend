@@ -113,6 +113,7 @@ export function searchMetapaths(sourceNodeId, targetNodeId) {
   const params = new URLSearchParams();
   params.set('source', sourceNodeId);
   params.set('target', targetNodeId);
+  params.set('complete', '');
   const query = metapathSearchUrl + '?' + params.toString();
   return fetchJson(query).then((response) => {
     return response.path_counts;

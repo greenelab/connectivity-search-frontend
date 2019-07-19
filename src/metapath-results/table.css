@@ -4,3 +4,18 @@
 .metapath_results_table th {
   height: 40px;
 }
+.metapath_results_compute {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 25px;
+  margin: 0;
+  opacity: 0.15;
+  transition: opacity 0.25s ease;
+  cursor: pointer;
+}
+
+.metapath_results_table tr:hover .metapath_results_compute {
+  opacity: 1;
+}
