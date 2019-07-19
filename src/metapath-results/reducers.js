@@ -10,7 +10,7 @@ export function metapaths(state = [], action) {
         metapaths = transferObjectProps(
           state,
           action.payload.metapaths,
-          ['id'],
+          ['metapath_id'],
           ['checked']
         );
       }

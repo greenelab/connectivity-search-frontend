@@ -10,10 +10,10 @@ import { setMetapaths } from '../metapath-results/actions.js';
 
 // get metagraph, hetio definitions, hetio styles, and hetmech definitions
 export async function fetchDefinitions() {
-  const metagraph = await getMetagraph() || {};
-  const hetioStyles = await getHetioStyles() || {};
-  const hetioDefinitions = await getHetioDefinitions() || {};
-  const hetmechDefinitions = await getHetmechDefinitions() || {};
+  const metagraph = (await getMetagraph()) || {};
+  const hetioStyles = (await getHetioStyles()) || {};
+  const hetioDefinitions = (await getHetioDefinitions()) || {};
+  const hetmechDefinitions = (await getHetmechDefinitions()) || {};
 
   // combine definitions into single convenient tooltipText lookup
   let tooltipDefinitions = {};
@@ -64,9 +64,9 @@ export function fetchAndSetDefinitions() {
 export function loadStateFromUrl() {
   return async function(dispatch) {
     let params = new URLSearchParams(window.location.search);
-    const sourceNodeId = params.get('source');
-    const targetNodeId = params.get('target');
-    const metapathAbbrevs = params.get('metapaths');
+    const sourceNodeId = params.get('source') || null;
+    const targetNodeId = params.get('target') || null;
+    const metapathAbbrevs = params.get('metapaths') || '';
 
     const sourceNode = await lookupNodeById(sourceNodeId);
     const targetNode = await lookupNodeById(targetNodeId);
@@ -84,11 +84,12 @@ export function loadStateFromUrl() {
       return;
 
     // check metapaths based on url
-    if (metapathAbbrevs) {
-      for (const metapath of metapaths) {
-        if (metapathAbbrevs.includes(metapath.metapath_abbreviation))
-          metapath.checked = true;
-      }
+    for (const metapath of metapaths) {
+      if (
+        metapathAbbrevs.includes(metapath.metapath_abbreviation) ||
+        metapathAbbrevs.includes(metapath.metapath_id)
+      )
+        metapath.checked = true;
     }
 
     // set global state
