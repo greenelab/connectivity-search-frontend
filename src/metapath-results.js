@@ -148,7 +148,7 @@ class TableFull extends Component {
     const newMetapaths = copyObject(this.props.metapaths);
 
     for (const metapath of newMetapaths) {
-      if (metapath.metapath_abbreviation === id)
+      if (id === metapath.metapath_id)
         metapath.checked = !metapath.checked;
     }
 
@@ -161,7 +161,7 @@ class TableFull extends Component {
     const allOthersUnchecked = this.allOthersUnchecked(id);
 
     for (const metapath of newMetapaths) {
-      if (allOthersUnchecked || id === metapath.metapath_abbreviation)
+      if (allOthersUnchecked || id === metapath.metapath_id)
         metapath.checked = true;
       else
         metapath.checked = false;
@@ -545,7 +545,7 @@ class TableBodyRow extends Component {
   // display component
   render() {
     const metapath = this.props.metapath;
-    const id = metapath.metapath_abbreviation;
+    const id = metapath.metapath_id;
 
     // primary columns
     const cols = (
