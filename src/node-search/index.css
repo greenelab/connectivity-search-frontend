@@ -1,3 +1,7 @@
 .node_search_filters {
   margin-bottom: 30px;
 }
+.node_search_filter_label {
+  display: inline-block;
+  margin: 0 auto;
+}

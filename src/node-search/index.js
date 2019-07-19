@@ -9,6 +9,7 @@ import { TargetNode } from './target-node.js';
 import { SwapButton } from './swap-button.js';
 import { RandomButton } from './random-button.js';
 import { CollapsibleSection } from '../components/collapsible-section.js';
+import { Tooltip } from '../components/tooltip.js';
 import { sortCustom } from '../util/array.js';
 import { compareObjects } from '../util/object.js';
 import { copyObject } from '../util/object.js';
@@ -132,7 +133,9 @@ export class NodeSearch extends Component {
           label='Node Search'
           tooltipText='Search the database for a source and target node'
         >
-          <div className='small light'>Filters</div>
+          <Tooltip text='Filter the text search by metatype. Ctrl+click to solo.'>
+            <div className='small light node_search_filter_label'>Filters</div>
+          </Tooltip>
           <div className='node_search_filters'>{filterButtons}</div>
           <SourceNode />
           <SwapButton />

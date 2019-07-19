@@ -76,8 +76,8 @@ export class PathTable extends Component {
     ];
     const bodyClasses = [null, null, 'small', 'small left'];
     const bodyTooltips = [
-      'Show this path in the graph',
-      'Highlight this path in the graph'
+      'Show this path in the graph. Ctrl+click to solo.',
+      'Highlight this path in the graph. Ctrl+click to solo.'
     ];
 
     return (

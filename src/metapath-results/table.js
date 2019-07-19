@@ -290,7 +290,10 @@ export class MetapathTable extends Component {
     ];
     const bodyClasses = [null, 'left'];
     const bodyTooltips = [
-      (datum) => 'Show these ' + datum.path_count + ' paths in the paths table'
+      (datum) =>
+        'Show these ' +
+        datum.path_count +
+        ' paths in the paths table. Ctrl+click to solo.'
     ];
 
     return (
