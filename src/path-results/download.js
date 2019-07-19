@@ -29,12 +29,7 @@ function makeTable(paths) {
   }
 
   // sort headers in custom order
-  const order = [
-    'description',
-    'metapath',
-    'score',
-    'percent_of_DWPC'
-  ];
+  const order = ['description', 'metapath', 'score', 'percent_of_DWPC'];
   headers = sortCustom(headers, order);
 
   const table = [];

@@ -25,7 +25,7 @@ export class GraphNodeLabels extends Component {
       return style.text_color;
     else
       return backgroundColor;
-  }
+  };
 
   // update
   update = () => {

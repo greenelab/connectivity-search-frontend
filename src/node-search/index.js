@@ -133,7 +133,10 @@ export class NodeSearch extends Component {
           label='Node Search'
           tooltipText='Search the database for a source and target node'
         >
-          <Tooltip text='Filter the text search by metatype. Ctrl+click to solo.'>
+          <Tooltip
+            text='Filter the text search by metatype.
+              Ctrl+click to solo.'
+          >
             <div className='small light node_search_filter_label'>Filters</div>
           </Tooltip>
           <div className='node_search_filters'>{filterButtons}</div>

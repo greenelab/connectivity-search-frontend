@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { ReactComponent as ArrowBoth } from '../images/arrow-icon-both.svg';
 import { ReactComponent as ArrowForward } from '../images/arrow-icon-forward.svg';
 import { ReactComponent as ArrowBackward } from '../images/arrow-icon-backward.svg';
-
 import { ReactComponent as Gene } from '../images/chip-gene.svg';
 import { ReactComponent as Compound } from '../images/chip-compound.svg';
 import { ReactComponent as Anatomy } from '../images/chip-anatomy.svg';
@@ -17,7 +16,6 @@ import { ReactComponent as CellularComponent } from '../images/chip-cellular-com
 import { ReactComponent as MolecularFunction } from '../images/chip-molecular-function.svg';
 import { ReactComponent as Pathway } from '../images/chip-pathway.svg';
 import { ReactComponent as PharmacologicClass } from '../images/chip-pharmacologic-class.svg';
-
 import { Tooltip } from './tooltip.js';
 
 import './chips.css';

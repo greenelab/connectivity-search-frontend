@@ -29,7 +29,8 @@ export class MetapathResults extends Component {
     return (
       <CollapsibleSection
         label='Metapaths'
-        tooltipText='Metapaths of length <= 3 between the source and target node'
+        tooltipText='Metapaths of length <= 3 between the source and target
+        node'
       >
         {this.props.metapaths.length > 0 && (
           <MetapathAttic

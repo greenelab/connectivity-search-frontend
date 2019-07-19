@@ -48,7 +48,7 @@ export function fetchAndSetMetapaths({
 }
 
 // fetch metapath data for metapath that hasn't been precomputed
-async function fetchMetapathMissingData({
+export async function fetchMetapathMissingData({
   sourceNodeId,
   targetNodeId,
   metapathId,

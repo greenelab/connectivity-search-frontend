@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { Tooltip } from './tooltip.js';
 
+// styles from global.css on het.io
+
 // button component
 export class Button extends Component {
   // display component

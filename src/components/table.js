@@ -62,19 +62,19 @@ export class Table extends Component {
 
   // sort table data based on sort field and direction
   sortData = (data) => {
-    // get compare function from props or standard/default compare
-    let compare;
+    // get sort function from props or standard/default sort
+    let func;
     if (this.props.sortFunction)
-      compare = this.props.sortFunction(this.state.sortField);
+      func = this.props.sortFunction(this.state.sortField);
 
-    if (typeof compare !== 'function')
-      compare = this.defaultSort;
+    if (typeof func !== 'function')
+      func = this.defaultSort;
 
     const originalData = copyObject(data);
 
     // sort
     data.sort((a, b) =>
-      compare(a, b, this.state.sortField, this.state.sortUp, originalData)
+      func(a, b, this.state.sortField, this.state.sortUp, originalData)
     );
 
     // reverse sort direction

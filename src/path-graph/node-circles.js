@@ -18,7 +18,7 @@ export class GraphNodeCircles extends Component {
       return style.fill_color;
     else
       return inkColor;
-  }
+  };
 
   // update
   update = () => {
@@ -44,7 +44,7 @@ export class GraphNodeCircles extends Component {
       .style('cursor', 'pointer');
 
     nodeCircles.exit().remove();
-  }
+  };
 
   // display component
   render() {

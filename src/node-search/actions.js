@@ -23,9 +23,9 @@ export function swapSourceTargetNode() {
 // fetch random pair of source/target nodes
 export function fetchRandomNodePair() {
   return async function(dispatch) {
-    const pair = await getRandomNodePair() || {};
-    const sourceNode = await lookupNodeById(pair.source_id) || {};
-    const targetNode = await lookupNodeById(pair.target_id) || {};
+    const pair = (await getRandomNodePair()) || {};
+    const sourceNode = (await lookupNodeById(pair.source_id)) || {};
+    const targetNode = (await lookupNodeById(pair.target_id)) || {};
 
     dispatch(
       setSourceTargetNode({
