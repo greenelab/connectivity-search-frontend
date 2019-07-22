@@ -18,19 +18,28 @@ export class Tooltip extends Component {
     this.state.x = 0;
     this.state.y = 0;
     this.state.opacity = 0;
+
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
+    this.openTooltip = this.openTooltip.bind(this);
   }
 
   // when mouse enters target
-  onMouseEnter = (event) => {
+  onMouseEnter(event) {
     const target = event.currentTarget;
     // delay opening tooltip
     window.setTimeout(() => this.openTooltip(target), delay);
     // track hover state
     this.setState({ hover: true });
-  };
+  }
+
+  // when mouse leaves target
+  onMouseLeave() {
+    this.setState({ hover: false, open: false });
+  }
 
   // open tooltip
-  openTooltip = (target) => {
+  openTooltip(target) {
     // if target not being hovered anymore, cancel open
     // if target not specified, exit
     if (!this.state.hover || !target) {
@@ -44,12 +53,7 @@ export class Tooltip extends Component {
 
     // open tooltip and update x/y position
     this.setState({ open: true, x: left, y: top });
-  };
-
-  // when mouse leaves target
-  onMouseLeave = () => {
-    this.setState({ hover: false, open: false });
-  };
+  }
 
   // display component
   render() {

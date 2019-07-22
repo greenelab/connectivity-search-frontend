@@ -18,6 +18,16 @@ import './index.css';
 
 import '../global.css';
 
+// Note about class arrow functions vs normal functions:
+//
+// Arrow functions automatically bind "this", but do not get added to the class
+// prototype, and thus get duplicated for every instance of the class. For
+// convenience, syntax aesthetics, and mitigation of human errors (forgetting
+// to bind "this"), arrow functions are used in classes, with two exceptions:
+// 1) react life-cycle methods (componentDidUpdate, render, etc) and 2) in
+// cases where there will be many instances of the class (say, > 10), like the
+// reusable "widgets" in /components.
+
 // main app component
 class App extends Component {
   // initialize component
