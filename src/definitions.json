@@ -1,5 +1,5 @@
 {
-  "id": "The unique integer id of the node used internally by Hetmech (but not in Hetionet v1.0)",
+  "id": "The unique integer id of the node used internally by Connectivity Search (but not in Hetionet v1.0)",
   "metapath": "The type of path (metapath) connecting the source node to the target node",
   "path_count": "The number of paths between the source and target node of the specified metapath (path type)",
   "adjusted_p_value": "A measure of the significance of the DWPC that indicates whether more paths were observed than expected due to random chance. Compares the DWPC to a null distribution of DWPCs generated from degree-preserving permuted networks. Bonferroni-adjusted for the number of metapaths with the same source metanode, target metanode, and length.",
