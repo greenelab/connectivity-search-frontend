@@ -4,11 +4,16 @@
     stroke="currentColor"
     stroke-width="10"
     d="
-      M 90 50
-      L 10 50
-      M 30 35
-      L 10 50
-      L 30 65
+      M 10 50
+      L 80 50
+    "
+  ></path>
+  <path
+    fill="currentColor"
+    d="
+      M 60 30
+      L 90 50
+      L 60 70
     "
   ></path>
 </svg>

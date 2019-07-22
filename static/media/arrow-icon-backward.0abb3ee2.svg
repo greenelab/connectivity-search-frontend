@@ -5,10 +5,15 @@
     stroke-width="10"
     d="
       M 90 50
+      L 20 50
+    "
+  ></path>
+  <path
+    fill="currentColor"
+    d="
+      M 40 30
       L 10 50
-      M 70 35
-      L 90 50
-      L 70 65
+      L 40 70
     "
   ></path>
 </svg>
