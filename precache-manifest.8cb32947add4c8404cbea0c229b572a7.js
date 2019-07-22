@@ -1,31 +1,31 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "d8588f38deae37626dfdefd3a8671508",
+    "revision": "911c9b18f5b10cfcbc2233f5fbe00b9b",
     "url": "./index.html"
   },
   {
-    "revision": "09551d978d9a69011dce",
+    "revision": "143672ed7f68de97b314",
     "url": "./static/css/main.css"
   },
   {
-    "revision": "09551d978d9a69011dce",
+    "revision": "143672ed7f68de97b314",
     "url": "./static/js/main.js"
   },
   {
-    "revision": "0abb3ee2911ddab2e2a934c2f6d76bf6",
-    "url": "./static/media/arrow-icon-backward.0abb3ee2.svg"
+    "revision": "c6a855007a649d8251ccdbabcebf1426",
+    "url": "./static/media/arrow-icon-backward.c6a85500.svg"
   },
   {
     "revision": "5f01d5743865ca57df5735cad330f842",
     "url": "./static/media/arrow-icon-both.5f01d574.svg"
   },
   {
-    "revision": "2c0b7662f2b17632d57c87c110c25460",
-    "url": "./static/media/arrow-icon-forward.2c0b7662.svg"
+    "revision": "43aa27a14373bc12a790f3b400b37d3c",
+    "url": "./static/media/arrow-icon-forward.43aa27a1.svg"
   },
   {
-    "revision": "0e87bb2ec1a209f2cba91ed1c64f593a",
-    "url": "./static/media/chip-anatomy.0e87bb2e.svg"
+    "revision": "b055d214701a0cf5d70f4a2bc369b19d",
+    "url": "./static/media/chip-anatomy.b055d214.svg"
   },
   {
     "revision": "979f4ab8463cc8f3ef8fc62eb6b4e007",
@@ -48,12 +48,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/media/chip-gene.6afa0a5b.svg"
   },
   {
-    "revision": "8b7e9f96a054e55ed2814d0f2d1309cc",
-    "url": "./static/media/chip-molecular-function.8b7e9f96.svg"
+    "revision": "787806a8eaf5cac159689962f0ef3874",
+    "url": "./static/media/chip-molecular-function.787806a8.svg"
   },
   {
-    "revision": "45ccfd00f5b12cf9a1ae34048664a301",
-    "url": "./static/media/chip-pathway.45ccfd00.svg"
+    "revision": "543f179a807c34b39469f8c7f5e2c1bc",
+    "url": "./static/media/chip-pathway.543f179a.svg"
   },
   {
     "revision": "b1fbdc4960c19773da5b044f48d34ed0",
@@ -64,8 +64,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "./static/media/chip-side-effect.dbe94434.svg"
   },
   {
-    "revision": "a2bbe145ceba5a1d729b465ad135061a",
-    "url": "./static/media/chip-symptom.a2bbe145.svg"
+    "revision": "2689ac777452bb99786c8f910808d77b",
+    "url": "./static/media/chip-symptom.2689ac77.svg"
   },
   {
     "revision": "1b1801598e1cdda021c6def708768f69",

@@ -13,7 +13,7 @@
     L 30 50
     "
   ></path>
-  <clipPath id="clip-pathway">
+  <clipPath id="clip">
     <rect x="0" y="0" width="100" height="100"></rect>
   </clipPath>
   <path
@@ -23,7 +23,7 @@
     stroke-linecap="square"
     stroke-linejoin="bevel"
     transform="translate(50,50) scale(0.4) translate(-50,-50) translate(45,0)"
-    clip-path="url(#clip-pathway)"
+    clip-path="url(#clip)"
     d="
       M 10 -10
       L 25 100
