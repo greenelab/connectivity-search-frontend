@@ -1,5 +1,6 @@
 import React from 'react';
 import { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { sortCustom } from '../util/array.js';
 import { Tooltip } from '../components/tooltip.js';
@@ -65,7 +66,7 @@ export class SelectedInfo extends Component {
 
     fields = fields.map((field, index) => (
       <React.Fragment key={index}>
-        <Tooltip text={field.firstCol}>
+        <Tooltip text={this.props.tooltipDefinitions[field.firstCol] || ''}>
           <td className='small light'>{field.firstCol}</td>
         </Tooltip>
         <td>
@@ -106,3 +107,7 @@ export class SelectedInfo extends Component {
     );
   }
 }
+// connect component to global state
+SelectedInfo = connect((state) => ({
+  tooltipDefinitions: state.tooltipDefinitions
+}))(SelectedInfo);
