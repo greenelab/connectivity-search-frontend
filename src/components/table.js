@@ -13,10 +13,10 @@ import { copyObject } from '../util/object.js';
 import './table.css';
 
 // generic table component
-// contains three sections: super (row above head), head, and body
+// contains three sections: top (row above head), head, and body
 // contents, styles, and classes can be specified for all sections
 // tooltips can be specified for head and body
-// colspans can be specified for super
+// colspans can be specified for top
 // custom sort function can be specified
 // supports img or font-awesome checkboxes
 export class Table extends Component {
@@ -196,10 +196,10 @@ export class Table extends Component {
           allChecked: this.allChecked,
           toggleAll: this.toggleAll,
           changeSort: this.changeSort,
-          superContents: this.props.superContents || [],
-          superStyles: this.props.superStyles || [],
-          superClasses: this.props.superClasses || [],
-          superColspans: this.props.superColspans || [],
+          topContents: this.props.topContents || [],
+          topStyles: this.props.topStyles || [],
+          topClasses: this.props.topClasses || [],
+          topColspans: this.props.topColspans || [],
           headContents: this.props.headContents || [],
           headFields: this.props.headFields || [],
           headStyles: this.props.headStyles || [],
@@ -214,7 +214,7 @@ export class Table extends Component {
       >
         <table className={this.props.className}>
           <thead>
-            <Super />
+            <Top />
             <Head />
           </thead>
           <tbody>
@@ -227,18 +227,18 @@ export class Table extends Component {
 }
 const TableContext = React.createContext({});
 
-// super section
+// top section
 // row above head row
-class Super extends Component {
+class Top extends Component {
   // display component
   render() {
-    const cells = this.context.superContents.map((content, index) => (
-      <SuperCell
+    const cells = this.context.topContents.map((content, index) => (
+      <TopCell
         key={index}
         content={content}
-        style={this.context.superStyles[index]}
-        className={this.context.superClasses[index]}
-        colspan={this.context.superColspans[index]}
+        style={this.context.topStyles[index]}
+        className={this.context.topClasses[index]}
+        colspan={this.context.topColspans[index]}
       />
     ));
 
@@ -248,10 +248,10 @@ class Super extends Component {
       return <></>;
   }
 }
-Super.contextType = TableContext;
+Top.contextType = TableContext;
 
-// super cell
-class SuperCell extends Component {
+// top cell
+class TopCell extends Component {
   // display component
   render() {
     return (
@@ -265,7 +265,7 @@ class SuperCell extends Component {
     );
   }
 }
-SuperCell.contextType = TableContext;
+TopCell.contextType = TableContext;
 
 // head section
 // contains sort buttons and field names

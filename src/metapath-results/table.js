@@ -52,13 +52,13 @@ export class MetapathTable extends Component {
       }
     };
 
-    let superContents = [];
-    let superStyles = [];
-    let superClasses = [];
-    let superColspans = [];
+    let topContents = [];
+    let topStyles = [];
+    let topClasses = [];
+    let topColspans = [];
 
     if (this.props.showMore) {
-      superContents = [
+      topContents = [
         null,
         null,
         null,
@@ -68,7 +68,7 @@ export class MetapathTable extends Component {
         <div className='line_sides'>Null DWPC distribution information</div>,
         null
       ];
-      superStyles = [
+      topStyles = [
         { width: 25 },
         { width: 200 },
         { width: 100 },
@@ -78,7 +78,7 @@ export class MetapathTable extends Component {
         { width: 600 },
         { width: 200 }
       ];
-      superClasses = [
+      topClasses = [
         'small',
         'small',
         'small',
@@ -88,7 +88,7 @@ export class MetapathTable extends Component {
         'small',
         'small'
       ];
-      superColspans = [1, 1, 1, 1, 1, 1, 6, 1];
+      topColspans = [1, 1, 1, 1, 1, 1, 6, 1];
     }
 
     let headContents = [
@@ -310,10 +310,10 @@ export class MetapathTable extends Component {
           sortFunction={sortFunction}
           defaultSortField='adjusted_p_value'
           defaultSortUp={false}
-          superContents={superContents}
-          superStyles={superStyles}
-          superClasses={superClasses}
-          superColspans={superColspans}
+          topContents={topContents}
+          topStyles={topStyles}
+          topClasses={topClasses}
+          topColspans={topColspans}
           headContents={headContents}
           headFields={headFields}
           headStyles={headStyles}
