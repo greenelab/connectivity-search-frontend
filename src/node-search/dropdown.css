@@ -1,0 +1,37 @@
+.node_search_results_popper {
+  width: 100% !important;
+  margin-top: 10px !important;
+  z-index: 10 !important;
+}
+.node_search_results_paper {
+  max-height: calc(4 * 40px);
+  overflow-y: auto;
+  border-radius: 0 !important;
+}
+.node_search_results_item {
+  height: 40px !important;
+  padding: 0 10px !important;
+  font-size: 16px !important;
+}
+.node_search_results_item_selected {
+  background: #c0ecf8 !important;
+}
+.node_search_results_item_name {
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.node_search_results_item_count {
+  margin-left: auto;
+  color: #808080;
+  font-size: 0.75em;
+  font-weight: 500;
+  width: 40px;
+  min-width: 40px;
+  vertical-align: middle;
+}
+.node_search_results_item_count svg {
+  height: 25px;
+  margin-right: 3px;
+  vertical-align: middle;
+}

@@ -1,0 +1,66 @@
+import React from 'react';
+import { Component } from 'react';
+import { connect } from 'react-redux';
+
+import { edgeArrowSize, inkColor } from './constants.js';
+
+// graph definitions/header component
+export class GraphDefs extends Component {
+  // display component
+  render() {
+    const sourceName = this.props.sourceNode.name || '___';
+    const targetName = this.props.targetNode.name || '___';
+    const sourceType = this.props.sourceNode.metanode || '___';
+    const targetType = this.props.targetNode.metanode || '___';
+
+    return (
+      <>
+        <title>
+          {sourceName} → {targetName}
+        </title>
+        <desc>
+          Graph visualization of the connectivity between {sourceName} (
+          {sourceType}) and {targetName} ({targetType}). Created at{' '}
+          {window.location.href}. This subgraph of Hetionet v1.0 was created
+          from paths between the specified source/target nodes that occurred
+          more than expected by chance. See https://het.io for more information.
+        </desc>
+        <defs>
+          <style>
+            {`
+              @import url('https://fonts.googleapis.com/css?family=Raleway:400,500,700');
+              @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700&text=0123456789');
+              * {
+                font-family: 'Montserrat', 'Raleway', sans-serif;
+              }
+            `}
+          </style>
+          <marker
+            id='graph_arrowhead'
+            viewBox='0 0 100 100'
+            refX='80'
+            refY='50'
+            orient='auto'
+            markerUnits='userSpaceOnUse'
+            markerWidth={edgeArrowSize}
+            markerHeight={edgeArrowSize}
+          >
+            <path
+              d='
+                M 0 0
+                L 100 50
+                L 0 100
+              '
+              fill={inkColor}
+            />
+          </marker>
+        </defs>
+      </>
+    );
+  }
+}
+// connect component to global state
+GraphDefs = connect((state) => ({
+  sourceNode: state.sourceNode,
+  targetNode: state.targetNode
+}))(GraphDefs);

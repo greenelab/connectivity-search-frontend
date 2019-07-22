@@ -1,0 +1,44 @@
+import { compareElements } from './array.js';
+
+// loop through new array of objects. for each object, find object in old
+// array that matches all compare keys, and transfer specified keys from
+// old object to new
+export function transferObjectProps(
+  oldArray,
+  newArray,
+  compareKeys,
+  transferKeys
+) {
+  for (const newElement of newArray) {
+    for (const oldElement of oldArray) {
+      let matches = true;
+      for (const compareKey of compareKeys) {
+        if (!compareElements(oldElement[compareKey], newElement[compareKey])) {
+          matches = false;
+          break;
+        }
+      }
+      if (matches) {
+        for (const transferKey of transferKeys)
+          newElement[transferKey] = oldElement[transferKey];
+      }
+    }
+  }
+
+  return newArray;
+}
+
+// make deep copy of object. ensures everything is clone/copy, not reference.
+// works for everything except circular refs, functions, and js Dates
+export function copyObject(object) {
+  if (typeof object === 'object')
+    return JSON.parse(JSON.stringify(object));
+  else
+    return object;
+}
+
+// compare objects with stringify
+// works for everything except circular refs, functions, and js Dates
+export function compareObjects(object1, object2) {
+  return JSON.stringify(object1) === JSON.stringify(object2);
+}

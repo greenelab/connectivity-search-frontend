@@ -1,0 +1,15 @@
+#graph_info_table_container {
+  outline: solid #e0e0e0 2px;
+  margin-top: 10px;
+  min-height: 120px;
+  display: flex;
+  justify-content: center;
+  padding: 5px;
+}
+#graph_info_table td {
+  height: 20px;
+}
+#graph_info_table td:nth-child(1),
+#graph_info_table td:nth-child(3) {
+  width: 13%;
+}
