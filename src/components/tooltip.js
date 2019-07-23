@@ -22,13 +22,21 @@ export class Tooltip extends Component {
     this.onMouseEnter = this.onMouseEnter.bind(this);
     this.onMouseLeave = this.onMouseLeave.bind(this);
     this.openTooltip = this.openTooltip.bind(this);
+
+    this.timer = null;
+  }
+
+  // when component unmounts
+  componentWillUnmount() {
+    // cancel timer if component has unmounted
+    window.clearTimeout(this.timer);
   }
 
   // when mouse enters target
   onMouseEnter(event) {
     const target = event.currentTarget;
     // delay opening tooltip
-    window.setTimeout(() => this.openTooltip(target), delay);
+    this.timer = window.setTimeout(() => this.openTooltip(target), delay);
     // track hover state
     this.setState({ hover: true });
   }

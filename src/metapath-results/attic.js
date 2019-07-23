@@ -42,7 +42,8 @@ export class MetapathAttic extends Component {
           className='link_button small'
           onClick={() => this.props.dispatch(togglePrecomputedMetapathsOnly())}
           checked={this.props.precomputedMetapathsOnly}
-          tooltipText='Only show precomputed metapaths'
+          tooltipText='Whether to show only precomputed metapaths, or show all
+            metapaths. Warning: showing all can be slow.'
         />
         <IconButton
           text={this.props.showMore ? 'show less ' : 'show more '}
