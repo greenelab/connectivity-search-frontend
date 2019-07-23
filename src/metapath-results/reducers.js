@@ -20,3 +20,13 @@ export function metapaths(state = [], action) {
       return state;
   }
 }
+
+// reducer for state.precomputedMetapathsOnly
+export function precomputedMetapathsOnly(state = true, action) {
+  switch (action.type) {
+    case 'toggle_precomputed_metapaths_only':
+      return !state;
+    default:
+      return state;
+  }
+}

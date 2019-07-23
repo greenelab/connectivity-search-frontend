@@ -14,6 +14,7 @@ export class MetapathResults extends Component {
 
     this.state = {};
     this.state.showMore = false;
+    this.state.precomputedOnly = false;
   }
 
   // toggle expanded table
@@ -36,6 +37,7 @@ export class MetapathResults extends Component {
           <MetapathAttic
             showMore={this.state.showMore}
             toggleShowMore={this.toggleShowMore}
+            precomputedOnly={this.state.precomputedOnly}
           />
         )}
         {this.props.metapaths.length > 0 && (

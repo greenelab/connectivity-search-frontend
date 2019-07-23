@@ -2,11 +2,13 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
 import { IconButton } from '../components/buttons.js';
 import { download } from './download.js';
+import { togglePrecomputedMetapathsOnly } from './actions.js';
 
 // table "attic" component
 // contains buttons and info above table
@@ -35,6 +37,14 @@ export class MetapathAttic extends Component {
           tooltipText='Download table as .csv file'
         />
         <IconButton
+          text='precomputed only'
+          icon={faCheck}
+          className='link_button small'
+          onClick={() => this.props.dispatch(togglePrecomputedMetapathsOnly())}
+          checked={this.props.precomputedMetapathsOnly}
+          tooltipText='Only show precomputed metapaths'
+        />
+        <IconButton
           text={this.props.showMore ? 'show less ' : 'show more '}
           icon={this.props.showMore ? faAngleLeft : faAngleRight}
           className='link_button small'
@@ -52,5 +62,6 @@ export class MetapathAttic extends Component {
 MetapathAttic = connect((state) => ({
   sourceNode: state.sourceNode,
   targetNode: state.targetNode,
-  metapaths: state.metapaths
+  metapaths: state.metapaths,
+  precomputedMetapathsOnly: state.precomputedMetapathsOnly
 }))(MetapathAttic);

@@ -55,12 +55,14 @@ class App extends Component {
     // when source/target node change, update metapaths
     if (
       prevProps.sourceNode.id !== this.props.sourceNode.id ||
-      prevProps.targetNode.id !== this.props.targetNode.id
+      prevProps.targetNode.id !== this.props.targetNode.id ||
+      prevProps.precomputedMetapathsOnly !== this.props.precomputedMetapathsOnly
     ) {
       this.props.dispatch(
         fetchAndSetMetapaths({
           sourceNodeId: this.props.sourceNode.id,
           targetNodeId: this.props.targetNode.id,
+          precomputedOnly: this.props.precomputedMetapathsOnly,
           updateUrl: swapped,
           preserveChecks: true
         })
@@ -125,6 +127,7 @@ class App extends Component {
 App = connect((state) => ({
   sourceNode: state.sourceNode,
   targetNode: state.targetNode,
-  metapaths: state.metapaths
+  metapaths: state.metapaths,
+  precomputedMetapathsOnly: state.precomputedMetapathsOnly
 }))(App);
 export { App };
