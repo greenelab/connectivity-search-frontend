@@ -11,8 +11,6 @@ import { Provider } from 'react-redux';
 import { Reducer } from './master-reducer.js';
 import { App } from './app';
 
-import './global.css';
-
 // clear cache when app first starts (page refresh)
 window.sessionStorage.clear();
 
