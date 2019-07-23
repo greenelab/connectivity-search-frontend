@@ -42,26 +42,36 @@ class App extends Component {
 
   // when component updates
   componentDidUpdate(prevProps) {
-    // if target and source were swapped
-    const swapped =
-      compareObjects(prevProps.targetNode, this.props.sourceNode) &&
-      compareObjects(prevProps.sourceNode, this.props.targetNode);
-
-    // normally the updateUrl flag is set to true by the action that sets
-    // the new source/target state. the swap action does not set the flag,
-    // so it can be set here instead, so that url can also be updated with
-    // the new metapath abbreviations resulting from the swap
-
     // when source/target node change, update metapaths
     if (
-      prevProps.sourceNode.id !== this.props.sourceNode.id ||
-      prevProps.targetNode.id !== this.props.targetNode.id
+      (prevProps.sourceNode.id !== this.props.sourceNode.id ||
+        prevProps.targetNode.id !== this.props.targetNode.id) &&
+      (this.props.sourceNode.id || this.props.targetNode.id)
     ) {
       this.props.dispatch(
         fetchAndSetMetapaths({
           sourceNodeId: this.props.sourceNode.id,
           targetNodeId: this.props.targetNode.id,
-          updateUrl: swapped,
+          precomputedOnly: this.props.precomputedMetapathsOnly,
+          updateUrl: true,
+          preserveChecks: true
+        })
+      );
+    }
+
+    // when precomputedMetapathsOnly changes, update metapaths
+    if (
+      prevProps.precomputedMetapathsOnly !==
+        this.props.precomputedMetapathsOnly &&
+      this.props.sourceNode.id &&
+      this.props.targetNode.id
+    ) {
+      this.props.dispatch(
+        fetchAndSetMetapaths({
+          sourceNodeId: this.props.sourceNode.id,
+          targetNodeId: this.props.targetNode.id,
+          precomputedOnly: this.props.precomputedMetapathsOnly,
+          updateUrl: true,
           preserveChecks: true
         })
       );
@@ -125,6 +135,7 @@ class App extends Component {
 App = connect((state) => ({
   sourceNode: state.sourceNode,
   targetNode: state.targetNode,
-  metapaths: state.metapaths
+  metapaths: state.metapaths,
+  precomputedMetapathsOnly: state.precomputedMetapathsOnly
 }))(App);
 export { App };

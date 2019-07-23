@@ -19,6 +19,8 @@ import './table.css';
 // colspans can be specified for top
 // custom sort function can be specified
 // supports img or font-awesome checkboxes
+// checkboxes get the attribute data-checked to allow desired CSS styling
+// sort arrows get the attribute data-disabled to allow desired CSS styling
 export class Table extends Component {
   // initialize component
   constructor(props) {
@@ -321,11 +323,7 @@ class HeadCheckboxCell extends Component {
             className='table_button'
             onClick={() => this.context.toggleAll(this.props.field)}
           >
-            <span
-              style={{
-                opacity: this.context.allChecked(this.props.field) ? 1 : 0.1
-              }}
-            >
+            <span data-checked={this.context.allChecked(this.props.field)}>
               {this.props.content}
             </span>
           </Button>
@@ -353,9 +351,7 @@ class HeadCell extends Component {
           >
             {this.props.content}
             <FontAwesomeIcon
-              style={{
-                opacity: this.props.field === this.context.sortField ? 1 : 0.1
-              }}
+              data-disabled={this.props.field !== this.context.sortField}
               icon={
                 this.props.field === this.context.sortField
                   ? this.context.sortUp
@@ -446,9 +442,7 @@ class BodyCheckboxCell extends Component {
               this.context.soloChecked(this.props.datum, this.props.field)
             }
           >
-            <div style={{ opacity: this.props.checked ? 1 : 0.1 }}>
-              {this.props.content}
-            </div>
+            <div data-checked={this.props.checked}>{this.props.content}</div>
           </Button>
         </td>
       </Tooltip>

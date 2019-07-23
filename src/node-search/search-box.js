@@ -25,7 +25,13 @@ export class SearchBox extends Component {
   }
 
   // when user types into or modifies text in text box
-  onInput = (searchString) => {
+  onInput = (searchString, stateAndHelpers) => {
+    // if dropdown isn't open, no reason to get search results.
+    // need this because Downshift triggers this onInput not just when the user
+    // changes the value, but also when the component receives a new state
+    if (!stateAndHelpers || !stateAndHelpers.isOpen)
+      return;
+
     let otherNodeId = '';
     if (this.props.otherNode && this.props.otherNode.id !== undefined)
       otherNodeId = this.props.otherNode.id;

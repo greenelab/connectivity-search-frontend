@@ -6,6 +6,7 @@ import { sourceNode } from './node-search/reducers.js';
 import { targetNode } from './node-search/reducers.js';
 
 import { metapaths } from './metapath-results/reducers.js';
+import { precomputedMetapathsOnly } from './metapath-results/reducers.js';
 
 import { paths } from './path-results/reducers.js';
 import { nodes } from './path-results/reducers.js';
@@ -28,6 +29,10 @@ export function Reducer(state = {}, action) {
     sourceNode: sourceNode(newState, action),
     targetNode: targetNode(newState, action),
     metapaths: metapaths(newState.metapaths, action),
+    precomputedMetapathsOnly: precomputedMetapathsOnly(
+      newState.precomputedMetapathsOnly,
+      action
+    ),
     paths: paths(newState, action),
     nodes: nodes(newState.nodes, action),
     relationships: relationships(newState.relationships, action),
@@ -63,6 +68,8 @@ function updateUrl(state) {
     newParams.set('target', state.targetNode.id);
   if (checkedMetapaths.length > 0)
     newParams.set('metapaths', checkedMetapaths.join(','));
+  if (!state.precomputedMetapathsOnly)
+    newParams.set('complete', '');
 
   // make search string
   let search = newParams.toString();

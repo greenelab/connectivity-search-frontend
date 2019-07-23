@@ -35,6 +35,7 @@ export class Button extends Component {
 
 // icon button component
 // link colored button with text and icon to right
+// icon gets the attribute data-checked to allow desired CSS styling
 export class IconButton extends Component {
   // display component
   render() {
@@ -46,7 +47,10 @@ export class IconButton extends Component {
         onCtrlClick={this.props.onCtrlClick}
       >
         {this.props.text && <span>{this.props.text}</span>}
-        <FontAwesomeIcon icon={this.props.icon} />
+        <FontAwesomeIcon
+          icon={this.props.icon}
+          data-checked={this.props.checked}
+        />
       </Button>
     );
   }
