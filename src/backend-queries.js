@@ -23,6 +23,26 @@ const pathSearchUrl = 'https://search-api.het.io/v1/query-paths/';
 
 // get resource at url and parse as json
 export async function fetchJson(url, dontCache) {
+  // get type of query (eg, random-node-pair, query-paths, etc )
+  const type = url.substr(0, url.lastIndexOf('/'));
+  // set up global store of fetch abort controllers if it doesn't exist
+  if (!window.fetchAbortControllers)
+    window.fetchAbortControllers = {};
+
+  // if a request of this type is already in progress
+  if (window.fetchAbortControllers[type]) {
+    console.log('abort request', type)
+    // abort it
+    window.fetchAbortControllers[type].abort();
+    // and remove controller
+    window.fetchAbortControllers[type] = null;
+  }
+
+  // make a new controller for this request
+  const controller = new AbortController();
+  // put it in store
+  window.fetchAbortControllers[type] = controller;
+
   try {
     // check if exact query has already been made during this session
     // if so, use cache of that. if not, query server
@@ -30,7 +50,10 @@ export async function fetchJson(url, dontCache) {
     if (cachedResponse && !dontCache)
       return JSON.parse(cachedResponse);
 
-    const response = await fetch(url);
+    const response = await fetch(url, {
+      method: 'get',
+      signal: AbortController.signal
+    });
     let json = {};
     if (response.ok)
       json = await response.json();
@@ -40,6 +63,9 @@ export async function fetchJson(url, dontCache) {
     // save response to cache
     if (!dontCache)
       window.sessionStorage.setItem(url, JSON.stringify(json));
+
+    // remove controller if request completes without any conflicts
+    window.fetchAbortControllers[type] = null;
 
     return json;
   } catch (error) {
