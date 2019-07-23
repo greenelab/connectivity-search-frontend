@@ -26,6 +26,11 @@ export function precomputedMetapathsOnly(state = true, action) {
   switch (action.type) {
     case 'toggle_precomputed_metapaths_only':
       return !state;
+    case 'set_precomputed_metapaths_only':
+      let precomputedMetapathsOnly = action.payload.precomputedMetapathsOnly;
+      if (typeof precomputedMetapathsOnly !== 'boolean')
+        precomputedMetapathsOnly = true;
+      return precomputedMetapathsOnly;
     default:
       return state;
   }

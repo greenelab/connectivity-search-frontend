@@ -7,6 +7,7 @@ import { searchMetapaths } from '../backend-queries.js';
 
 import { setSourceTargetNode } from '../node-search/actions.js';
 import { setMetapaths } from '../metapath-results/actions.js';
+import { setPrecomputedMetapathsOnly } from '../metapath-results/actions.js';
 
 // get metagraph, hetio definitions, hetio styles, and hetmech definitions
 export async function fetchDefinitions() {
@@ -67,10 +68,12 @@ export function loadStateFromUrl() {
     const sourceNodeId = params.get('source');
     const targetNodeId = params.get('target');
     let metapathAbbrevs = params.get('metapaths');
+    const complete = params.get('complete') === '' ? true : false;
 
     const sourceNode = await lookupNodeById(sourceNodeId);
     const targetNode = await lookupNodeById(targetNodeId);
-    const metapaths = (await searchMetapaths(sourceNodeId, targetNodeId)) || [];
+    const metapaths =
+      (await searchMetapaths(sourceNodeId, targetNodeId, complete)) || [];
 
     // by the time awaits return, url may be different (eg if user
     // clicks back/forward quickly). if different, exit and allow more
@@ -96,6 +99,11 @@ export function loadStateFromUrl() {
     }
 
     // set global state
+    dispatch(
+      setPrecomputedMetapathsOnly({
+        precomputedMetapathsOnly: !complete
+      })
+    );
     dispatch(
       setSourceTargetNode({
         sourceNode: sourceNode,

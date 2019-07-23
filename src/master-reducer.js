@@ -68,6 +68,8 @@ function updateUrl(state) {
     newParams.set('target', state.targetNode.id);
   if (checkedMetapaths.length > 0)
     newParams.set('metapaths', checkedMetapaths.join(','));
+  if (!state.precomputedMetapathsOnly)
+    newParams.set('complete', '');
 
   // make search string
   let search = newParams.toString();

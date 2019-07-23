@@ -106,6 +106,20 @@ export function fetchAndSetMetapathMissingData({
 // toggle precomputedMetapathsOnly action
 export function togglePrecomputedMetapathsOnly() {
   return {
-    type: 'toggle_precomputed_metapaths_only'
+    type: 'toggle_precomputed_metapaths_only',
+    payload: {
+      updateUrl: true
+    }
+  };
+}
+
+// set precomputedMetapathsOnly action
+export function setPrecomputedMetapathsOnly({ precomputedMetapathsOnly }) {
+  return {
+    type: 'set_precomputed_metapaths_only',
+    payload: {
+      precomputedMetapathsOnly: precomputedMetapathsOnly,
+      updateUrl: true
+    }
   };
 }
