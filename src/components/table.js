@@ -3,6 +3,12 @@ import { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons';
 import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons';
+import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleLeft } from '@fortawesome/free-solid-svg-icons';
+import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
+import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faListOl } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from './buttons.js';
 import { Tooltip } from './tooltip.js';
@@ -28,25 +34,66 @@ export class Table extends Component {
 
     this.state = {};
     this.state.data = [];
+    this.state.sortedData = [];
+    this.state.filteredData = [];
+    this.state.paginatedData = [];
     this.state.sortField = this.props.defaultSortField || '';
     this.state.sortUp = this.props.defaultSortUp || false;
+    this.state.searchString = '';
+    this.state.page = 1;
+    this.state.pages = 1;
+    this.state.perPage = 10;
 
     this.state.onChange = this.props.onChange || (() => null);
   }
 
   // when component mounts
   componentDidMount() {
-    this.setState({ data: this.sortData(this.props.data) });
+    this.setState({ sortedData: this.sortData(this.props.data) });
   }
 
   // when component updates
   componentDidUpdate(prevProps, prevState) {
+    const newState = {};
+    // if input data changes or sort column changes
+    // update sorted data
     if (
       !compareObjects(this.props.data, prevProps.data) ||
       this.state.sortField !== prevState.sortField ||
       this.state.sortUp !== prevState.sortUp
     )
-      this.setState({ data: this.sortData(this.props.data) });
+      newState.sortedData = this.sortData(this.props.data);
+
+    // if sorted data changes or search string changes
+    // update filtered data
+    if (
+      !compareObjects(this.state.sortedData, prevState.sortedData) ||
+      this.state.searchString !== prevState.searchString
+    ) {
+      newState.filteredData = this.filterData(this.state.sortedData);
+      if (this.state.searchString !== prevState.searchString)
+        newState.page = 1;
+    }
+
+    // if filtered data changes or page controls change
+    // update paginated data
+    if (
+      !compareObjects(this.state.filteredData, prevState.filteredData) ||
+      this.state.page !== prevState.page ||
+      this.state.perPage !== prevState.perPage
+    ) {
+      newState.paginatedData = this.paginateData(this.state.filteredData);
+      newState.pages = this.calcPages();
+    }
+
+    // if paginated data changes
+    // update main final data var that is passed to children for render
+    if (!compareObjects(this.state.paginatedData, prevState.paginatedData))
+      newState.data = this.state.paginatedData;
+
+    // set new state, if any
+    if (Object.keys(newState).length > 0)
+      this.setState(newState);
   }
 
   // change which field table is sorted by
@@ -64,14 +111,17 @@ export class Table extends Component {
 
   // sort table data based on sort field and direction
   sortData = (data) => {
+    data = copyObject(data);
+
     // get sort function from props or standard/default sort
     let func;
     if (this.props.sortFunction)
       func = this.props.sortFunction(this.state.sortField);
-
     if (typeof func !== 'function')
       func = this.defaultSort;
 
+    // keep immutable copy of data before sort
+    // if just "data" was used, it would change throughout sort()
     const originalData = copyObject(data);
 
     // sort
@@ -128,6 +178,67 @@ export class Table extends Component {
       return 1;
     else
       return sortUp ? bIndex - aIndex : aIndex - bIndex;
+  };
+
+  // when user types into searchbox
+  onSearch = (value) => {
+    this.setState({ searchString: value });
+  };
+
+  // filter table based on search textbox
+  filterData = (data) => {
+    data = copyObject(data);
+
+    if (!this.state.searchString)
+      return data;
+
+    return data.filter((datum) => {
+      for (const key of Object.keys(datum)) {
+        if (
+          String(datum[key])
+            .toLowerCase()
+            .includes(this.state.searchString.toLowerCase())
+        )
+          return true;
+      }
+    });
+  };
+
+  // paginate data based on page controls
+  paginateData = (data) => {
+    data = copyObject(data);
+
+    const start = (this.state.page - 1) * this.state.perPage;
+    const end = start + this.state.perPage;
+
+    return data.slice(start, end);
+  };
+
+  // set page number
+  setPage = (page) => {
+    if (typeof page !== 'number')
+      page = 1;
+    page = Math.round(page);
+    if (page < 1)
+      page = 1;
+    if (page > this.state.pages)
+      page = this.state.pages;
+
+    this.setState({ page: page });
+  };
+
+  // set per page
+  setPerPage = (value) => {
+    value = Number(value);
+    if (Number.isNaN(value))
+      value = 10;
+
+    this.setState({ perPage: value, page: 1 });
+  };
+
+  // calculate number of pages based on results and per page
+  calcPages = () => {
+    return Math.ceil(this.state.filteredData.length / this.state.perPage);
   };
 
   // toggles checkbox on/off
@@ -190,9 +301,18 @@ export class Table extends Component {
     return (
       <TableContext.Provider
         value={{
-          data: this.state.data || [],
+          data: this.state.data,
+          sortedData: this.state.sortedData,
+          filteredData: this.state.filteredData,
           sortField: this.state.sortField,
           sortUp: this.state.sortUp,
+          onSearch: this.onSearch,
+          searchString: this.state.searchString,
+          page: this.state.page,
+          pages: this.state.pages,
+          perPage: this.state.perPage,
+          setPerPage: this.setPerPage,
+          setPage: this.setPage,
           toggleChecked: this.toggleChecked,
           soloChecked: this.soloChecked,
           allChecked: this.allChecked,
@@ -214,15 +334,18 @@ export class Table extends Component {
           bodyTooltips: this.props.bodyTooltips || []
         }}
       >
-        <table className={this.props.className}>
-          <thead>
-            <Top />
-            <Head />
-          </thead>
-          <tbody>
-            <Body />
-          </tbody>
-        </table>
+        <div className={this.props.containerClass}>
+          <table className={this.props.className}>
+            <thead>
+              <Top />
+              <Head />
+            </thead>
+            <tbody>
+              <Body />
+            </tbody>
+          </table>
+        </div>
+        <Controls />
       </TableContext.Provider>
     );
   }
@@ -359,7 +482,7 @@ class HeadCell extends Component {
                     : faLongArrowAltDown
                   : faLongArrowAltUp
               }
-              className='fa-lg sort_icon'
+              className='fa-lg table_sort_icon'
             />
           </Button>
         </th>
@@ -487,3 +610,130 @@ function propValOrFunc(props, prop, datum, blank) {
   else
     return prop || blank;
 }
+
+// controls section
+// contains search, pagination, and more
+class Controls extends Component {
+  // display component
+  render() {
+    return (
+      <div className='table_controls'>
+        <PerPage />
+        <Nav />
+        <Search />
+      </div>
+    );
+  }
+}
+
+// page navigation component
+class Nav extends Component {
+  // display component
+  render() {
+    return (
+      <div className='table_nav'>
+        <Button
+          tooltipText='Go to first page'
+          className='table_nav_button'
+          disabled={this.context.page <= 1}
+          onClick={() => this.context.setPage(1)}
+        >
+          <FontAwesomeIcon icon={faAngleDoubleLeft} className='fa-sm' />
+        </Button>
+        <Button
+          tooltipText='Go to previous page'
+          className='table_nav_button'
+          disabled={this.context.page <= 1}
+          onClick={() => this.context.setPage(this.context.page - 1)}
+        >
+          <FontAwesomeIcon icon={faAngleLeft} className='fa-sm' />
+        </Button>
+        <Tooltip text='Pages'>
+          <span>
+            {this.context.page} of {this.context.pages || 1}
+          </span>
+        </Tooltip>
+        <Button
+          tooltipText='Go to next page'
+          className='table_nav_button'
+          disabled={this.context.page >= this.context.pages}
+          onClick={() => this.context.setPage(this.context.page + 1)}
+        >
+          <FontAwesomeIcon icon={faAngleRight} className='fa-sm' />
+        </Button>
+        <Button
+          tooltipText='Go to last page'
+          className='table_nav_button'
+          disabled={this.context.page >= this.context.pages}
+          onClick={() => this.context.setPage(this.context.pages)}
+        >
+          <FontAwesomeIcon icon={faAngleDoubleRight} className='fa-sm' />
+        </Button>
+      </div>
+    );
+  }
+}
+Nav.contextType = TableContext;
+
+// per page component
+// ie, show X entries per page
+class PerPage extends Component {
+  // when selection changes
+  onChange = (event) => {
+    if (event && event.target && this.context.setPerPage)
+      this.context.setPerPage(event.target.value);
+  };
+
+  // display component
+  render() {
+    return (
+      <div className='table_per_page'>
+        <form>
+          <Tooltip text='Rows to show per page'>
+            <select
+              value={String(this.context.perPage)}
+              onChange={this.onChange}
+            >
+              <option value='5'>5</option>
+              <option value='10'>10</option>
+              <option value='25'>25</option>
+              <option value='50'>50</option>
+              <option value='100'>100</option>
+              <option value='500'>500</option>
+              <option value='1000'>1000</option>
+            </select>
+          </Tooltip>
+          <FontAwesomeIcon icon={faListOl} className='fa-sm' />
+        </form>
+      </div>
+    );
+  }
+}
+PerPage.contextType = TableContext;
+
+// search textbox component
+class Search extends Component {
+  // when user types into box
+  onInput = (event) => {
+    if (event && event.target && this.context.onSearch)
+      this.context.onSearch(event.target.value);
+  };
+
+  // display component
+  render() {
+    return (
+      <Tooltip text='Search table'>
+        <div className='table_search'>
+          <form>
+            <input type='text' onInput={this.onInput} />
+            <FontAwesomeIcon icon={faSearch} className='fa-sm' />
+          </form>
+          {this.context.searchString && (
+            <span>{this.context.filteredData.length} results</span>
+          )}
+        </div>
+      </Tooltip>
+    );
+  }
+}
+Search.contextType = TableContext;

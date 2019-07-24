@@ -302,30 +302,31 @@ export class MetapathTable extends Component {
     ];
 
     return (
-      <div className='table_container' data-expanded={this.props.showMore}>
-        <Table
-          className='metapath_results_table'
-          data={this.props.metapaths}
-          onChange={onChange}
-          sortFunction={sortFunction}
-          defaultSortField='adjusted_p_value'
-          defaultSortUp={false}
-          topContents={topContents}
-          topStyles={topStyles}
-          topClasses={topClasses}
-          topColspans={topColspans}
-          headContents={headContents}
-          headFields={headFields}
-          headStyles={headStyles}
-          headClasses={headClasses}
-          headTooltips={headTooltips}
-          bodyValues={bodyValues}
-          bodyFullValues={bodyFullValues}
-          bodyStyles={bodyStyles}
-          bodyClasses={bodyClasses}
-          bodyTooltips={bodyTooltips}
-        />
-      </div>
+      <Table
+        containerClass={
+          this.props.showMore ? 'table_container_expanded' : 'table_container'
+        }
+        className='metapath_results_table'
+        data={this.props.metapaths}
+        onChange={onChange}
+        sortFunction={sortFunction}
+        defaultSortField='adjusted_p_value'
+        defaultSortUp={false}
+        topContents={topContents}
+        topStyles={topStyles}
+        topClasses={topClasses}
+        topColspans={topColspans}
+        headContents={headContents}
+        headFields={headFields}
+        headStyles={headStyles}
+        headClasses={headClasses}
+        headTooltips={headTooltips}
+        bodyValues={bodyValues}
+        bodyFullValues={bodyFullValues}
+        bodyStyles={bodyStyles}
+        bodyClasses={bodyClasses}
+        bodyTooltips={bodyTooltips}
+      />
     );
   }
 }

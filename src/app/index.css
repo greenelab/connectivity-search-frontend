@@ -11,3 +11,10 @@
 .table_attic > *:last-child {
   flex-grow: 1;
 }
+
+.table_nav_button {
+  color: #606060;
+}
+.table_controls form svg {
+  color: #808080;
+}

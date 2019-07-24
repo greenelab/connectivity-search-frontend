@@ -16,6 +16,8 @@ import { fetchAndSetPaths } from '../path-results/actions';
 
 import './index.css';
 
+import '../global.css';
+
 // Note about class arrow functions vs normal functions:
 //
 // Arrow functions automatically bind "this", but do not get added to the class
@@ -117,11 +119,11 @@ class App extends Component {
     return (
       <>
         {/* load global, site-wide styles from het.io */}
-        <link
+        {/* <link
           rel='stylesheet'
           type='text/css'
           href='https://het.io/global.css'
-        />
+        /> */}
         <NodeSearch />
         <NodeResults />
         <MetapathResults />
