@@ -23,19 +23,21 @@ export class MetapathAttic extends Component {
 
     return (
       <div className='table_attic'>
-        <IconButton
-          text='.csv'
-          icon={faDownload}
-          className='link_button small'
-          onClick={() =>
-            download(
-              this.props.sourceNode,
-              this.props.targetNode,
-              this.props.metapaths
-            )
-          }
-          tooltipText='Download table as .csv file'
-        />
+        {this.props.metapaths.length > 0 && (
+          <IconButton
+            text='.csv'
+            icon={faDownload}
+            className='link_button small'
+            onClick={() =>
+              download(
+                this.props.sourceNode,
+                this.props.targetNode,
+                this.props.metapaths
+              )
+            }
+            tooltipText='Download table as .csv file'
+          />
+        )}
         <IconButton
           text='precomputed only'
           icon={faCheck}
@@ -45,16 +47,21 @@ export class MetapathAttic extends Component {
           tooltipText='Whether to show only precomputed metapaths, or show all
             metapaths. Warning: showing all can be slow.'
         />
-        <IconButton
-          text={this.props.showMore ? 'show less ' : 'show more '}
-          icon={this.props.showMore ? faAngleLeft : faAngleRight}
-          className='link_button small'
-          onClick={this.props.toggleShowMore}
-          tooltipText='Expand table and show more columns'
-        />
-        <div className='small light right'>
-          {metapathCount} results, {metapathSelectedCount} selected
-        </div>
+        <span />
+        {this.props.metapaths.length > 0 && (
+          <IconButton
+            text={this.props.showMore ? 'show less ' : 'show more '}
+            icon={this.props.showMore ? faAngleLeft : faAngleRight}
+            className='link_button small'
+            onClick={this.props.toggleShowMore}
+            tooltipText='Expand table and show more columns'
+          />
+        )}
+        {this.props.metapaths.length > 0 && (
+          <div className='small light right'>
+            {metapathCount} results, {metapathSelectedCount} selected
+          </div>
+        )}
       </div>
     );
   }
