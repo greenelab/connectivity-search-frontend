@@ -26,29 +26,39 @@ export class MetapathResults extends Component {
 
   // display component
   render() {
+    let placeholder = <></>;
+    if (
+      this.props.sourceNode.id &&
+      this.props.targetNode.id &&
+      this.props.metapaths.length === 0
+    )
+      placeholder = <span className='light'>no results to show</span>;
+    if (!this.props.sourceNode.id || !this.props.targetNode.id) {
+      placeholder = (
+        <span className='light'>select a source and target node</span>
+      );
+    }
     return (
       <CollapsibleSection
         label='Metapaths'
         tooltipText='Metapaths of length <= 3 between the source and target
         node'
       >
-        {this.props.metapaths.length > 0 && (
-          <MetapathAttic
-            showMore={this.state.showMore}
-            toggleShowMore={this.toggleShowMore}
-          />
-        )}
+        <MetapathAttic
+          showMore={this.state.showMore}
+          toggleShowMore={this.toggleShowMore}
+        />
         {this.props.metapaths.length > 0 && (
           <MetapathTable showMore={this.state.showMore} />
         )}
-        {this.props.metapaths.length === 0 && (
-          <span className='light'>select a source and target node</span>
-        )}
+        {placeholder}
       </CollapsibleSection>
     );
   }
 }
 // connect component to global state
 MetapathResults = connect((state) => ({
+  sourceNode: state.sourceNode,
+  targetNode: state.targetNode,
   metapaths: state.metapaths
 }))(MetapathResults);
