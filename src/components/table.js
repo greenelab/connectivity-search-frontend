@@ -201,6 +201,7 @@ export class Table extends Component {
         )
           return true;
       }
+      return false;
     });
   };
 
