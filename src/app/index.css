@@ -18,3 +18,7 @@
 .table_controls form svg {
   color: #808080;
 }
+
+th {
+  height: 40px !important;
+}

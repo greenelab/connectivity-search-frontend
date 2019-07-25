@@ -85,7 +85,6 @@ export class PathTable extends Component {
         containerClass={
           this.props.showMore ? 'table_container_expanded' : 'table_container'
         }
-        className='metapath_results_table'
         data={this.props.paths}
         onChange={onChange}
         defaultSortField='score'
