@@ -40,5 +40,16 @@ export function copyObject(object) {
 // compare objects with stringify
 // works for everything except circular refs, functions, and js Dates
 export function compareObjects(object1, object2) {
-  return JSON.stringify(object1) === JSON.stringify(object2);
+  if (typeof object1 !== typeof object2)
+    return false;
+  else if (Array.isArray(object1) && Array.isArray(object2)) {
+    if (object1.length !== object2.length)
+      return false;
+    for (let index = 0; index < object1.length; index++) {
+      if (JSON.stringify(object1[index]) !== JSON.stringify(object2[index]))
+        return false;
+    }
+    return true;
+  } else
+    return JSON.stringify(object1) === JSON.stringify(object2);
 }
