@@ -32,17 +32,23 @@ export class Graph extends Component {
     super();
 
     this.state = {};
-
-    // initialize graph. create simulation and event handlers to be referenced
-    // on graph updates
-    this.state.simulation = createSimulation();
-    this.state.viewHandler = createViewHandler(this.onViewClick, this.fitView);
-    this.state.nodeDragHandler = createNodeDragHandler(this.state.simulation);
   }
 
   // when component mounts
   componentDidMount() {
-    this.resetView();
+    // initialize graph. create simulation and event handlers to be referenced
+    // on graph updates
+    const simulation = createSimulation();
+    const viewHandler = createViewHandler(this.onViewClick, this.fitView);
+    const nodeDragHandler = createNodeDragHandler(simulation);
+    this.setState(
+      {
+        simulation: simulation,
+        viewHandler: viewHandler,
+        nodeDragHandler: nodeDragHandler
+      },
+      this.resetView
+    );
   }
 
   // when component updates
@@ -51,7 +57,6 @@ export class Graph extends Component {
     updateSimulation(
       this.state.simulation,
       this.props.graph,
-      // only reheat simulation when nodes are added or removed
       this.props.graph.nodes.length !== prevProps.graph.nodes.length
     );
 
