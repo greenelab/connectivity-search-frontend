@@ -18,6 +18,8 @@ import { copyObject } from '../util/object.js';
 
 import './table.css';
 
+const rowIndexKey = '_rowIndex';
+
 // generic table component
 // contains three sections: top (row above head), head, and body
 // contents, styles, and classes can be specified for all sections
@@ -33,80 +35,133 @@ export class Table extends Component {
     super(props);
 
     this.state = {};
-    this.state.data = [];
+    // input data at different stages in processing chain
+    this.state.indexedData = [];
     this.state.sortedData = [];
     this.state.filteredData = [];
     this.state.paginatedData = [];
+    // final data passed to children for render
+    this.state.data = [];
+    // table control vars
     this.state.sortField = this.props.defaultSortField || '';
     this.state.sortUp = this.props.defaultSortUp || false;
     this.state.searchString = '';
+    this.state.searchResults = 0;
     this.state.page = 1;
     this.state.pages = 1;
     this.state.perPage = 10;
+    this.state.dragField = null;
+    this.state.dragValue = null;
+    this.state.dragList = [];
 
-    this.state.onChange = this.props.onChange || (() => null);
+    // end checkbox drag when mouse released anywhere
+    window.addEventListener('mouseup', this.endDrag);
   }
 
   // when component mounts
   componentDidMount() {
-    this.setState({ sortedData: this.sortData(this.props.data) });
+    const newState = {};
+
+    newState.indexedData = this.indexData(this.props.data);
+    newState.sortedData = this.sortData(newState.indexedData);
+    newState.filteredData = this.filterData(newState.sortedData);
+    newState.searchResults = newState.filteredData.length || 0;
+    newState.paginatedData = this.paginateData(newState.filteredData);
+    newState.pages = this.calcPages(newState.filteredData, this.state.perPage);
+    newState.data = newState.paginatedData;
+
+    this.setState(newState);
   }
 
   // when component updates
   componentDidUpdate(prevProps, prevState) {
     const newState = {};
-    // if input data changes or sort column changes
-    // update sorted data
-    if (
-      !compareObjects(this.props.data, prevProps.data) ||
-      this.state.sortField !== prevState.sortField ||
-      this.state.sortUp !== prevState.sortUp
-    )
-      newState.sortedData = this.sortData(this.props.data);
 
-    // if sorted data changes or search string changes
-    // update filtered data
-    if (
-      !compareObjects(this.state.sortedData, prevState.sortedData) ||
-      this.state.searchString !== prevState.searchString
-    ) {
-      newState.filteredData = this.filterData(this.state.sortedData);
-      if (this.state.searchString !== prevState.searchString)
-        newState.page = 1;
+    // when input data changes
+    if (!compareObjects(this.props.data, prevProps.data)) {
+      newState.indexedData = this.indexData(this.props.data);
+      newState.sortedData = this.sortData(newState.indexedData);
+      newState.filteredData = this.filterData(newState.sortedData);
+      newState.searchResults = newState.filteredData.length || 0;
+      newState.paginatedData = this.paginateData(newState.filteredData);
+      newState.pages = this.calcPages(
+        newState.filteredData,
+        this.state.perPage
+      );
+      newState.data = newState.paginatedData;
     }
 
-    // if filtered data changes or page controls change
-    // update paginated data
+    // when sort column or direction changes
     if (
-      !compareObjects(this.state.filteredData, prevState.filteredData) ||
+      this.state.sortField !== prevState.sortField ||
+      this.state.sortUp !== prevState.sortUp
+    ) {
+      newState.sortedData = this.sortData(this.state.indexedData);
+      newState.filteredData = this.filterData(newState.sortedData);
+      newState.paginatedData = this.paginateData(newState.filteredData);
+      newState.data = newState.paginatedData;
+    }
+
+    // when search string changes
+    if (this.state.searchString !== prevState.searchString) {
+      newState.filteredData = this.filterData(this.state.sortedData);
+      newState.searchResults = newState.filteredData.length || 0;
+      newState.paginatedData = this.paginateData(newState.filteredData);
+      newState.pages = this.calcPages(
+        newState.filteredData,
+        this.state.perPage
+      );
+      newState.page = 1;
+      newState.data = newState.paginatedData;
+    }
+
+    // when page controls change
+    if (
       this.state.page !== prevState.page ||
       this.state.perPage !== prevState.perPage
     ) {
       newState.paginatedData = this.paginateData(this.state.filteredData);
-      newState.pages = this.calcPages();
+      newState.pages = this.calcPages(
+        this.state.filteredData,
+        this.state.perPage
+      );
+      newState.data = newState.paginatedData;
     }
-
-    // if paginated data changes
-    // update main final data var that is passed to children for render
-    if (!compareObjects(this.state.paginatedData, prevState.paginatedData))
-      newState.data = this.state.paginatedData;
 
     // set new state, if any
     if (Object.keys(newState).length > 0)
       this.setState(newState);
   }
 
-  // change which field table is sorted by
-  changeSort = (field) => {
-    const newState = {};
-    newState.sortField = field;
+  // //////////////////////////////////////////////////
+  // DATA FUNCTIONS
+  // //////////////////////////////////////////////////
 
-    if (field === this.state.sortField)
-      newState.sortUp = !this.state.sortUp;
-    else
-      newState.sortUp = true;
+  // call input onChange function with new data to set
+  setData = (data) => {
+    if (!this.props.onChange)
+      return;
 
-    this.setState(newState);
+    data = copyObject(data);
+
+    // remove row index property from each object
+    for (const datum of data)
+      delete datum[rowIndexKey];
+
+    this.props.onChange(data);
+  };
+
+  // attach row index property to data for easy referencing/identification
+  indexData = (data) => {
+    data = copyObject(data);
+
+    let index = 0;
+    for (const datum of data) {
+      datum[rowIndexKey] = index;
+      index++;
+    }
+
+    return data;
   };
 
   // sort table data based on sort field and direction
@@ -120,14 +175,8 @@ export class Table extends Component {
     if (typeof func !== 'function')
       func = this.defaultSort;
 
-    // keep immutable copy of data before sort
-    // if just "data" was used, it would change throughout sort()
-    const originalData = copyObject(data);
-
     // sort
-    data.sort((a, b) =>
-      func(a, b, this.state.sortField, this.state.sortUp, originalData)
-    );
+    data.sort((a, b) => func(a, b, this.state.sortField, this.state.sortUp));
 
     // reverse sort direction
     if (this.state.sortUp)
@@ -137,52 +186,37 @@ export class Table extends Component {
   };
 
   // compare function for sorting
-  defaultSort = (a, b, key, sortUp, original) => {
-    // get values
-    const aValue = a[key];
-    const bValue = b[key];
-
-    // get values
-    const aNum = Number(aValue);
-    const bNum = Number(bValue);
-
-    // get whether a and b are numbers
-    const aIsNum = !Number.isNaN(aNum);
-    const bIsNum = !Number.isNaN(bNum);
-
-    // get original positions in array
-    const aIndex = original.findIndex((element) => compareObjects(element, a));
-    const bIndex = original.findIndex((element) => compareObjects(element, b));
-
-    // if both are numbers, compare by values, or by index if values are the
-    // same (to preserve original order)
-    if (aIsNum && bIsNum) {
-      if (aNum - bNum !== 0)
-        return aNum - bNum;
+  defaultSort = (a, b, key, sortUp) => {
+    // if both are numbers, compare by values
+    if (typeof a[key] === 'number' && typeof b[key] === 'number') {
+      if (a[key] < b[key])
+        return -1;
+      else if (a[key] > b[key])
+        return 1;
       else
-        return sortUp ? bIndex - aIndex : aIndex - bIndex;
+        return 0;
     }
 
-    // if one is a number and the other is not, always put the NaN vertically
-    // below the number
-    if (!aIsNum && bIsNum)
+    // if one is undefined/object and the other is not, always put the
+    // undefined/object vertically below
+    if (
+      (typeof a[key] === 'undefined' || typeof a[key] === 'object') &&
+      !(typeof b[key] === 'undefined' || typeof b[key] === 'object')
+    )
       return sortUp ? -1 : 1;
-    if (aIsNum && !bIsNum)
+    if (
+      !(typeof a[key] === 'undefined' || typeof a[key] === 'object') &&
+      (typeof b[key] === 'undefined' || typeof b[key] === 'object')
+    )
       return sortUp ? 1 : -1;
 
-    // if neither are numbers, compare alphabetically, or by index if values
-    // are the same (to preserve original order)
-    if (aValue < bValue)
+    // otherwise, compare alphabetically
+    if (a[key] < b[key])
       return -1;
-    else if (aValue > bValue)
+    else if (a[key] > b[key])
       return 1;
     else
-      return sortUp ? bIndex - aIndex : aIndex - bIndex;
-  };
-
-  // when user types into searchbox
-  onSearch = (value) => {
-    this.setState({ searchString: value });
+      return 0;
   };
 
   // filter table based on search textbox
@@ -215,6 +249,133 @@ export class Table extends Component {
     return data.slice(start, end);
   };
 
+  // //////////////////////////////////////////////////
+  // CHECKBOX FUNCTIONS
+  // //////////////////////////////////////////////////
+
+  // toggles checkbox on/off
+  toggleChecked = (rowIndex, field) => {
+    const newData = copyObject(this.state.indexedData);
+
+    for (const row of newData) {
+      if (row[rowIndexKey] === rowIndex)
+        row[field] = !row[field];
+    }
+
+    this.setData(newData);
+  };
+
+  // solo checkbox (turn all others off)
+  soloChecked = (rowIndex, field) => {
+    const newData = copyObject(this.state.indexedData);
+
+    let allOthersUnchecked = true;
+    for (const row of newData) {
+      if (row[rowIndexKey] !== rowIndex && row[field]) {
+        allOthersUnchecked = false;
+        break;
+      }
+    }
+
+    for (const row of newData) {
+      if (allOthersUnchecked || row[rowIndexKey] === rowIndex)
+        row[field] = true;
+      else
+        row[field] = false;
+    }
+
+    this.setData(newData);
+  };
+
+  // checks whether all checkboxes are checked
+  allChecked = (field) => {
+    for (const datum of this.props.data) {
+      if (!datum[field])
+        return false;
+    }
+
+    return true;
+  };
+
+  // check or uncheck all checkboxes
+  toggleAll = (field) => {
+    const newData = copyObject(this.props.data);
+
+    const newChecked = !this.allChecked(field);
+    for (const datum of newData)
+      datum[field] = newChecked;
+
+    this.setData(newData);
+  };
+
+  // begin dragging checkboxes
+  beginDrag = (field, newChecked) => {
+    this.setState({ dragField: field, dragValue: newChecked });
+  };
+
+  // add row index to drag list
+  addToDragList = (rowIndex) => {
+    if (!this.state.dragList.includes(rowIndex))
+      this.setState({ dragList: [...this.state.dragList, rowIndex] });
+  };
+
+  // end dragging checkboxes
+  endDrag = () => {
+    if (
+      !this.state.dragField ||
+      typeof this.state.dragValue !== 'boolean' ||
+      !this.state.dragList.length
+    ) {
+      this.resetDrag();
+      return;
+    }
+
+    const newData = copyObject(this.state.indexedData);
+
+    for (const datum of newData) {
+      if (this.state.dragList.includes(datum[rowIndexKey]))
+        datum[this.state.dragField] = this.state.dragValue;
+    }
+
+    this.setData(newData);
+    this.resetDrag();
+  };
+
+  // cancel dragging checkboxes
+  resetDrag = () => {
+    this.setState({ dragField: null, dragValue: null, dragList: [] });
+  };
+
+  // //////////////////////////////////////////////////
+  // SORT FUNCTIONS
+  // //////////////////////////////////////////////////
+
+  // change which field table is sorted by
+  changeSort = (field) => {
+    const newState = {};
+    newState.sortField = field;
+
+    if (field === this.state.sortField)
+      newState.sortUp = !this.state.sortUp;
+    else
+      newState.sortUp = true;
+
+    this.setState(newState);
+  };
+
+  // //////////////////////////////////////////////////
+  // SEARCH/FILTER FUNCTIONS
+  // //////////////////////////////////////////////////
+
+  // when user types into searchbox
+  onSearch = (value) => {
+    this.setState({ searchString: value });
+  };
+
+  // //////////////////////////////////////////////////
+  // PAGE FUNCTIONS
+  // //////////////////////////////////////////////////
+
   // set page number
   setPage = (page) => {
     if (typeof page !== 'number')
@@ -238,63 +399,8 @@ export class Table extends Component {
   };
 
   // calculate number of pages based on results and per page
-  calcPages = () => {
-    return Math.ceil(this.state.filteredData.length / this.state.perPage);
-  };
-
-  // toggles checkbox on/off
-  toggleChecked = (datum, field) => {
-    const newData = copyObject(this.props.data);
-
-    for (const row of newData) {
-      if (compareObjects(row, datum))
-        row[field] = !row[field];
-    }
-
-    this.state.onChange(newData);
-  };
-
-  // solo checkbox (turn all others off)
-  soloChecked = (datum, field) => {
-    const newData = copyObject(this.props.data);
-
-    let allOthersUnchecked = true;
-    for (const row of newData) {
-      if (!compareObjects(row, datum) && row[field]) {
-        allOthersUnchecked = false;
-        break;
-      }
-    }
-
-    for (const row of newData) {
-      if (allOthersUnchecked || compareObjects(row, datum))
-        row[field] = true;
-      else
-        row[field] = false;
-    }
-
-    this.state.onChange(newData);
-  };
-
-  // checks whether all checkboxes are checked
-  allChecked = (field) => {
-    for (const datum of this.props.data) {
-      if (!datum[field])
-        return false;
-    }
-
-    return true;
-  };
-
-  // check or uncheck all checkboxes
-  toggleAll = (field) => {
-    const newData = copyObject(this.props.data);
-
-    const newChecked = !this.allChecked(field);
-    for (const datum of newData)
-      datum[field] = newChecked;
-
-    this.state.onChange(newData);
+  calcPages = (data, perPage) => {
+    return Math.ceil(data.length / perPage);
   };
 
   // display component
@@ -303,22 +409,35 @@ export class Table extends Component {
       <TableContext.Provider
         value={{
           data: this.state.data,
-          sortedData: this.state.sortedData,
-          filteredData: this.state.filteredData,
-          sortField: this.state.sortField,
-          sortUp: this.state.sortUp,
-          onSearch: this.onSearch,
-          searchString: this.state.searchString,
-          page: this.state.page,
-          pages: this.state.pages,
-          perPage: this.state.perPage,
-          setPerPage: this.setPerPage,
-          setPage: this.setPage,
+          // checkbox props
+          dragField: this.state.dragField,
+          dragValue: this.state.dragValue,
+          // checkbox functions
           toggleChecked: this.toggleChecked,
           soloChecked: this.soloChecked,
           allChecked: this.allChecked,
           toggleAll: this.toggleAll,
+          beginDrag: this.beginDrag,
+          addToDragList: this.addToDragList,
+          resetDrag: this.resetDrag,
+          // sort props
+          sortField: this.state.sortField,
+          sortUp: this.state.sortUp,
+          // sort functions
           changeSort: this.changeSort,
+          // search props
+          searchString: this.state.searchString,
+          searchResults: this.state.searchResults,
+          // search/filter functions
+          onSearch: this.onSearch,
+          // page props
+          page: this.state.page,
+          pages: this.state.pages,
+          perPage: this.state.perPage,
+          // page functions
+          setPage: this.setPage,
+          setPerPage: this.setPerPage,
+          // table input
           topContents: this.props.topContents || [],
           topStyles: this.props.topStyles || [],
           topClasses: this.props.topClasses || [],
@@ -548,25 +667,79 @@ BodyRow.contextType = TableContext;
 // body checkbox cell
 // contains checkbox for column whose head is also a checkbox
 class BodyCheckboxCell extends Component {
+  // initialize component
+  constructor() {
+    super();
+
+    this.state = {};
+    // temporary checked state for dragging
+    this.tempChecked = null;
+
+    this.onCtrlClick = this.onCtrlClick.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
+    this.onMouseMove = this.onMouseMove.bind(this);
+    this.onMouseUp = this.onMouseUp.bind(this);
+
+    window.addEventListener('mouseup', this.onMouseUp);
+  }
+
+  // when component unmounts
+  componentWillUnmount() {
+    window.removeEventListener('mouseup', this.onMouseUp);
+  }
+
+  // on ctrl+click
+  onCtrlClick() {
+    this.context.soloChecked(this.props.datum[rowIndexKey], this.props.field);
+  }
+
+  // on mouse down over button
+  onMouseDown() {
+    this.context.beginDrag(this.props.field, !this.props.checked);
+    this.context.addToDragList(this.props.datum[rowIndexKey]);
+    this.setState({ tempChecked: !this.props.checked });
+  }
+
+  // on mouse move over button
+  onMouseMove() {
+    // if this column is the column being dragged, add self to drag list
+    if (
+      this.context.dragField === this.props.field &&
+      typeof this.context.dragValue === 'boolean'
+    ) {
+      this.context.addToDragList(this.props.datum[rowIndexKey]);
+      this.setState({ tempChecked: this.context.dragValue });
+    }
+  }
+
+  // on mouse up anywhere
+  onMouseUp() {
+    // reset temp checked state to nothing
+    this.setState({ tempChecked: null });
+  }
+
   // display component
   render() {
     const style = propValOrFunc(this.props, 'style', 'datum', {});
     const className = propValOrFunc(this.props, 'className', 'datum', '');
     const tooltip = propValOrFunc(this.props, 'tooltip', 'datum', '');
 
+    let checked;
+    if (typeof this.state.tempChecked === 'boolean')
+      checked = this.state.tempChecked;
+    else
+      checked = this.props.checked;
+
     return (
       <Tooltip text={tooltip}>
         <td style={style} className={className}>
           <Button
             className={'table_button'}
-            onClick={() =>
-              this.context.toggleChecked(this.props.datum, this.props.field)
-            }
-            onCtrlClick={() =>
-              this.context.soloChecked(this.props.datum, this.props.field)
-            }
+            onCtrlClick={this.onCtrlClick}
+            onMouseDown={this.onMouseDown}
+            onMouseMove={this.onMouseMove}
           >
-            <div data-checked={this.props.checked}>{this.props.content}</div>
+            <div data-checked={checked}>{this.props.content}</div>
           </Button>
         </td>
       </Tooltip>
@@ -628,6 +801,7 @@ class Controls extends Component {
 }
 
 // page navigation component
+// contains arrow buttons to previous/next pages, and X/N page info
 class Nav extends Component {
   // display component
   render() {
@@ -730,7 +904,7 @@ class Search extends Component {
             <FontAwesomeIcon icon={faSearch} className='fa-sm' />
           </form>
           {this.context.searchString && (
-            <span>{this.context.filteredData.length} results</span>
+            <span>{this.context.searchResults} results</span>
           )}
         </div>
       </Tooltip>
