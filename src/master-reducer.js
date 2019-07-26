@@ -15,12 +15,10 @@ import { relationships } from './path-results/reducers.js';
 import { graph } from './path-graph/reducers.js';
 import { showGrid } from './path-graph/reducers.js';
 
-import { copyObject } from './util/object.js';
-
 // master combined reducer
 export function Reducer(state = {}, action) {
   // make deep copy of old state into new state
-  let newState = copyObject(state);
+  let newState = { ...state };
 
   // assemble new state from individual reducers
   newState = {

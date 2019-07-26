@@ -9,8 +9,7 @@ export function createNodeDragHandler(simulation) {
   const nodeDragHandler = d3
     .drag()
     .on('drag', onNodeDrag)
-    .on('start', () => onNodeDragStart(simulation))
-    .on('end', () => onNodeDragEnd(simulation));
+    .on('start', () => onNodeDragStart(simulation));
   return nodeDragHandler;
 }
 
@@ -26,15 +25,10 @@ function onNodeDrag(d) {
 
   // snap to grid
   if (store.getState().showGrid) {
-    newX = Math.round(newX / gridSpacing) * gridSpacing;
-    newY = Math.round(newY / gridSpacing) * gridSpacing;
+    newX = Math.round(newX / (gridSpacing / 2)) * (gridSpacing / 2);
+    newY = Math.round(newY / (gridSpacing / 2)) * (gridSpacing / 2);
   }
 
   d.fx = newX;
   d.fy = newY;
-}
-
-// when node dragged by user
-function onNodeDragEnd(simulation) {
-  simulation.alphaTarget(0).restart();
 }

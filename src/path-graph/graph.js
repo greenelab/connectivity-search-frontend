@@ -56,7 +56,8 @@ export class Graph extends Component {
     // update simulation with new data
     updateSimulation(
       this.state.simulation,
-      this.props.graph,
+      this.props.graph.nodes,
+      this.props.graph.edges,
       this.props.graph.nodes.length !== prevProps.graph.nodes.length
     );
 

@@ -2,7 +2,12 @@ import * as d3 from 'd3';
 
 import { positionNode, positionEdge, positionEdgeLabel } from './position.js';
 
-import { nodeDistance, nodeRadius, nodeRepulsion } from './constants.js';
+import {
+  nodeDistance,
+  nodeRadius,
+  nodeRepulsion,
+  centeringForce
+} from './constants.js';
 
 // create physics simulation
 export function createSimulation() {
@@ -23,8 +28,8 @@ export function createSimulation() {
         .radius(nodeRadius)
         .strength(1)
     )
-    .force('centerX', d3.forceX(0).strength(0.01))
-    .force('centerY', d3.forceY(0).strength(0.01))
+    .force('centerX', d3.forceX(0).strength(centeringForce / 100))
+    .force('centerY', d3.forceY(0).strength(centeringForce / 100))
     .force('charge', d3.forceManyBody().strength(-nodeRepulsion));
   simulation.on('tick', onSimulationTick);
   return simulation;
@@ -42,11 +47,11 @@ function onSimulationTick() {
 }
 
 // update simulation with new data
-export function updateSimulation(simulation, data, reheat) {
+export function updateSimulation(simulation, nodes, edges, reheat) {
   // reimport nodes
-  simulation.nodes(data.nodes);
+  simulation.nodes(nodes);
   // rebuild node links
-  simulation.force('link').links(data.edges);
+  simulation.force('link').links(edges);
   // reheat simulation
   if (reheat)
     simulation.alpha(1).restart();

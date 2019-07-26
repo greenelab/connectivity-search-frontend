@@ -9,6 +9,7 @@ export const nodeDistance = 100;
 export const nodeCharLimit = 25;
 export const nodeFontSize = 8;
 export const nodeRepulsion = 200;
+export const centeringForce = 2;
 export const edgeFontSize = 8;
 export const edgeThickness = 2;
 export const edgeArrowSize = 10;
