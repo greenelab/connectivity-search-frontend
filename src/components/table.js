@@ -694,7 +694,7 @@ class BodyCheckboxCell extends Component {
   }
 
   // on mouse down over button
-  onMouseDown(event) {
+  onMouseDown() {
     this.context.beginDrag(this.props.field, !this.props.checked);
     this.context.addToDragList(this.props.datum[rowIndexKey]);
     this.setState({ tempChecked: !this.props.checked });
@@ -738,6 +738,8 @@ class BodyCheckboxCell extends Component {
             onCtrlClick={this.onCtrlClick}
             onMouseDown={this.onMouseDown}
             onMouseMove={this.onMouseMove}
+            onTouchDown={this.onMouseDown}
+            onTouchMove={this.onMouseMove}
           >
             <div data-checked={checked}>{this.props.content}</div>
           </Button>
