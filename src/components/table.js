@@ -738,8 +738,6 @@ class BodyCheckboxCell extends Component {
             onCtrlClick={this.onCtrlClick}
             onMouseDown={this.onMouseDown}
             onMouseMove={this.onMouseMove}
-            onTouchDown={this.onMouseDown}
-            onTouchMove={this.onMouseMove}
           >
             <div data-checked={checked}>{this.props.content}</div>
           </Button>
