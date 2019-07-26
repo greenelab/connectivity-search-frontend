@@ -1,5 +1,6 @@
 // construct graph object with relevant properties for each node/edge
 export function assembleGraph(paths = [], nodes = {}, relationships = {}) {
+  console.log('assembleGraph')
   // empty graph object
   const graph = {
     source_neo4j_id: null,

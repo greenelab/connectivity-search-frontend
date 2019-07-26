@@ -17,3 +17,5 @@ export const edgeSpreadAngle = (45 / 360) * 2 * Math.PI;
 export const inkColor = '#424242';
 export const backgroundColor = '#fafafa';
 export const highlightColor = '#ffcc00';
+export const gridSpacing = 25;
+export const gridMultiple = 4;

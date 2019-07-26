@@ -10,6 +10,7 @@ import { GraphEdgeLines } from './edge-lines.js';
 import { GraphEdgeLabels } from './edge-labels.js';
 import { GraphNodeCircles } from './node-circles.js';
 import { GraphNodeLabels } from './node-labels.js';
+import { GraphGrid } from './grid.js';
 import { createSimulation } from './simulation.js';
 import { updateSimulation } from './simulation.js';
 import { pinSourceTarget } from './simulation.js';
@@ -31,17 +32,27 @@ export class Graph extends Component {
     super();
 
     this.state = {};
+
+    // initialize graph. create simulation and event handlers to be referenced
+    // on graph updates
+    this.state.simulation = createSimulation();
+    this.state.viewHandler = createViewHandler(this.onViewClick, this.fitView);
+    this.state.nodeDragHandler = createNodeDragHandler(this.state.simulation);
   }
+
   // when component mounts
   componentDidMount() {
-    this.createGraph();
+    this.resetView();
   }
 
   // when component updates
   componentDidUpdate(prevProps) {
+    console.log(this.state.nodeDragHandler)
+    // update simulation with new data
     updateSimulation(
       this.state.simulation,
       this.props.graph,
+      // only reheat simulation when nodes are added or removed
       this.props.graph.nodes.length !== prevProps.graph.nodes.length
     );
 
@@ -49,22 +60,6 @@ export class Graph extends Component {
     if (prevProps.graph.nodes.length === 0)
       this.restartGraph();
   }
-
-  // initialize graph. create simulation and event handlers
-  createGraph = () => {
-    const simulation = createSimulation();
-    const viewHandler = createViewHandler(this.onViewClick, this.fitView);
-    const nodeDragHandler = createNodeDragHandler(simulation);
-    // store the above objects to be referenced on graph updates
-    this.setState(
-      {
-        simulation: simulation,
-        viewHandler: viewHandler,
-        nodeDragHandler: nodeDragHandler
-      },
-      this.resetView
-    );
-  };
 
   // completely restart graph
   restartGraph = () => {
@@ -151,6 +146,7 @@ export class Graph extends Component {
       if (left < minLeft)
         left = minLeft;
     }
+    console.log('graph render()')
     return (
       <div id='graph_container' style={{ height: this.props.height }}>
         <svg
@@ -162,6 +158,11 @@ export class Graph extends Component {
         >
           <GraphDefs />
           <g id='graph_view'>
+            {this.props.showGrid && (
+              <g id='graph_grid_layer'>
+                <GraphGrid />
+              </g>
+            )}
             <g id='graph_edge_line_highlight_layer'>
               <GraphEdgeLineHighlights />
             </g>
@@ -170,10 +171,11 @@ export class Graph extends Component {
             </g>
             <g id='graph_edge_line_layer'>
               <GraphEdgeLines
-                // pass selectedElement and hoveredElement as props
-                // to make sure component rerenders any time they change
+                // pass props to make sure component rerenders any time they
+                // change
                 selectedElement={this.props.selectedElement}
                 hoveredElement={this.props.hoveredElement}
+                showGrid={this.props.showGrid}
               />
             </g>
             <g id='graph_edge_label_layer'>
@@ -189,10 +191,11 @@ export class Graph extends Component {
                 onNodeEdgeClick={this.onNodeEdgeClick}
                 onNodeEdgeHover={this.onNodeEdgeHover}
                 onNodeEdgeUnhover={this.onNodeEdgeUnhover}
-                // pass selectedElement and hoveredElement as props
-                // to make sure component rerenders any time they change
+                // pass props to make sure component rerenders any time they
+                // change
                 selectedElement={this.props.selectedElement}
                 hoveredElement={this.props.hoveredElement}
+                showGrid={this.props.showGrid}
               />
             </g>
             <g id='graph_node_label_layer'>
@@ -208,7 +211,8 @@ export class Graph extends Component {
 Graph = connect(
   (state) => ({
     paths: state.paths,
-    graph: state.graph
+    graph: state.graph,
+    showGrid: state.showGrid
   }),
   null,
   null,

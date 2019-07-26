@@ -5,10 +5,12 @@ import { faPowerOff } from '@fortawesome/free-solid-svg-icons';
 import { faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons';
 import { faMapMarker } from '@fortawesome/free-solid-svg-icons';
 import { faExpand } from '@fortawesome/free-solid-svg-icons';
+import { faBorderAll } from '@fortawesome/free-solid-svg-icons';
 import { faExpandArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faCompressArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
+import { toggleShowGrid } from './actions.js';
 import { IconButton } from '../components/buttons.js';
 import { NumberBox } from '../components/number-box.js';
 
@@ -60,6 +62,14 @@ export class GraphAttic extends Component {
                 this.props.graphRef.current.fitView();
             }}
             tooltipText='Fit the view to the contents of the graph'
+          />
+          <IconButton
+            text='grid'
+            icon={faBorderAll}
+            onClick={() => {
+              this.props.dispatch(toggleShowGrid());
+            }}
+            tooltipText='Show and snap to grid'
           />
           <IconButton
             text='.svg'

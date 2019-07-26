@@ -1,7 +1,12 @@
 import * as d3 from 'd3';
 
+import { store } from '../index.js';
+
+import { gridSpacing } from './constants.js';
+
 // create node drag handler
 export function createNodeDragHandler(simulation) {
+  console.log('createNodeDragHandler')
   const nodeDragHandler = d3
     .drag()
     .on('drag', onNodeDrag)
@@ -17,8 +22,18 @@ function onNodeDragStart(simulation) {
 
 // when node dragged by user
 function onNodeDrag(d) {
-  d.fx = d3.event.x;
-  d.fy = d3.event.y;
+  console.log('onNodeDrag')
+  let newX = d3.event.x;
+  let newY = d3.event.y;
+
+  // snap to grid
+  if (store.getState().showGrid) {
+    newX = Math.round(newX / gridSpacing) * gridSpacing;
+    newY = Math.round(newY / gridSpacing) * gridSpacing;
+  }
+
+  d.fx = newX;
+  d.fy = newY;
 }
 
 // when node dragged by user
