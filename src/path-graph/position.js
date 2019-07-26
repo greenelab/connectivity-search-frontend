@@ -17,7 +17,6 @@ export function positionNode(d, i, s) {
 
 // position edge line between start/end nodes of edge
 export function positionEdge(d, i, s) {
-  console.log('positionEdge')
   let x1 = d.source.x;
   let y1 = d.source.y;
   let x2 = d.target.x;

@@ -6,7 +6,6 @@ import { gridSpacing } from './constants.js';
 
 // create node drag handler
 export function createNodeDragHandler(simulation) {
-  console.log('createNodeDragHandler')
   const nodeDragHandler = d3
     .drag()
     .on('drag', onNodeDrag)
@@ -22,7 +21,6 @@ function onNodeDragStart(simulation) {
 
 // when node dragged by user
 function onNodeDrag(d) {
-  console.log('onNodeDrag')
   let newX = d3.event.x;
   let newY = d3.event.y;
 

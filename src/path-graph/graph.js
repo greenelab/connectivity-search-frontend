@@ -47,7 +47,6 @@ export class Graph extends Component {
 
   // when component updates
   componentDidUpdate(prevProps) {
-    console.log(this.state.nodeDragHandler)
     // update simulation with new data
     updateSimulation(
       this.state.simulation,
@@ -146,7 +145,7 @@ export class Graph extends Component {
       if (left < minLeft)
         left = minLeft;
     }
-    console.log('graph render()')
+
     return (
       <div id='graph_container' style={{ height: this.props.height }}>
         <svg

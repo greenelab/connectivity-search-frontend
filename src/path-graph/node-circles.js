@@ -31,7 +31,6 @@ export class GraphNodeCircles extends Component {
     nodeCircles
       .enter()
       .append('circle')
-      .call(()=>console.log('FUCK'))
       .call(this.props.nodeDragHandler)
       .on('click', this.props.onNodeEdgeClick)
       .on('mouseenter', this.props.onNodeEdgeHover)
