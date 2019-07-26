@@ -35,11 +35,14 @@ export class Table extends Component {
     super(props);
 
     this.state = {};
+    // input data at different stages in processing chain
     this.state.indexedData = [];
     this.state.sortedData = [];
     this.state.filteredData = [];
     this.state.paginatedData = [];
+    // final data passed to children for render
     this.state.data = [];
+    // table control vars
     this.state.sortField = this.props.defaultSortField || '';
     this.state.sortUp = this.props.defaultSortUp || false;
     this.state.searchString = '';
@@ -131,23 +134,24 @@ export class Table extends Component {
   }
 
   // //////////////////////////////////////////////////
-  // DATA FUNTIONS
+  // DATA FUNCTIONS
   // //////////////////////////////////////////////////
 
-  // function to change input props.data
+  // call input onChange function with new data to set
   setData = (data) => {
+    if (!this.props.onChange)
+      return;
+
     data = copyObject(data);
 
     // remove row index property from each object
     for (const datum of data)
       delete datum[rowIndexKey];
 
-    // call onChange function with new data to set
-    const func = this.props.onChange || (() => null);
-    func(data);
+    this.props.onChange(data);
   };
 
-  // attach index property to data
+  // attach row index property to data for easy referencing/identification
   indexData = (data) => {
     data = copyObject(data);
 
@@ -183,13 +187,8 @@ export class Table extends Component {
 
   // compare function for sorting
   defaultSort = (a, b, key, sortUp) => {
-    // get whether a and b are numbers
-    const aIsNum = !Number.isNaN(Number(a[key]));
-    const bIsNum = !Number.isNaN(Number(b[key]));
-
-    // if both are numbers, compare by values, or by index if values are the
-    // same (to preserve original order)
-    if (aIsNum && bIsNum) {
+    // if both are numbers, compare by values
+    if (typeof a[key] === 'number' && typeof b[key] === 'number') {
       if (a[key] < b[key])
         return -1;
       else if (a[key] > b[key])
@@ -198,15 +197,20 @@ export class Table extends Component {
         return 0;
     }
 
-    // if one is a number and the other is not, always put the NaN vertically
-    // below the number
-    if (!aIsNum && bIsNum)
+    // if one is undefined/object and the other is not, always put the
+    // undefined/object vertically below
+    if (
+      (typeof a[key] === 'undefined' || typeof a[key] === 'object') &&
+      !(typeof b[key] === 'undefined' || typeof b[key] === 'object')
+    )
       return sortUp ? -1 : 1;
-    if (aIsNum && !bIsNum)
+    if (
+      !(typeof a[key] === 'undefined' || typeof a[key] === 'object') &&
+      (typeof b[key] === 'undefined' || typeof b[key] === 'object')
+    )
       return sortUp ? 1 : -1;
 
-    // if neither are numbers, compare alphabetically, or by index if values
-    // are the same (to preserve original order)
+    // otherwise, compare alphabetically
     if (a[key] < b[key])
       return -1;
     else if (a[key] > b[key])
@@ -246,7 +250,7 @@ export class Table extends Component {
   };
 
   // //////////////////////////////////////////////////
-  // CHECKBOX FUNTIONS
+  // CHECKBOX FUNCTIONS
   // //////////////////////////////////////////////////
 
   // toggles checkbox on/off
@@ -343,7 +347,7 @@ export class Table extends Component {
   };
 
   // //////////////////////////////////////////////////
-  // SORT FUNTIONS
+  // SORT FUNCTIONS
   // //////////////////////////////////////////////////
 
   // change which field table is sorted by
@@ -359,7 +363,9 @@ export class Table extends Component {
     this.setState(newState);
   };
 
-  // SEARCH/FILTER FUNTIONS
+  // //////////////////////////////////////////////////
+  // SEARCH/FILTER FUNCTIONS
+  // //////////////////////////////////////////////////
 
   // when user types into searchbox
   onSearch = (value) => {
@@ -367,7 +373,7 @@ export class Table extends Component {
   };
 
   // //////////////////////////////////////////////////
-  // PAGE FUNTIONS
+  // PAGE FUNCTIONS
   // //////////////////////////////////////////////////
 
   // set page number
@@ -666,6 +672,7 @@ class BodyCheckboxCell extends Component {
     super();
 
     this.state = {};
+    // temporary checked state for dragging
     this.tempChecked = null;
 
     this.onCtrlClick = this.onCtrlClick.bind(this);
@@ -676,7 +683,7 @@ class BodyCheckboxCell extends Component {
     window.addEventListener('mouseup', this.onMouseUp);
   }
 
-  // component will unmount
+  // when component unmounts
   componentWillUnmount() {
     window.removeEventListener('mouseup', this.onMouseUp);
   }
@@ -686,15 +693,16 @@ class BodyCheckboxCell extends Component {
     this.context.soloChecked(this.props.datum[rowIndexKey], this.props.field);
   }
 
-  // on mouse down
+  // on mouse down over button
   onMouseDown(event) {
     this.context.beginDrag(this.props.field, !this.props.checked);
     this.context.addToDragList(this.props.datum[rowIndexKey]);
     this.setState({ tempChecked: !this.props.checked });
   }
 
-  // on mouse move
+  // on mouse move over button
   onMouseMove() {
+    // if this column is the column being dragged, add self to drag list
     if (
       this.context.dragField === this.props.field &&
       typeof this.context.dragValue === 'boolean'
@@ -706,6 +714,7 @@ class BodyCheckboxCell extends Component {
 
   // on mouse up anywhere
   onMouseUp() {
+    // reset temp checked state to nothing
     this.setState({ tempChecked: null });
   }
 
@@ -792,6 +801,7 @@ class Controls extends Component {
 }
 
 // page navigation component
+// contains arrow buttons to previous/next pages, and X/N page info
 class Nav extends Component {
   // display component
   render() {
