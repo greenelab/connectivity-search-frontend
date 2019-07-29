@@ -6,6 +6,7 @@ import { faAngleDoubleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faListOl } from '@fortawesome/free-solid-svg-icons';
 
 import { ReactComponent as SortUp } from '../images/sort-up.svg';
@@ -883,7 +884,7 @@ class PerPage extends Component {
   render() {
     return (
       <div className='table_per_page'>
-        <form>
+        <div className='table_input'>
           <Tooltip text='Rows to show per page'>
             <select
               value={String(this.context.perPage)}
@@ -899,7 +900,7 @@ class PerPage extends Component {
             </select>
           </Tooltip>
           <FontAwesomeIcon icon={faListOl} className='fa-sm' />
-        </form>
+        </div>
       </div>
     );
   }
@@ -908,10 +909,23 @@ PerPage.contextType = TableContext;
 
 // search textbox component
 class Search extends Component {
+  // intialize component
+  constructor() {
+    super();
+
+    this.ref = React.createRef();
+  }
   // when user types into box
   onInput = (event) => {
     if (event && event.target && this.context.onSearch)
       this.context.onSearch(event.target.value);
+  };
+
+  // when user clicks button
+  onClick = () => {
+    this.ref.current.focus();
+    this.ref.current.value = '';
+    this.context.onSearch('');
   };
 
   // display component
@@ -919,10 +933,17 @@ class Search extends Component {
     return (
       <Tooltip text='Search table'>
         <div className='table_search'>
-          <form>
-            <input type='text' onInput={this.onInput} />
-            <FontAwesomeIcon icon={faSearch} className='fa-sm' />
-          </form>
+          <div className='table_input'>
+            <input ref={this.ref} type='text' onInput={this.onInput} />
+            {!this.context.searchString && (
+              <FontAwesomeIcon icon={faSearch} className='fa-sm' />
+            )}
+            {this.context.searchString && (
+              <button onClick={this.onClick}>
+                <FontAwesomeIcon icon={faTimes} className='fa-sm' />
+              </button>
+            )}
+          </div>
           {this.context.searchString && (
             <span>{this.context.searchResults} results</span>
           )}

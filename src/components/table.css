@@ -3,6 +3,7 @@
   height: 100%;
   margin: 0;
   padding: 0;
+  color: #303030;
 }
 th > .table_button {
   padding: 0 5px;
@@ -29,12 +30,8 @@ th > .table_button {
     width: 100%;
   }
 }
-.table_per_page select {
-  width: 80px;
-  height: 25px;
-  padding: 0 5px;
-  appearance: none;
-  cursor: pointer;
+.table_controls button {
+  color: #303030;
 }
 .table_per_page span {
   font-size: 0.8em;
@@ -53,24 +50,41 @@ th > .table_button {
   margin: 0;
   padding: 0;
 }
-.table_controls form {
+.table_per_page .table_input select {
+  width: 80px;
+  height: 25px;
+  padding: 0 5px;
+  appearance: none;
+  cursor: pointer;
+}
+.table_controls .table_input {
   display: flex;
   justify-content: center;
   align-items: center;
   position: relative;
   margin: 0;
 }
-.table_search input {
+.table_search .table_input input {
   box-sizing: border-box;
   width: 150px;
   height: 25px;
   padding-left: 5px;
   padding-right: 25px;
 }
-.table_controls form svg {
+.table_controls .table_input > svg {
   position: absolute;
   right: 5px;
-  pointer-events: none;
+}
+.table_controls .table_input > button {
+  position: absolute;
+  right: 0;
+  width: 25px;
+  height: 25px;
+  margin: 0;
+  padding: 0;
+}
+.table_controls .table_input > button:hover {
+  background: none;
 }
 .table_search span {
   margin-left: 5px;
