@@ -9,6 +9,7 @@ th > .table_button {
 }
 .table_sort_icon {
   margin-left: 5px;
+  height: 15px;
 }
 .table_controls {
   display: flex;
