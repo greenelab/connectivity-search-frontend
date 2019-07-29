@@ -783,7 +783,7 @@ class BodyCell extends Component {
           data-highlighted={
             this.props.datum[cellHighlightKey] === this.props.field
               ? 'true'
-              : ''
+              : 'false'
           }
         >
           <DynamicField value={value} fullValue={fullValue} />
