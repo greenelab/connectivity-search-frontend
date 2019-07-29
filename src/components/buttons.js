@@ -32,7 +32,7 @@ export class Button extends Component {
 
   // when user presses down on button
   onMouseDown(event) {
-    if (this.props.onMouseDown)
+    if (this.props.onMouseDown && event.button === 0)
       this.props.onMouseDown(event);
   }
 

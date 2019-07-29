@@ -168,43 +168,45 @@ export class Graph extends Component {
                 <GraphGrid />
               </g>
             )}
-            <g id='graph_edge_line_highlight_layer'>
-              <GraphEdgeLineHighlights />
-            </g>
-            <g id='graph_node_circle_highlight_layer'>
-              <GraphNodeCircleHighlights />
-            </g>
-            <g id='graph_edge_line_layer'>
-              <GraphEdgeLines
-                // pass props to make sure component rerenders any time they
-                // change
-                selectedElement={this.props.selectedElement}
-                hoveredElement={this.props.hoveredElement}
-                showGrid={this.props.showGrid}
-              />
-            </g>
-            <g id='graph_edge_label_layer'>
-              <GraphEdgeLabels
-                onNodeEdgeClick={this.onNodeEdgeClick}
-                onNodeEdgeHover={this.onNodeEdgeHover}
-                onNodeEdgeUnhover={this.onNodeEdgeUnhover}
-              />
-            </g>
-            <g id='graph_node_circle_layer'>
-              <GraphNodeCircles
-                nodeDragHandler={this.state.nodeDragHandler}
-                onNodeEdgeClick={this.onNodeEdgeClick}
-                onNodeEdgeHover={this.onNodeEdgeHover}
-                onNodeEdgeUnhover={this.onNodeEdgeUnhover}
-                // pass props to make sure component rerenders any time they
-                // change
-                selectedElement={this.props.selectedElement}
-                hoveredElement={this.props.hoveredElement}
-                showGrid={this.props.showGrid}
-              />
-            </g>
-            <g id='graph_node_label_layer'>
-              <GraphNodeLabels />
+            <g id='graph_contents'>
+              <g id='graph_edge_line_highlight_layer'>
+                <GraphEdgeLineHighlights />
+              </g>
+              <g id='graph_node_circle_highlight_layer'>
+                <GraphNodeCircleHighlights />
+              </g>
+              <g id='graph_edge_line_layer'>
+                <GraphEdgeLines
+                  // pass props to make sure component rerenders any time they
+                  // change
+                  selectedElement={this.props.selectedElement}
+                  hoveredElement={this.props.hoveredElement}
+                  showGrid={this.props.showGrid}
+                />
+              </g>
+              <g id='graph_edge_label_layer'>
+                <GraphEdgeLabels
+                  onNodeEdgeClick={this.onNodeEdgeClick}
+                  onNodeEdgeHover={this.onNodeEdgeHover}
+                  onNodeEdgeUnhover={this.onNodeEdgeUnhover}
+                />
+              </g>
+              <g id='graph_node_circle_layer'>
+                <GraphNodeCircles
+                  nodeDragHandler={this.state.nodeDragHandler}
+                  onNodeEdgeClick={this.onNodeEdgeClick}
+                  onNodeEdgeHover={this.onNodeEdgeHover}
+                  onNodeEdgeUnhover={this.onNodeEdgeUnhover}
+                  // pass props to make sure component rerenders any time they
+                  // change
+                  selectedElement={this.props.selectedElement}
+                  hoveredElement={this.props.hoveredElement}
+                  showGrid={this.props.showGrid}
+                />
+              </g>
+              <g id='graph_node_label_layer'>
+                <GraphNodeLabels />
+              </g>
             </g>
           </g>
         </svg>

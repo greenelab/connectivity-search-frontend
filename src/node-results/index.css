@@ -6,3 +6,6 @@
   width: 100px;
   text-align: left;
 }
+.node_results_table th {
+  height: 25px;
+}

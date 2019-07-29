@@ -30,10 +30,6 @@ export function resetView(viewHandler) {
     .node()
     .getBoundingClientRect();
 
-  // dimensions minus borders
-  container.width -= 2;
-  container.height -= 2;
-
   // determine scale and translate to fit view
   const scale = 1;
   const translateX = container.width / 2;
@@ -49,7 +45,7 @@ export function resetView(viewHandler) {
 // fit view to contents of graph
 export function fitView(viewHandler) {
   const contents = d3
-    .select('#graph_view')
+    .select('#graph_contents')
     .node()
     .getBBox();
   const container = d3
@@ -61,10 +57,6 @@ export function fitView(viewHandler) {
   // if no contents, exit
   if (contents.width === 0 || contents.height === 0)
     return;
-
-  // dimensions minus borders
-  container.width -= 2;
-  container.height -= 2;
 
   // calculate center of contents
   contents.midX = contents.x + contents.width / 2;
