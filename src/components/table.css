@@ -76,3 +76,6 @@ th > .table_button {
   margin-left: 5px;
   font-size: 0.8em;
 }
+td[data-highlighted='true'] {
+  background: #c0ecf8;
+}
