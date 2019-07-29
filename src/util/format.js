@@ -39,11 +39,15 @@ export function toGradient(number) {
     return 'rgba(255, 255, 255, 0)';
 
   // pretty gradient
-  let gradient = ['rgba(255, 255, 255, 0)', 'rgba(244, 143, 177, 0.5)'];
+  let gradient = [
+    'rgba(233, 30, 99, 0)',
+    'rgba(233, 30, 99, 0.35)',
+    'rgba(233, 30, 99, 0.5)'
+  ];
 
   // split each gradient color into component rgba values
   gradient = gradient.map((color) => {
-    color = color.split(/[^0-9,]/).join('');
+    color = color.split(/[^0-9,.]/).join('');
     color = {
       r: parseInt(color.split(',')[0]),
       g: parseInt(color.split(',')[1]),
@@ -59,7 +63,7 @@ export function toGradient(number) {
 
   // start/end cutoffs for exponent
   const rangeStart = 0;
-  const rangeEnd = -8;
+  const rangeEnd = -50;
 
   // get percent that number is through range
   let percent = (number - rangeStart) / (rangeEnd - rangeStart);
