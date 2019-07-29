@@ -6,3 +6,7 @@
   outline: solid #e0e0e0 2px;
   position: absolute;
 }
+
+#graph_grid_layer {
+  opacity: 0.5;
+}

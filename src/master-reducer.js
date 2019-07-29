@@ -1,6 +1,7 @@
 import { metagraph } from './app/reducers.js';
 import { hetioStyles } from './app/reducers.js';
 import { tooltipDefinitions } from './app/reducers.js';
+import { copyObject } from './util/object.js';
 
 import { sourceNode } from './node-search/reducers.js';
 import { targetNode } from './node-search/reducers.js';
@@ -13,13 +14,17 @@ import { nodes } from './path-results/reducers.js';
 import { relationships } from './path-results/reducers.js';
 
 import { graph } from './path-graph/reducers.js';
-
-import { copyObject } from './util/object.js';
+import { showGrid } from './path-graph/reducers.js';
 
 // master combined reducer
 export function Reducer(state = {}, action) {
   // make deep copy of old state into new state
   let newState = copyObject(state);
+  // only shallow copy graph though, because d3 attaches internal variables
+  // directly to the data structure, and the simulation will get messed up
+  // if we deep copy and replace the data completely
+  delete newState.graph;
+  newState.graph = state.graph;
 
   // assemble new state from individual reducers
   newState = {
@@ -36,7 +41,8 @@ export function Reducer(state = {}, action) {
     paths: paths(newState, action),
     nodes: nodes(newState.nodes, action),
     relationships: relationships(newState.relationships, action),
-    graph: graph(newState, action)
+    graph: graph(newState, action),
+    showGrid: showGrid(newState.showGrid, action)
   };
 
   // if explicitly specified, update url to match state

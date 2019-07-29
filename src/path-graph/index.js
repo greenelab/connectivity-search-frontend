@@ -67,20 +67,18 @@ export class PathGraph extends Component {
 
   // expand graph container to width of window
   expandContainer = (proportionalHeight) => {
-    const newState = {};
-    newState.width = document.body.clientWidth - 20 - 20;
+    const width = document.body.clientWidth - 20 - 20;
+    this.setWidth(width);
     if (proportionalHeight)
-      newState.height = (newState.width * 3) / 4;
-    this.setState(newState);
+      this.setHeight(Math.ceil((width * 3) / 4));
   };
 
   // collapse graph container to width of <section> element
   collapseContainer = (proportionalHeight) => {
-    const newState = {};
-    newState.width = ReactDOM.findDOMNode(this).clientWidth;
+    const width = ReactDOM.findDOMNode(this).clientWidth;
+    this.setWidth(width);
     if (proportionalHeight)
-      newState.height = (newState.width * 3) / 4;
-    this.setState(newState);
+      this.setHeight(Math.ceil((width * 3) / 4));
   };
 
   // get current width of <section> element

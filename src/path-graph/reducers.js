@@ -29,3 +29,13 @@ export function graph(state = {}, action) {
       return state.graph || { nodes: [], edges: [] };
   }
 }
+
+// reducer for state.showGrid
+export function showGrid(state = false, action) {
+  switch (action.type) {
+    case 'toggle_show_grid':
+      return !state;
+    default:
+      return state;
+  }
+}

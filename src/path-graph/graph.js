@@ -10,6 +10,7 @@ import { GraphEdgeLines } from './edge-lines.js';
 import { GraphEdgeLabels } from './edge-labels.js';
 import { GraphNodeCircles } from './node-circles.js';
 import { GraphNodeLabels } from './node-labels.js';
+import { GraphGrid } from './grid.js';
 import { createSimulation } from './simulation.js';
 import { updateSimulation } from './simulation.js';
 import { pinSourceTarget } from './simulation.js';
@@ -32,30 +33,14 @@ export class Graph extends Component {
 
     this.state = {};
   }
+
   // when component mounts
   componentDidMount() {
-    this.createGraph();
-  }
-
-  // when component updates
-  componentDidUpdate(prevProps) {
-    updateSimulation(
-      this.state.simulation,
-      this.props.graph,
-      this.props.graph.nodes.length !== prevProps.graph.nodes.length
-    );
-
-    // when adding first path to graph, restart graph
-    if (prevProps.graph.nodes.length === 0)
-      this.restartGraph();
-  }
-
-  // initialize graph. create simulation and event handlers
-  createGraph = () => {
+    // initialize graph. create simulation and event handlers to be referenced
+    // on graph updates
     const simulation = createSimulation();
     const viewHandler = createViewHandler(this.onViewClick, this.fitView);
     const nodeDragHandler = createNodeDragHandler(simulation);
-    // store the above objects to be referenced on graph updates
     this.setState(
       {
         simulation: simulation,
@@ -64,7 +49,22 @@ export class Graph extends Component {
       },
       this.resetView
     );
-  };
+  }
+
+  // when component updates
+  componentDidUpdate(prevProps) {
+    // update simulation with new data
+    updateSimulation(
+      this.state.simulation,
+      this.props.graph.nodes,
+      this.props.graph.edges,
+      this.props.graph.nodes.length !== prevProps.graph.nodes.length
+    );
+
+    // when adding first path to graph, restart graph
+    if (prevProps.graph.nodes.length === 0)
+      this.restartGraph();
+  }
 
   // completely restart graph
   restartGraph = () => {
@@ -151,6 +151,7 @@ export class Graph extends Component {
       if (left < minLeft)
         left = minLeft;
     }
+
     return (
       <div id='graph_container' style={{ height: this.props.height }}>
         <svg
@@ -162,41 +163,50 @@ export class Graph extends Component {
         >
           <GraphDefs />
           <g id='graph_view'>
-            <g id='graph_edge_line_highlight_layer'>
-              <GraphEdgeLineHighlights />
-            </g>
-            <g id='graph_node_circle_highlight_layer'>
-              <GraphNodeCircleHighlights />
-            </g>
-            <g id='graph_edge_line_layer'>
-              <GraphEdgeLines
-                // pass selectedElement and hoveredElement as props
-                // to make sure component rerenders any time they change
-                selectedElement={this.props.selectedElement}
-                hoveredElement={this.props.hoveredElement}
-              />
-            </g>
-            <g id='graph_edge_label_layer'>
-              <GraphEdgeLabels
-                onNodeEdgeClick={this.onNodeEdgeClick}
-                onNodeEdgeHover={this.onNodeEdgeHover}
-                onNodeEdgeUnhover={this.onNodeEdgeUnhover}
-              />
-            </g>
-            <g id='graph_node_circle_layer'>
-              <GraphNodeCircles
-                nodeDragHandler={this.state.nodeDragHandler}
-                onNodeEdgeClick={this.onNodeEdgeClick}
-                onNodeEdgeHover={this.onNodeEdgeHover}
-                onNodeEdgeUnhover={this.onNodeEdgeUnhover}
-                // pass selectedElement and hoveredElement as props
-                // to make sure component rerenders any time they change
-                selectedElement={this.props.selectedElement}
-                hoveredElement={this.props.hoveredElement}
-              />
-            </g>
-            <g id='graph_node_label_layer'>
-              <GraphNodeLabels />
+            {this.props.showGrid && (
+              <g id='graph_grid_layer'>
+                <GraphGrid />
+              </g>
+            )}
+            <g id='graph_contents'>
+              <g id='graph_edge_line_highlight_layer'>
+                <GraphEdgeLineHighlights />
+              </g>
+              <g id='graph_node_circle_highlight_layer'>
+                <GraphNodeCircleHighlights />
+              </g>
+              <g id='graph_edge_line_layer'>
+                <GraphEdgeLines
+                  // pass props to make sure component rerenders any time they
+                  // change
+                  selectedElement={this.props.selectedElement}
+                  hoveredElement={this.props.hoveredElement}
+                  showGrid={this.props.showGrid}
+                />
+              </g>
+              <g id='graph_edge_label_layer'>
+                <GraphEdgeLabels
+                  onNodeEdgeClick={this.onNodeEdgeClick}
+                  onNodeEdgeHover={this.onNodeEdgeHover}
+                  onNodeEdgeUnhover={this.onNodeEdgeUnhover}
+                />
+              </g>
+              <g id='graph_node_circle_layer'>
+                <GraphNodeCircles
+                  nodeDragHandler={this.state.nodeDragHandler}
+                  onNodeEdgeClick={this.onNodeEdgeClick}
+                  onNodeEdgeHover={this.onNodeEdgeHover}
+                  onNodeEdgeUnhover={this.onNodeEdgeUnhover}
+                  // pass props to make sure component rerenders any time they
+                  // change
+                  selectedElement={this.props.selectedElement}
+                  hoveredElement={this.props.hoveredElement}
+                  showGrid={this.props.showGrid}
+                />
+              </g>
+              <g id='graph_node_label_layer'>
+                <GraphNodeLabels />
+              </g>
             </g>
           </g>
         </svg>
@@ -208,7 +218,8 @@ export class Graph extends Component {
 Graph = connect(
   (state) => ({
     paths: state.paths,
-    graph: state.graph
+    graph: state.graph,
+    showGrid: state.showGrid
   }),
   null,
   null,

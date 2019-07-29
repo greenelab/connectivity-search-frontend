@@ -2,7 +2,7 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faDice } from '@fortawesome/free-solid-svg-icons';
+import { faDiceThree } from '@fortawesome/free-solid-svg-icons';
 
 import { Button } from '../components/buttons.js';
 import { fetchRandomNodePair } from './actions.js';
@@ -26,7 +26,7 @@ export class RandomButton extends Component {
         className='node_search_round_button'
         onClick={this.onClick}
       >
-        <FontAwesomeIcon icon={faDice} />
+        <FontAwesomeIcon icon={faDiceThree} />
       </Button>
     );
   }

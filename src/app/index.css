@@ -11,14 +11,18 @@
 .table_attic > *:last-child {
   flex-grow: 1;
 }
-
+.table_attic_button_group {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: nowrap;
+}
 .table_nav_button {
   color: #606060;
 }
 .table_controls form svg {
   color: #808080;
 }
-
-th {
-  height: 40px !important;
+table tr th {
+  height: 40px;
 }

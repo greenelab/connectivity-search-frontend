@@ -32,7 +32,7 @@ export class Button extends Component {
 
   // when user presses down on button
   onMouseDown(event) {
-    if (this.props.onMouseDown)
+    if (event.button === 0 && this.props.onMouseDown)
       this.props.onMouseDown(event);
   }
 
@@ -44,7 +44,7 @@ export class Button extends Component {
 
   // when user releases button
   onMouseUp(event) {
-    if (this.props.onMouseUp)
+    if (event.button === 0 && this.props.onMouseUp)
       this.props.onMouseUp(event);
   }
 

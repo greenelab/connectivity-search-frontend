@@ -20,7 +20,10 @@ const logger = createLogger({
 });
 
 // create global state store
-const store = createStore(Reducer, compose(applyMiddleware(thunk, logger)));
+export const store = createStore(
+  Reducer,
+  compose(applyMiddleware(thunk, logger))
+);
 
 // render/run app
 render(
