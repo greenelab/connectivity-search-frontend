@@ -88,7 +88,7 @@ export class PathTable extends Component {
         data={this.props.paths}
         onChange={onChange}
         defaultSortField='score'
-        defaultSortUp={false}
+        defaultSortUp={true}
         headContents={headContents}
         headFields={headFields}
         headStyles={headStyles}

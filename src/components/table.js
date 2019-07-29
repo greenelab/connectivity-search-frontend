@@ -1,14 +1,15 @@
 import React from 'react';
 import { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons';
-import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDoubleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faListOl } from '@fortawesome/free-solid-svg-icons';
+
+import { ReactComponent as SortUp } from '../images/sort-up.svg';
+import { ReactComponent as SortDown } from '../images/sort-down.svg';
 
 import { Button } from './buttons.js';
 import { Tooltip } from './tooltip.js';
@@ -582,6 +583,10 @@ HeadCheckboxCell.contextType = TableContext;
 class HeadCell extends Component {
   // display component
   render() {
+    const sortIconProps = {
+      'className': 'table_sort_icon',
+      'data-disabled': this.props.field !== this.context.sortField
+    };
     return (
       <Tooltip text={this.props.tooltip || ''}>
         <th
@@ -593,17 +598,15 @@ class HeadCell extends Component {
             onClick={() => this.context.changeSort(this.props.field)}
           >
             {this.props.content}
-            <FontAwesomeIcon
-              data-disabled={this.props.field !== this.context.sortField}
-              icon={
-                this.props.field === this.context.sortField
-                  ? this.context.sortUp
-                    ? faLongArrowAltUp
-                    : faLongArrowAltDown
-                  : faLongArrowAltUp
-              }
-              className='fa-lg table_sort_icon'
-            />
+            {this.props.field === this.context.sortField ? (
+              this.context.sortUp ? (
+                <SortUp {...sortIconProps} />
+              ) : (
+                <SortDown {...sortIconProps} />
+              )
+            ) : (
+              <SortUp {...sortIconProps} />
+            )}
           </Button>
         </th>
       </Tooltip>
