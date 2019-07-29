@@ -20,6 +20,7 @@ import { copyObject } from '../util/object.js';
 import './table.css';
 
 const rowIndexKey = '_rowIndex';
+const cellHighlightKey = '_cellHighlight';
 
 // generic table component
 // contains three sections: top (row above head), head, and body
@@ -79,7 +80,10 @@ export class Table extends Component {
     const newState = {};
 
     // when input data changes
-    if (!compareObjects(this.props.data, prevProps.data)) {
+    if (
+      !compareObjects(this.props.data, prevProps.data) ||
+      !compareObjects(this.props.headFields, prevProps.headFields)
+    ) {
       newState.indexedData = this.indexData(this.props.data);
       newState.sortedData = this.sortData(newState.indexedData);
       newState.filteredData = this.filterData(newState.sortedData);
@@ -228,13 +232,17 @@ export class Table extends Component {
       return data;
 
     return data.filter((datum) => {
-      for (const key of Object.keys(datum)) {
+      for (const field of this.props.headFields) {
         if (
-          String(datum[key])
+          datum[field] !== undefined &&
+          datum[field] !== null &&
+          JSON.stringify(datum[field])
             .toLowerCase()
             .includes(this.state.searchString.toLowerCase())
-        )
+        ) {
+          datum[cellHighlightKey] = field;
           return true;
+        }
       }
       return false;
     });
@@ -769,7 +777,15 @@ class BodyCell extends Component {
 
     return (
       <Tooltip text={tooltip}>
-        <td style={style} className={className}>
+        <td
+          style={style}
+          className={className}
+          data-highlighted={
+            this.props.datum[cellHighlightKey] === this.props.field
+              ? 'true'
+              : ''
+          }
+        >
           <DynamicField value={value} fullValue={fullValue} />
         </td>
       </Tooltip>
