@@ -20,10 +20,15 @@ export class GraphDefs extends Component {
         </title>
         <desc>
           Graph visualization of the connectivity between {sourceName} (
-          {sourceType}) and {targetName} ({targetType}). Created at{' '}
-          {window.location.href}. This subgraph of Hetionet v1.0 was created
-          from paths between the specified source/target nodes that occurred
-          more than expected by chance. See https://het.io for more information.
+          {sourceType}) and {targetName} ({targetType}).
+          {'\n'}
+          {'\n'}
+          Created at {window.location.href}
+          {'\n'}
+          {'\n'}
+          This subgraph of Hetionet v1.0 was created from paths between the
+          specified source/target nodes that occurred more than expected by
+          chance. See https://het.io for more information.
         </desc>
         <defs>
           <style>
