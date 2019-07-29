@@ -587,6 +587,7 @@ class HeadCell extends Component {
       'className': 'table_sort_icon',
       'data-disabled': this.props.field !== this.context.sortField
     };
+
     return (
       <Tooltip text={this.props.tooltip || ''}>
         <th
