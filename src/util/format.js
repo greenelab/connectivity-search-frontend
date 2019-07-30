@@ -63,7 +63,7 @@ export function toGradient(number) {
 
   // start/end cutoffs for exponent
   const rangeStart = 0;
-  const rangeEnd = -50;
+  const rangeEnd = -100;
 
   // get percent that number is through range
   let percent = (number - rangeStart) / (rangeEnd - rangeStart);
