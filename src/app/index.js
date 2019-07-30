@@ -7,7 +7,6 @@ import { NodeResults } from '../node-results';
 import { MetapathResults } from '../metapath-results';
 import { PathResults } from '../path-results';
 import { PathGraph } from '../path-graph';
-import { cutString } from '../util/string.js';
 import { loadStateFromUrl } from './actions.js';
 import { compareObjects } from '../util/object';
 import { fetchAndSetDefinitions } from './actions.js';
@@ -88,24 +87,7 @@ class App extends Component {
         })
       );
     }
-    this.updateTitle();
   }
-
-  // update document title to reflect current state
-  updateTitle = () => {
-    const metapaths = this.props.metapaths.filter(
-      (metapath) => metapath.checked
-    ).length;
-
-    const title =
-      cutString(this.props.sourceNode.name || '___', 20) +
-      ' ↔ ' +
-      cutString(this.props.targetNode.name || '___', 20) +
-      ' – ' +
-      metapaths +
-      ' metapaths';
-    document.title = title;
-  };
 
   // load source/target nodes, checked metapaths, etc from url
   loadStateFromUrl = () => {

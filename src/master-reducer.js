@@ -2,6 +2,7 @@ import { metagraph } from './app/reducers.js';
 import { hetioStyles } from './app/reducers.js';
 import { tooltipDefinitions } from './app/reducers.js';
 import { copyObject } from './util/object.js';
+import { cutString } from './util/string.js';
 
 import { sourceNode } from './node-search/reducers.js';
 import { targetNode } from './node-search/reducers.js';
@@ -49,6 +50,9 @@ export function Reducer(state = {}, action) {
   if (action.payload && action.payload.updateUrl === true)
     updateUrl(newState);
 
+  // update document/tab title based on state
+  updateTitle(newState);
+
   return newState;
 }
 
@@ -89,4 +93,18 @@ function updateUrl(state) {
   // navigate to new url
   const url = window.location.origin + window.location.pathname + search;
   window.history.pushState({}, '', url);
+}
+
+// update document title to reflect state
+function updateTitle(state) {
+  const checkedMetapaths = state.metapaths.filter(
+    (metapath) => metapath.checked
+  );
+  document.title =
+    cutString(state.sourceNode.name || '___', 20) +
+    ' ↔ ' +
+    cutString(state.targetNode.name || '___', 20) +
+    ' – ' +
+    checkedMetapaths.length +
+    ' metapaths';
 }

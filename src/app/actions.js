@@ -101,7 +101,8 @@ export function loadStateFromUrl() {
     // set global state
     dispatch(
       setPrecomputedMetapathsOnly({
-        precomputedMetapathsOnly: !complete
+        precomputedMetapathsOnly: !complete,
+        updateUrl: false
       })
     );
     dispatch(

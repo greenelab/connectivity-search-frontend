@@ -114,12 +114,15 @@ export function togglePrecomputedMetapathsOnly() {
 }
 
 // set precomputedMetapathsOnly action
-export function setPrecomputedMetapathsOnly({ precomputedMetapathsOnly }) {
+export function setPrecomputedMetapathsOnly({
+  precomputedMetapathsOnly,
+  updateUrl
+}) {
   return {
     type: 'set_precomputed_metapaths_only',
     payload: {
       precomputedMetapathsOnly: precomputedMetapathsOnly,
-      updateUrl: true
+      updateUrl: updateUrl
     }
   };
 }
