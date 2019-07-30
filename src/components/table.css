@@ -74,6 +74,7 @@ th > .table_button {
 .table_controls .table_input > svg {
   position: absolute;
   right: 5px;
+  pointer-events: none;
 }
 .table_controls .table_input > button {
   position: absolute;

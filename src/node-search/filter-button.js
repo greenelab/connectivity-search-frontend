@@ -14,7 +14,7 @@ export class FilterButton extends Component {
       <Button
         className='node_search_filter_button'
         disabled={!this.props.active}
-        tooltipText={this.props.tooltipText}
+        tooltipText={this.props.tooltipText + ' Ctrl+click to solo.'}
         onClick={() => this.props.toggle(this.props.name)}
         onCtrlClick={() => this.props.solo(this.props.name)}
       >

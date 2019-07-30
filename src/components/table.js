@@ -37,7 +37,12 @@ export class Table extends Component {
   constructor(props) {
     super(props);
 
+    // ref to table container
+    this.ref = React.createRef();
+
     this.state = {};
+    this.state.hovered = false;
+
     // input data at different stages in processing chain
     this.state.indexedData = [];
     this.state.sortedData = [];
@@ -59,6 +64,7 @@ export class Table extends Component {
 
     // end checkbox drag when mouse released anywhere
     window.addEventListener('mouseup', this.endDrag);
+    window.addEventListener('keydown', this.onKeyDown);
   }
 
   // when component mounts
@@ -138,6 +144,35 @@ export class Table extends Component {
     if (Object.keys(newState).length > 0)
       this.setState(newState);
   }
+
+  // set hovered state
+  setHovered = (hovered) => {
+    this.setState({ hovered: hovered });
+  };
+
+  // when user presses key
+  onKeyDown = (event) => {
+    if (!this.ref.current)
+      return;
+
+    if (!this.state.hovered)
+      return;
+
+    // if user is hovering over table, let arrow keys control pagination nav
+    if (event.key === 'ArrowLeft') {
+      if (event.ctrlKey)
+        this.setPage(1);
+      else
+        this.setPage(this.state.page - 1);
+    }
+
+    if (event.key === 'ArrowRight') {
+      if (event.ctrlKey)
+        this.setPage(this.state.pages);
+      else
+        this.setPage(this.state.page + 1);
+    }
+  };
 
   // //////////////////////////////////////////////////
   // DATA FUNCTIONS
@@ -307,11 +342,21 @@ export class Table extends Component {
     return true;
   };
 
+  // checks whether all checkboxes are unchecked
+  allUnchecked = (field) => {
+    for (const datum of this.props.data) {
+      if (datum[field])
+        return false;
+    }
+
+    return true;
+  };
+
   // check or uncheck all checkboxes
   toggleAll = (field) => {
     const newData = copyObject(this.props.data);
 
-    const newChecked = !this.allChecked(field);
+    const newChecked = this.allUnchecked(field);
     for (const datum of newData)
       datum[field] = newChecked;
 
@@ -418,6 +463,7 @@ export class Table extends Component {
     return (
       <TableContext.Provider
         value={{
+          setHovered: this.setHovered,
           data: this.state.data,
           // checkbox props
           dragField: this.state.dragField,
@@ -464,7 +510,12 @@ export class Table extends Component {
           bodyTooltips: this.props.bodyTooltips || []
         }}
       >
-        <div className={this.props.containerClass}>
+        <div
+          className={this.props.containerClass}
+          ref={this.ref}
+          onMouseEnter={() => this.setHovered(true)}
+          onMouseLeave={() => this.setHovered(false)}
+        >
           <table className={this.props.className}>
             <thead>
               <Top />
@@ -827,7 +878,11 @@ class Nav extends Component {
   // display component
   render() {
     return (
-      <div className='table_nav'>
+      <div
+        className='table_nav'
+        onMouseEnter={() => this.context.setHovered(true)}
+        onMouseLeave={() => this.context.setHovered(false)}
+      >
         <Button
           tooltipText='Go to first page'
           className='table_nav_button'
@@ -883,7 +938,11 @@ class PerPage extends Component {
   // display component
   render() {
     return (
-      <div className='table_per_page'>
+      <div
+        className='table_per_page'
+        onMouseEnter={() => this.context.setHovered(true)}
+        onMouseLeave={() => this.context.setHovered(false)}
+      >
         <div className='table_input'>
           <Tooltip text='Rows to show per page'>
             <select
