@@ -92,7 +92,15 @@ export class Table extends Component {
       !compareObjects(this.props.headFields, prevProps.headFields)
     ) {
       newState.indexedData = this.indexData(this.props.data);
-      newState.sortedData = this.sortData(newState.indexedData);
+      // if number of data rows hasn't changed, assume none were added/deleted,
+      // and don't resort, preserve previous sorting
+      if (this.props.data.length === prevProps.data.length) {
+        newState.sortedData = this.preserveSortData(
+          prevState.sortedData,
+          newState.indexedData
+        );
+      } else
+        newState.sortedData = this.sortData(newState.indexedData);
       newState.filteredData = this.filterData(newState.sortedData);
       newState.searchResults = newState.filteredData.length || 0;
       newState.paginatedData = this.paginateData(newState.filteredData);
@@ -194,6 +202,7 @@ export class Table extends Component {
 
   // attach row index property to data for easy referencing/identification
   indexData = (data) => {
+    console.log('indexData');
     data = copyObject(data);
 
     let index = 0;
@@ -207,6 +216,7 @@ export class Table extends Component {
 
   // sort table data based on sort field and direction
   sortData = (data) => {
+    console.log('sortData');
     data = copyObject(data);
 
     // get sort function from props or standard/default sort
@@ -260,8 +270,33 @@ export class Table extends Component {
       return 0;
   };
 
+  // sort data in same order as it was before, based on index
+  preserveSortData = (oldData, newData) => {
+    console.log('preserveSortData');
+    oldData = copyObject(oldData);
+    newData = copyObject(newData);
+
+    let returnData = [];
+    for (const oldDatum of oldData) {
+      const index = newData.findIndex(
+        (newDatum) => oldDatum[rowIndexKey] === newDatum[rowIndexKey]
+      );
+      if (index !== -1) {
+        returnData.push(newData[index]);
+        newData.splice(index, 1);
+      }
+    }
+
+    returnData = [...returnData, ...newData];
+
+    console.log(returnData);
+
+    return returnData;
+  };
+
   // filter table based on search textbox
   filterData = (data) => {
+    console.log('filterData');
     data = copyObject(data);
 
     if (!this.state.searchString)
@@ -286,6 +321,7 @@ export class Table extends Component {
 
   // paginate data based on page controls
   paginateData = (data) => {
+    console.log('paginateData');
     data = copyObject(data);
 
     const start = (this.state.page - 1) * this.state.perPage;
