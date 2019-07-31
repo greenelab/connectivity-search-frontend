@@ -4,7 +4,7 @@
     "main.js": "./static/js/main.js",
     "main.js.map": "./static/js/main.js.map",
     "index.html": "./index.html",
-    "precache-manifest.1c5c693c95689fad6c97ae978b85c9f5.js": "./precache-manifest.1c5c693c95689fad6c97ae978b85c9f5.js",
+    "precache-manifest.cb85b2c22c53fdd262942d4f322db925.js": "./precache-manifest.cb85b2c22c53fdd262942d4f322db925.js",
     "service-worker.js": "./service-worker.js",
     "static/css/main.css.map": "./static/css/main.css.map",
     "static/media/arrow-icon-backward.0abb3ee2.svg": "./static/media/arrow-icon-backward.0abb3ee2.svg",
@@ -21,8 +21,6 @@
     "static/media/chip-pharmacologic-class.b1fbdc49.svg": "./static/media/chip-pharmacologic-class.b1fbdc49.svg",
     "static/media/chip-side-effect.dbe94434.svg": "./static/media/chip-side-effect.dbe94434.svg",
     "static/media/chip-symptom.a2bbe145.svg": "./static/media/chip-symptom.a2bbe145.svg",
-    "static/media/path.1b180159.svg": "./static/media/path.1b180159.svg",
-    "static/media/sort-down.ef4d6d80.svg": "./static/media/sort-down.ef4d6d80.svg",
-    "static/media/sort-up.b8583c8a.svg": "./static/media/sort-up.b8583c8a.svg"
+    "static/media/path.1b180159.svg": "./static/media/path.1b180159.svg"
   }
 }
