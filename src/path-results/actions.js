@@ -11,6 +11,7 @@ export async function fetchPaths({
   let paths = [];
   let nodes = {};
   let relationships = {};
+  const pathCountInfo = {};
 
   const abbrevs = metapaths
     .filter((metapath) => metapath.checked)
@@ -21,12 +22,16 @@ export async function fetchPaths({
     paths = [...paths, ...query.paths];
     nodes = { ...nodes, ...query.nodes };
     relationships = { ...relationships, ...query.relationships };
+    // include path_count_info returned from query to be used by metapaths
+    // to fill in missing (not precomputed) data
+    pathCountInfo[abbrev] = query.path_count_info;
   }
 
   return {
     paths: paths,
     nodes: nodes,
     relationships: relationships,
+    pathCountInfo: pathCountInfo,
     updateUrl: updateUrl,
     preserveChecks: preserveChecks
   };
@@ -37,6 +42,7 @@ export function setPaths({
   paths,
   nodes,
   relationships,
+  pathCountInfo,
   updateUrl,
   preserveChecks
 }) {
@@ -46,6 +52,7 @@ export function setPaths({
       paths: paths,
       nodes: nodes,
       relationships: relationships,
+      pathCountInfo: pathCountInfo,
       updateUrl: updateUrl,
       preserveChecks: preserveChecks
     }

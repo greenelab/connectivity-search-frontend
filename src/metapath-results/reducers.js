@@ -16,6 +16,29 @@ export function metapaths(state = [], action) {
         );
       }
       return metapaths || [];
+
+    // any time a new path is fetched from a query, fill in the returned
+    // metapath data into the corresponding metapath in case it is missing
+    // (not precomputed)
+    case 'set_paths':
+      const newMetapaths = state;
+
+      if (!action.payload || !action.payload.pathCountInfo)
+        return newMetapaths;
+
+      const pathCountInfo = action.payload.pathCountInfo;
+
+      for (const key of Object.keys(pathCountInfo)) {
+        const index = newMetapaths.findIndex(
+          (metapath) => metapath.metapath_abbreviation === key
+        );
+        newMetapaths[index] = {
+          ...newMetapaths[index],
+          ...pathCountInfo[key]
+        };
+      }
+      return newMetapaths;
+
     default:
       return state;
   }
