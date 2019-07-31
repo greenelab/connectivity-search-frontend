@@ -286,7 +286,6 @@ export class Table extends Component {
 
     returnData = [...returnData, ...newData];
 
-
     return returnData;
   };
 
