@@ -22,9 +22,11 @@ export function metapaths(state = [], action) {
     // (not precomputed)
     case 'set_paths':
       const newMetapaths = state;
-      const pathCountInfo = action.payload.pathCountInfo;
-      if (!pathCountInfo)
+
+      if (!action.payload || !action.payload.pathCountInfo)
         return newMetapaths;
+
+      const pathCountInfo = action.payload.pathCountInfo;
 
       for (const key of Object.keys(pathCountInfo)) {
         const index = newMetapaths.findIndex(
