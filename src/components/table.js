@@ -202,7 +202,6 @@ export class Table extends Component {
 
   // attach row index property to data for easy referencing/identification
   indexData = (data) => {
-    console.log('indexData');
     data = copyObject(data);
 
     let index = 0;
@@ -216,7 +215,6 @@ export class Table extends Component {
 
   // sort table data based on sort field and direction
   sortData = (data) => {
-    console.log('sortData');
     data = copyObject(data);
 
     // get sort function from props or standard/default sort
@@ -272,7 +270,6 @@ export class Table extends Component {
 
   // sort data in same order as it was before, based on index
   preserveSortData = (oldData, newData) => {
-    console.log('preserveSortData');
     oldData = copyObject(oldData);
     newData = copyObject(newData);
 
@@ -289,14 +286,12 @@ export class Table extends Component {
 
     returnData = [...returnData, ...newData];
 
-    console.log(returnData);
 
     return returnData;
   };
 
   // filter table based on search textbox
   filterData = (data) => {
-    console.log('filterData');
     data = copyObject(data);
 
     if (!this.state.searchString)
@@ -321,7 +316,6 @@ export class Table extends Component {
 
   // paginate data based on page controls
   paginateData = (data) => {
-    console.log('paginateData');
     data = copyObject(data);
 
     const start = (this.state.page - 1) * this.state.perPage;
