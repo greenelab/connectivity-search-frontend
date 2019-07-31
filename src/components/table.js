@@ -91,7 +91,16 @@ export class Table extends Component {
       !compareObjects(this.props.headFields, prevProps.headFields)
     ) {
       newState.indexedData = this.indexData(this.props.data);
-      newState.sortedData = this.sortData(newState.indexedData);
+      // if number of input data rows hasn't changed, assume none were added,
+      // deleted, or reordered, and preserve previous sorting
+      // assumes prevState.indexedData and newState.indexedData in same order
+      if (this.props.data.length === prevProps.data.length) {
+        newState.sortedData = this.preserveSortData(
+          prevState.sortedData,
+          newState.indexedData
+        );
+      } else
+        newState.sortedData = this.sortData(newState.indexedData);
       newState.filteredData = this.filterData(newState.sortedData);
       newState.searchResults = newState.filteredData.length || 0;
       newState.paginatedData = this.paginateData(newState.filteredData);
@@ -257,6 +266,27 @@ export class Table extends Component {
       return 1;
     else
       return 0;
+  };
+
+  // sort data in same order as it was before, based on index
+  preserveSortData = (oldData, newData) => {
+    oldData = copyObject(oldData);
+    newData = copyObject(newData);
+
+    let returnData = [];
+    for (const oldDatum of oldData) {
+      const index = newData.findIndex(
+        (newDatum) => oldDatum[rowIndexKey] === newDatum[rowIndexKey]
+      );
+      if (index !== -1) {
+        returnData.push(newData[index]);
+        newData.splice(index, 1);
+      }
+    }
+
+    returnData = [...returnData, ...newData];
+
+    return returnData;
   };
 
   // filter table based on search textbox
