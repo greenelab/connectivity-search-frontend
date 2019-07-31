@@ -70,8 +70,7 @@ export async function fetchMetapathMissingData({
   );
   newMetapaths[index] = {
     ...newMetapaths[index],
-    ...query.path_count_info,
-    path_count: newMetapaths[index].path_count || query.paths.length || 0
+    ...query.path_count_info
   };
 
   return {

@@ -5,12 +5,11 @@ import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDoubleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDoubleRight } from '@fortawesome/free-solid-svg-icons';
+import { faSortAmountUp } from '@fortawesome/free-solid-svg-icons';
+import { faSortAmountDownAlt } from '@fortawesome/free-solid-svg-icons';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { faListOl } from '@fortawesome/free-solid-svg-icons';
-
-import { ReactComponent as SortUp } from '../images/sort-up.svg';
-import { ReactComponent as SortDown } from '../images/sort-down.svg';
 
 import { Button } from './buttons.js';
 import { Tooltip } from './tooltip.js';
@@ -270,9 +269,7 @@ export class Table extends Component {
     return data.filter((datum) => {
       for (const field of this.props.headFields) {
         if (
-          datum[field] !== undefined &&
-          datum[field] !== null &&
-          JSON.stringify(datum[field])
+          String(JSON.stringify(datum[field]))
             .toLowerCase()
             .includes(this.state.searchString.toLowerCase())
         ) {
@@ -643,10 +640,9 @@ HeadCheckboxCell.contextType = TableContext;
 class HeadCell extends Component {
   // display component
   render() {
-    const sortIconProps = {
-      'className': 'table_sort_icon',
-      'data-disabled': this.props.field !== this.context.sortField
-    };
+    let sortUp = true;
+    if (this.props.field === this.context.sortField && this.context.sortUp)
+      sortUp = false;
 
     return (
       <Tooltip text={this.props.tooltip || ''}>
@@ -659,15 +655,11 @@ class HeadCell extends Component {
             onClick={() => this.context.changeSort(this.props.field)}
           >
             {this.props.content}
-            {this.props.field === this.context.sortField ? (
-              this.context.sortUp ? (
-                <SortUp {...sortIconProps} />
-              ) : (
-                <SortDown {...sortIconProps} />
-              )
-            ) : (
-              <SortUp {...sortIconProps} />
-            )}
+            <FontAwesomeIcon
+              icon={sortUp ? faSortAmountUp : faSortAmountDownAlt}
+              className='fa-lg table_sort_icon'
+              data-disabled={this.props.field !== this.context.sortField}
+            />
           </Button>
         </th>
       </Tooltip>

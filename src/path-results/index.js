@@ -26,6 +26,16 @@ export class PathResults extends Component {
 
   // display component
   render() {
+    let placeholder = <></>;
+    const checkedMetapaths = this.props.metapaths.filter(
+      (metapath) => metapath.checked
+    );
+
+    if (!checkedMetapaths.length)
+      placeholder = <span className='light'>select a metapath</span>;
+    else if (this.props.paths.length === 0)
+      placeholder = <span className='light'>no results to show</span>;
+
     return (
       <CollapsibleSection
         label='Paths'
@@ -40,14 +50,13 @@ export class PathResults extends Component {
         {this.props.paths.length > 0 && (
           <PathTable showMore={this.state.showMore} />
         )}
-        {this.props.paths.length === 0 && (
-          <span className='light'>select a metapath</span>
-        )}
+        {placeholder}
       </CollapsibleSection>
     );
   }
 }
 // connect component to global state
 PathResults = connect((state) => ({
+  metapaths: state.metapaths,
   paths: state.paths
 }))(PathResults);

@@ -27,17 +27,13 @@ export class MetapathResults extends Component {
   // display component
   render() {
     let placeholder = <></>;
-    if (
-      this.props.sourceNode.id &&
-      this.props.targetNode.id &&
-      this.props.metapaths.length === 0
-    )
-      placeholder = <span className='light'>no results to show</span>;
     if (!this.props.sourceNode.id || !this.props.targetNode.id) {
       placeholder = (
         <span className='light'>select a source and target node</span>
       );
-    }
+    } else if (this.props.metapaths.length === 0)
+      placeholder = <span className='light'>no results to show</span>;
+
     return (
       <CollapsibleSection
         label='Metapaths'
