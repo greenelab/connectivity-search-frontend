@@ -92,8 +92,9 @@ export class Table extends Component {
       !compareObjects(this.props.headFields, prevProps.headFields)
     ) {
       newState.indexedData = this.indexData(this.props.data);
-      // if number of data rows hasn't changed, assume none were added/deleted,
-      // and don't resort, preserve previous sorting
+      // if number of input data rows hasn't changed, assume none were added,
+      // deleted, or reordered, and preserve previous sorting
+      // assumes prevState.indexedData and newState.indexedData in same order
       if (this.props.data.length === prevProps.data.length) {
         newState.sortedData = this.preserveSortData(
           prevState.sortedData,
