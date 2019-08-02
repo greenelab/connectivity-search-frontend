@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
-import { sortCustom } from '../util/array.js';
-import { shortenUrl } from '../util/string.js';
+import { sortCustom } from 'hetio-frontend-components';
+import { shortenUrl } from 'hetio-frontend-components';
 import { NodeRow } from './row.js';
-import { IconButton } from '../components/buttons.js';
+import { IconButton } from 'hetio-frontend-components';
 
 // node results table component
 // displays details about source/target node

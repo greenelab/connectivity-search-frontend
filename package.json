@@ -11,6 +11,7 @@
     "d3": "^5.9.7",
     "downshift": "^3.2.7",
     "font-awesome": "^4.7.0",
+    "hetio-frontend-components": "git+ssh://git@github.com/hetio/frontend-components.git#build",
     "npm": "^6.10.1",
     "react": "^16.7.0",
     "react-dom": "^16.7.0",

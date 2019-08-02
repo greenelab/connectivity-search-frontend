@@ -2,9 +2,9 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { sortCustom } from '../util/array.js';
-import { Tooltip } from '../components/tooltip.js';
-import { DynamicField } from '../components/dynamic-field.js';
+import { sortCustom } from 'hetio-frontend-components';
+import { Tooltip } from 'hetio-frontend-components';
+import { DynamicField } from 'hetio-frontend-components';
 
 import './selected-info.css';
 

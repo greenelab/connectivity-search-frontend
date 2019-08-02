@@ -1,8 +1,8 @@
 import { metagraph } from './app/reducers.js';
 import { hetioStyles } from './app/reducers.js';
 import { tooltipDefinitions } from './app/reducers.js';
-import { copyObject } from './util/object.js';
-import { cutString } from './util/string.js';
+import { copyObject } from 'hetio-frontend-components';
+import { cutString } from 'hetio-frontend-components';
 
 import { sourceNode } from './node-search/reducers.js';
 import { targetNode } from './node-search/reducers.js';

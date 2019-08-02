@@ -9,10 +9,10 @@ import { TargetNode } from './target-node.js';
 import { SwapButton } from './swap-button.js';
 import { RandomButton } from './random-button.js';
 import { CollapsibleSection } from '../components/collapsible-section.js';
-import { Tooltip } from '../components/tooltip.js';
-import { sortCustom } from '../util/array.js';
-import { compareObjects } from '../util/object.js';
-import { copyObject } from '../util/object.js';
+import { Tooltip } from 'hetio-frontend-components';
+import { sortCustom } from 'hetio-frontend-components';
+import { compareObjects } from 'hetio-frontend-components';
+import { copyObject } from 'hetio-frontend-components';
 
 import './index.css';
 

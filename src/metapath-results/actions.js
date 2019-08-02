@@ -1,6 +1,6 @@
 import { searchMetapaths } from '../backend-queries.js';
 import { searchPaths } from '../backend-queries.js';
-import { copyObject } from '../util/object.js';
+import { copyObject } from 'hetio-frontend-components';
 
 // fetch metapaths function
 export async function fetchMetapaths({

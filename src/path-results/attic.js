@@ -5,7 +5,7 @@ import { faDownload } from '@fortawesome/free-solid-svg-icons';
 import { faAngleLeft } from '@fortawesome/free-solid-svg-icons';
 import { faAngleRight } from '@fortawesome/free-solid-svg-icons';
 
-import { IconButton } from '../components/buttons.js';
+import { IconButton } from 'hetio-frontend-components';
 import { download } from './download.js';
 
 // table "attic" component

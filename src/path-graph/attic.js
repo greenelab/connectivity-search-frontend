@@ -11,7 +11,7 @@ import { faCompressArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 import { toggleShowGrid } from './actions.js';
-import { IconButton } from '../components/buttons.js';
+import { IconButton } from 'hetio-frontend-components';
 import { NumberBox } from '../components/number-box.js';
 
 import { minWidth, minHeight, maxWidth, maxHeight } from './constants.js';

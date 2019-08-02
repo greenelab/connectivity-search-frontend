@@ -1,4 +1,4 @@
-import { transferObjectProps } from '../util/object.js';
+import { transferObjectProps } from 'hetio-frontend-components';
 
 // reducer for state.metapaths
 export function metapaths(state = [], action) {

@@ -1,6 +1,6 @@
 import { assemblePath } from './assemble.js';
 import { textDescription } from './assemble.js';
-import { transferObjectProps } from '../util/object.js';
+import { transferObjectProps } from 'hetio-frontend-components';
 
 // reducer for state.paths
 // takes whole state as input

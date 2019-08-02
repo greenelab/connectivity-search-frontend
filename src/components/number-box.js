@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 
-import { Tooltip } from './tooltip.js';
+import { Tooltip } from 'hetio-frontend-components';
 import './number-box.css';
 
 // number input box component

@@ -1,6 +1,6 @@
-import { makeFilenameFriendly } from '../util/string.js';
-import { sortCustom } from '../util/array.js';
-import { downloadCsv } from '../util/file.js';
+import { makeFilenameFriendly } from 'hetio-frontend-components';
+import { sortCustom } from 'hetio-frontend-components';
+import { downloadCsv } from 'hetio-frontend-components';
 
 // download path table
 export function download(sourceNode, targetNode, paths) {
