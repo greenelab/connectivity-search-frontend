@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faHighlighter } from '@fortawesome/free-solid-svg-icons';
 
-import { Table } from '../components/table.js';
-import { toFixed } from '../util/format';
+import { Table } from 'hetio-frontend-components';
+import { toFixed } from 'hetio-frontend-components';
 import { pathChips } from '../components/chips.js';
 import { setPaths } from './actions.js';
 

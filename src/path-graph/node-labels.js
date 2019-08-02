@@ -3,7 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import * as d3 from 'd3';
 
-import { cutString } from '../util/string.js';
+import { cutString } from 'hetio-frontend-components';
 
 import {
   nodeRadius,

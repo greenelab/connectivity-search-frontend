@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons';
 
-import { Button } from '../components/buttons.js';
+import { Button } from 'hetio-frontend-components';
 import { swapSourceTargetNode } from './actions.js';
 
 import './round-button.css';

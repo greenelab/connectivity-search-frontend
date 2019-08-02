@@ -8,7 +8,7 @@ import { MetapathResults } from '../metapath-results';
 import { PathResults } from '../path-results';
 import { PathGraph } from '../path-graph';
 import { loadStateFromUrl } from './actions.js';
-import { compareObjects } from '../util/object';
+import { compareObjects } from 'hetio-frontend-components';
 import { fetchAndSetDefinitions } from './actions.js';
 import { fetchAndSetMetapaths } from '../metapath-results/actions.js';
 import { fetchAndSetPaths } from '../path-results/actions';

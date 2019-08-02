@@ -1,5 +1,5 @@
 import { assembleGraph } from './assemble.js';
-import { transferObjectProps } from '../util/object.js';
+import { transferObjectProps } from 'hetio-frontend-components';
 
 // reducer for state.graph
 // takes whole state as input

@@ -21,7 +21,7 @@ import { createViewHandler } from './view.js';
 import { createNodeDragHandler } from './node-drag.js';
 import { resetView } from './view.js';
 import { fitView } from './view.js';
-import { downloadSvg } from '../util/file.js';
+import { downloadSvg } from 'hetio-frontend-components';
 
 import './graph.css';
 

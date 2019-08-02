@@ -5,14 +5,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 
-import { Table } from '../components/table.js';
+import { Table } from 'hetio-frontend-components';
 import { metapathChips } from '../components/chips.js';
-import { Tooltip } from '../components/tooltip.js';
-import { toFixed } from '../util/format';
-import { toExponential } from '../util/format.js';
-import { toComma } from '../util/format.js';
-import { toGradient } from '../util/format.js';
-import { cutString } from '../util/string.js';
+import { Tooltip } from 'hetio-frontend-components';
+import { toFixed } from 'hetio-frontend-components';
+import { toExponential } from 'hetio-frontend-components';
+import { toComma } from 'hetio-frontend-components';
+import { toGradient } from 'hetio-frontend-components';
+import { cutString } from 'hetio-frontend-components';
 import { setMetapaths } from './actions.js';
 import { fetchAndSetMetapathMissingData } from './actions.js';
 

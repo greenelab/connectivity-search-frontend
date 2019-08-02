@@ -4,7 +4,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
 import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
-import { Button } from './buttons.js';
+import { Button } from 'hetio-frontend-components';
 import './collapsible-section.css';
 
 // accordion (collapse/expand) section component

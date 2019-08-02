@@ -1,8 +1,8 @@
 import React from 'react';
 import { Component } from 'react';
 
-import { Tooltip } from '../components/tooltip.js';
-import { DynamicField } from '../components/dynamic-field.js';
+import { Tooltip } from 'hetio-frontend-components';
+import { DynamicField } from 'hetio-frontend-components';
 
 // node row component
 // contains one row of information

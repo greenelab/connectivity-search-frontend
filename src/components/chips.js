@@ -16,7 +16,7 @@ import { ReactComponent as CellularComponent } from '../images/chip-cellular-com
 import { ReactComponent as MolecularFunction } from '../images/chip-molecular-function.svg';
 import { ReactComponent as Pathway } from '../images/chip-pathway.svg';
 import { ReactComponent as PharmacologicClass } from '../images/chip-pharmacologic-class.svg';
-import { Tooltip } from './tooltip.js';
+import { Tooltip } from 'hetio-frontend-components';
 
 import './chips.css';
 

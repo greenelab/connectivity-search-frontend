@@ -3,7 +3,7 @@ import { Component } from 'react';
 import Downshift from 'downshift';
 
 import { Context } from './context.js';
-import { Tooltip } from '../components/tooltip.js';
+import { Tooltip } from 'hetio-frontend-components';
 import { TextBox } from './text-box.js';
 import { Dropdown } from './dropdown.js';
 import { searchNodes } from '../backend-queries.js';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Component } from 'react';
 
-import { Button } from '../components/buttons.js';
+import { Button } from 'hetio-frontend-components';
 import { MetanodeChip } from '../components/chips.js';
 
 import './filter-button.css';
