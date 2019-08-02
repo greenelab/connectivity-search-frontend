@@ -3,14 +3,13 @@ version: 2
 jobs:
   test:
     docker:
-      - image: buildkite/puppeteer:v1.15.0
+      - image: node:8.15.1-stretch
     working_directory: ~/hetmech-frontend
     steps:
       - checkout
       - run:
           name: Frontend tests
           command: |
-            apt-get update && apt-get install procps --yes
             npm install
             npm test
             npm run build
