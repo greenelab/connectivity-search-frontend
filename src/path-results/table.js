@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye } from '@fortawesome/free-solid-svg-icons';
 import { faHighlighter } from '@fortawesome/free-solid-svg-icons';
 
+import { DynamicField } from 'hetio-frontend-components';
 import { Table } from 'hetio-frontend-components';
 import { toFixed } from 'hetio-frontend-components';
 import { pathChips } from '../components/chips.js';
@@ -17,6 +18,17 @@ export class PathTable extends Component {
     const onChange = (newData) => {
       this.props.dispatch(setPaths({ paths: newData, updateUrl: true }));
     };
+
+    const fields = [
+      'checked',
+      'highlighted',
+      'metapath',
+      'text_description',
+      'score',
+      'percent_of_DWPC'
+    ];
+    const checkboxes = [true, true];
+    const sortables = [false, false, true, true, true, true];
 
     const headContents = [
       <FontAwesomeIcon className='fa-xs' icon={faEye} />,
@@ -33,14 +45,6 @@ export class PathTable extends Component {
         <br />
         DWPC
       </>
-    ];
-    const headFields = [
-      'checked',
-      'highlighted',
-      'metapath',
-      'text_description',
-      'score',
-      'percent_of_DWPC'
     ];
     const headStyles = [
       { width: 25 },
@@ -60,19 +64,22 @@ export class PathTable extends Component {
       this.props.tooltipDefinitions['percent_of_DWPC']
     ];
 
-    const bodyValues = [
-      null,
-      null,
-      null,
-      (datum) => pathChips(datum.assembled || [], this.props.showMore),
-      (datum) => toFixed(datum.score),
-      (datum) => toFixed(datum.percent_of_DWPC)
-    ];
-    const bodyFullValues = [
-      null,
-      null,
-      null,
-      (datum) => datum.text_description
+    const bodyContents = [
+      <FontAwesomeIcon className='fa-xs' icon={faEye} />,
+      <FontAwesomeIcon className='fa-xs' icon={faHighlighter} />,
+      (datum, field, value) => <DynamicField value={value} />,
+      (datum, field, value) => (
+        <DynamicField
+          value={pathChips(datum.assembled || [], this.props.showMore)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField value={toFixed(value)} fullValue={value} />
+      ),
+      (datum, field, value) => (
+        <DynamicField value={toFixed(value)} fullValue={value} />
+      )
     ];
     const bodyClasses = [null, null, 'small', 'small left'];
     const bodyTooltips = [
@@ -86,16 +93,17 @@ export class PathTable extends Component {
           this.props.showMore ? 'table_container_expanded' : 'table_container'
         }
         data={this.props.paths}
+        fields={fields}
+        checkboxes={checkboxes}
+        sortables={sortables}
         onChange={onChange}
         defaultSortField='score'
         defaultSortUp={true}
         headContents={headContents}
-        headFields={headFields}
         headStyles={headStyles}
         headClasses={headClasses}
         headTooltips={headTooltips}
-        bodyValues={bodyValues}
-        bodyFullValues={bodyFullValues}
+        bodyContents={bodyContents}
         bodyClasses={bodyClasses}
         bodyTooltips={bodyTooltips}
       />
