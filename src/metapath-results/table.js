@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faQuestion } from '@fortawesome/free-solid-svg-icons';
 
+import { DynamicField } from 'hetio-frontend-components';
 import { Table } from 'hetio-frontend-components';
 import { metapathChips } from '../components/chips.js';
 import { Tooltip } from 'hetio-frontend-components';
@@ -51,6 +52,29 @@ export class MetapathTable extends Component {
         };
       }
     };
+
+    let fields = [
+      'checked',
+      'metapath_metaedges',
+      'path_count',
+      'adjusted_p_value'
+    ];
+    const checkboxes = [true];
+    const sortables = [
+      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true
+    ];
 
     let topContents = [];
     let topStyles = [];
@@ -105,12 +129,6 @@ export class MetapathTable extends Component {
         <i>p</i>-value
       </span>
     ];
-    let headFields = [
-      'checked',
-      'metapath_metaedges',
-      'path_count',
-      'adjusted_p_value'
-    ];
     const headStyles = [
       { width: 25 },
       { width: 200 },
@@ -149,6 +167,17 @@ export class MetapathTable extends Component {
     ];
 
     if (this.props.showMore) {
+      fields = fields.concat([
+        'p_value',
+        'dwpc',
+        'dgp_source_degree',
+        'dgp_target_degree',
+        'dgp_n_dwpcs',
+        'dgp_n_nonzero_dwpcs',
+        'dgp_nonzero_mean',
+        'dgp_nonzero_sd',
+        'cypher_query'
+      ]);
       headContents = headContents.concat([
         <>
           <i>p</i>-value
@@ -189,17 +218,6 @@ export class MetapathTable extends Component {
           neo4j query
         </a>
       ]);
-      headFields = headFields.concat([
-        'p_value',
-        'dwpc',
-        'dgp_source_degree',
-        'dgp_target_degree',
-        'dgp_n_dwpcs',
-        'dgp_n_nonzero_dwpcs',
-        'dgp_nonzero_mean',
-        'dgp_nonzero_sd',
-        'cypher_query'
-      ]);
     }
 
     const compute = (datum) => (
@@ -225,66 +243,80 @@ export class MetapathTable extends Component {
         </button>
       </Tooltip>
     );
-    const bodyValues = [
-      null,
-      (datum) => metapathChips(datum.metapath_metaedges),
-      (datum) =>
-        datum.path_count !== undefined
-          ? toComma(datum.path_count)
-          : compute(datum),
-      (datum) =>
-        datum.path_count !== undefined
-          ? toExponential(datum.adjusted_p_value)
-          : compute(datum),
-      (datum) =>
-        datum.path_count !== undefined
-          ? toExponential(datum.p_value)
-          : compute(datum),
-      (datum) =>
-        datum.path_count !== undefined ? toFixed(datum.dwpc) : compute(datum),
-      (datum) =>
-        datum.path_count !== undefined
-          ? toComma(datum.dgp_source_degree)
-          : compute(datum),
-      (datum) =>
-        datum.path_count !== undefined
-          ? toComma(datum.dgp_target_degree)
-          : compute(datum),
-      (datum) =>
-        datum.path_count !== undefined
-          ? toComma(datum.dgp_n_dwpcs)
-          : compute(datum),
-      (datum) =>
-        datum.path_count !== undefined
-          ? toComma(datum.dgp_n_nonzero_dwpcs)
-          : compute(datum),
-      (datum) =>
-        datum.path_count !== undefined
-          ? toFixed(datum.dgp_nonzero_mean)
-          : compute(datum),
-      (datum) =>
-        datum.path_count !== undefined
-          ? toFixed(datum.dgp_nonzero_sd)
-          : compute(datum),
-      (datum) =>
-        datum.path_count !== undefined
-          ? cutString(datum.cypher_query, 16)
-          : compute(datum)
-    ];
-    const bodyFullValues = [
-      null,
-      (datum) => datum.metapath_name,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      null,
-      (datum) => <textarea rows='4' cols='50' value={datum.cypher_query} />
+    const bodyContents = [
+      <FontAwesomeIcon className='fa-xs' icon={faCheck} />,
+      (datum, field, value) => (
+        <DynamicField
+          value={metapathChips(value)}
+          fullValue={datum.metapath_name}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? toComma(value) : compute(datum)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? toExponential(value) : compute(datum)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? toExponential(value) : compute(datum)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? toFixed(value) : compute(datum)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? toComma(value) : compute(datum)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? toComma(value) : compute(datum)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? toComma(value) : compute(datum)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? toComma(value) : compute(datum)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? toFixed(value) : compute(datum)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? toFixed(value) : compute(datum)}
+          fullValue={value}
+        />
+      ),
+      (datum, field, value) => (
+        <DynamicField
+          value={value !== undefined ? cutString(value, 16) : compute(datum)}
+          fullValue={<textarea rows='4' cols='50' value={value} />}
+        />
+      )
     ];
     const bodyStyles = [
       null,
@@ -308,21 +340,23 @@ export class MetapathTable extends Component {
         }
         className='metapath_results_table'
         data={this.props.metapaths}
+        fields={fields}
+        checkboxes={checkboxes}
+        sortables={sortables}
         onChange={onChange}
         sortFunction={sortFunction}
         defaultSortField='adjusted_p_value'
         defaultSortUp={false}
+        dontResort={true}
         topContents={topContents}
         topStyles={topStyles}
         topClasses={topClasses}
         topColspans={topColspans}
         headContents={headContents}
-        headFields={headFields}
         headStyles={headStyles}
         headClasses={headClasses}
         headTooltips={headTooltips}
-        bodyValues={bodyValues}
-        bodyFullValues={bodyFullValues}
+        bodyContents={bodyContents}
         bodyStyles={bodyStyles}
         bodyClasses={bodyClasses}
         bodyTooltips={bodyTooltips}
