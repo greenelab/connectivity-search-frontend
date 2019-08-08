@@ -44,7 +44,6 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  color: var(--dark-gray);
   padding: 10px;
   position: absolute;
   right: 0;
