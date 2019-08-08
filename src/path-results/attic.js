@@ -22,6 +22,10 @@ export class PathAttic extends Component {
 
     return (
       <div className='table_attic'>
+        <div className='small light left'>
+          {pathCount} results, {pathSelectedCount} selected,{' '}
+          {pathHighlightedCount} highlighted
+        </div>
         <IconButton
           text='.csv'
           icon={faDownload}
@@ -36,16 +40,12 @@ export class PathAttic extends Component {
           tooltipText='Download table as .csv file'
         />
         <IconButton
-          text={this.props.showMore ? 'show less ' : 'show more '}
+          text={this.props.showMore ? 'collapse' : 'expand'}
           icon={this.props.showMore ? faAngleLeft : faAngleRight}
           className='link_button small'
           onClick={this.props.toggleShowMore}
-          tooltipText='Expand table and show more columns'
+          tooltipText='Expand table'
         />
-        <div className='small light right'>
-          {pathCount} results, {pathSelectedCount} selected,{' '}
-          {pathHighlightedCount} highlighted
-        </div>
       </div>
     );
   }

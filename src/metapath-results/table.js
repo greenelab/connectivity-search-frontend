@@ -322,8 +322,18 @@ export class MetapathTable extends Component {
       null,
       null,
       null,
-      (datum) => ({ background: toGradient(datum.adjusted_p_value) }),
-      (datum) => ({ background: toGradient(datum.p_value) })
+      (datum, field, value) => ({
+        background: toGradient(Math.log10(value), [
+          [-50, 'rgba(233, 30, 99, 0.5)'],
+          [-1, 'rgba(255, 255, 255, 0)']
+        ])
+      }),
+      (datum, field, value) => ({
+        background: toGradient(Math.log10(value), [
+          [-50, 'rgba(233, 30, 99, 0.5)'],
+          [-1, 'rgba(255, 255, 255, 0)']
+        ])
+      })
     ];
     const bodyClasses = [null, 'left'];
     const bodyTooltips = [

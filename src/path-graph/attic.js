@@ -26,7 +26,7 @@ export class GraphAttic extends Component {
 
     return (
       <>
-        <div className='table_attic'>
+        <div className='center'>
           <IconButton
             text='reset'
             icon={faPowerOff}
@@ -80,52 +80,52 @@ export class GraphAttic extends Component {
             }}
             tooltipText='Download the graph as an .svg file'
           />
-          <div className='table_attic_button_group'>
-            <NumberBox
-              tooltipText='Width of the container'
-              min={minWidth}
-              step='5'
-              max={maxWidth}
-              value={this.props.width}
-              onArrows={this.props.setWidth}
-              onSubmit={this.props.setWidth}
-            />
-            &nbsp;&times;&nbsp;
-            <NumberBox
-              tooltipText='Height of the container'
-              min={minHeight}
-              step='5'
-              max={maxHeight}
-              value={this.props.height}
-              onArrows={this.props.setHeight}
-              onSubmit={this.props.setHeight}
-            />
-            <IconButton
-              className='graph_expand_collapse_button'
-              text=''
-              icon={faCompressArrowsAlt}
-              onClick={() => {
-                this.props.collapseContainer();
-                if (this.props.graphRef.current)
-                  this.props.graphRef.current.fitView();
-              }}
-              tooltipText='Fit the graph to the page column'
-            />
-            <IconButton
-              className='graph_expand_collapse_button'
-              text=''
-              icon={faExpandArrowsAlt}
-              onClick={() => {
-                this.props.expandContainer();
-                if (this.props.graphRef.current)
-                  this.props.graphRef.current.fitView();
-              }}
-              tooltipText='Fit the graph to the window'
-            />
-          </div>
-          <span className='small light right'>
+        </div>
+        <div className='table_attic'>
+          <span className='small light left'>
             {nodeCount} nodes, {edgeCount} edges
           </span>
+          <NumberBox
+            tooltipText='Width of the container'
+            min={minWidth}
+            step='5'
+            max={maxWidth}
+            value={this.props.width}
+            onArrows={this.props.setWidth}
+            onSubmit={this.props.setWidth}
+          />
+          &nbsp;&times;&nbsp;
+          <NumberBox
+            tooltipText='Height of the container'
+            min={minHeight}
+            step='5'
+            max={maxHeight}
+            value={this.props.height}
+            onArrows={this.props.setHeight}
+            onSubmit={this.props.setHeight}
+          />
+          <IconButton
+            className='graph_expand_collapse_button'
+            text=''
+            icon={faCompressArrowsAlt}
+            onClick={() => {
+              this.props.collapseContainer();
+              if (this.props.graphRef.current)
+                this.props.graphRef.current.fitView();
+            }}
+            tooltipText='Fit the graph to the page column'
+          />
+          <IconButton
+            className='graph_expand_collapse_button'
+            text=''
+            icon={faExpandArrowsAlt}
+            onClick={() => {
+              this.props.expandContainer();
+              if (this.props.graphRef.current)
+                this.props.graphRef.current.fitView();
+            }}
+            tooltipText='Fit the graph to the window'
+          />
         </div>
       </>
     );
