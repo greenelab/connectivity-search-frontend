@@ -9,7 +9,6 @@
   bottom: 0;
   padding: 10px !important;
   padding-right: 35px !important;
-  background: #e0e0e0;
   pointer-events: none;
 }
 .node_search_field_container {
@@ -33,10 +32,13 @@
 .node_search_input_blank {
   padding: 10px !important;
   padding-right: 35px !important;
+}
+.node_search_input {
   color: #303030 !important;
 }
 .node_search_input_blank {
   overflow: hidden;
+  color: transparent !important;
 }
 .node_search_icon {
   display: flex;

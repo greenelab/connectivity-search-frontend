@@ -31,15 +31,6 @@ export class GraphDefs extends Component {
           chance. See https://het.io for more information.
         </desc>
         <defs>
-          <style>
-            {`
-              @import url('https://fonts.googleapis.com/css?family=Raleway:400,500,700');
-              @import url('https://fonts.googleapis.com/css?family=Montserrat:400,500,700&text=0123456789');
-              * {
-                font-family: 'Montserrat', 'Raleway', sans-serif;
-              }
-            `}
-          </style>
           <marker
             id='graph_arrowhead'
             viewBox='0 0 100 100'
