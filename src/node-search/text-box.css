@@ -25,7 +25,7 @@
   border-bottom-width: 0 !important;
 }
 .node_search_field:after {
-  border-bottom-color: #00bcd4 !important;
+  border-bottom-color: var(--blue) !important;
   border-bottom-width: 2px !important;
 }
 .node_search_input,
@@ -34,7 +34,7 @@
   padding-right: 35px !important;
 }
 .node_search_input {
-  color: #303030 !important;
+  color: var(--black) !important;
 }
 .node_search_input_blank {
   overflow: hidden;
@@ -44,6 +44,7 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  color: var(--dark-gray);
   padding: 10px;
   position: absolute;
   right: 0;

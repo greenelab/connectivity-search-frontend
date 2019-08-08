@@ -3,7 +3,7 @@
   position: relative;
 }
 #graph {
-  outline: solid #e0e0e0 2px;
+  outline: solid var(--light-gray) 2px;
   position: absolute;
 }
 
