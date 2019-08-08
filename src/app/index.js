@@ -98,12 +98,6 @@ class App extends Component {
   render() {
     return (
       <>
-        {/* load global, site-wide styles from het.io */}
-        <link
-          rel='stylesheet'
-          type='text/css'
-          href='https://het.io/global.css'
-        />
         <NodeSearch />
         <NodeResults />
         <MetapathResults />
