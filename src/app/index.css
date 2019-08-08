@@ -4,18 +4,21 @@
 
 .table_attic {
   display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  flex-wrap: wrap;
-}
-.table_attic > *:last-child {
-  flex-grow: 1;
-}
-.table_attic_button_group {
-  display: inline-flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: nowrap;
+  flex-wrap: wrap;
+  margin: 5px 0;
+}
+.table_attic > *:first-child {
+  flex-grow: 1;
+  padding-left: 10px;
+}
+@media screen and (max-width: 640px) {
+  .table_attic > *:first-child {
+    width: 100%;
+    order: 1;
+    margin-top: 5px;
+  }
 }
 table tr th {
   height: 40px;

@@ -24,6 +24,11 @@ export class MetapathAttic extends Component {
     return (
       <div className='table_attic'>
         {this.props.metapaths.length > 0 && (
+          <div className='small light left'>
+            {metapathCount} results, {metapathSelectedCount} selected
+          </div>
+        )}
+        {this.props.metapaths.length > 0 && (
           <IconButton
             text='.csv'
             icon={faDownload}
@@ -50,17 +55,12 @@ export class MetapathAttic extends Component {
         <span />
         {this.props.metapaths.length > 0 && (
           <IconButton
-            text={this.props.showMore ? 'show less ' : 'show more '}
+            text={this.props.showMore ? 'collapse' : 'expand'}
             icon={this.props.showMore ? faAngleLeft : faAngleRight}
             className='link_button small'
             onClick={this.props.toggleShowMore}
             tooltipText='Expand table and show more columns'
           />
-        )}
-        {this.props.metapaths.length > 0 && (
-          <div className='small light right'>
-            {metapathCount} results, {metapathSelectedCount} selected
-          </div>
         )}
       </div>
     );
