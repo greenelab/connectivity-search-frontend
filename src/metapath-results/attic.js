@@ -52,7 +52,6 @@ export class MetapathAttic extends Component {
           tooltipText='Whether to show only precomputed metapaths, or show all
             metapaths. Warning: showing all can be slow.'
         />
-        <span />
         {this.props.metapaths.length > 0 && (
           <IconButton
             text={this.props.showMore ? 'collapse' : 'expand'}
