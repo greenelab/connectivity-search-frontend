@@ -14,7 +14,7 @@
   font-size: 16px !important;
 }
 .node_search_results_item_selected {
-  background: #c0ecf8 !important;
+  background: var(--light-blue) !important;
 }
 .node_search_results_item_name {
   font-weight: 500;
@@ -23,7 +23,7 @@
 }
 .node_search_results_item_count {
   margin-left: auto;
-  color: #808080;
+  color: var(--gray);
   font-size: 0.75em;
   font-weight: 500;
   width: 40px;
