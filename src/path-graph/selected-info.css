@@ -1,21 +1,9 @@
-#graph_info_table_container {
-  outline: solid var(--light-gray) 2px;
+#graph_info_container {
   margin-top: 10px;
   min-height: 120px;
-  display: flex;
-  justify-content: center;
-  padding: 5px;
 }
-#graph_info_table td {
-  height: 20px;
-}
-#graph_info_table td:nth-child(1),
-#graph_info_table td:nth-child(3) {
-  width: 80px;
-}
-
 @media only screen and (max-width: 640px) {
-  #graph_info_table_container {
+  #graph_info_container {
     min-height: 200px;
   }
 }

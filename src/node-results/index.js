@@ -16,12 +16,19 @@ export class NodeResults extends Component {
       <CollapsibleSection
         label='Node Info'
         tooltipText='Details about the source and target node'
+        className='node_results_content'
       >
         {this.props.sourceNode.name && (
-          <NodeTable node={this.props.sourceNode} label='Source Node' />
+          <>
+            <div className='small left'>Source Node</div>
+            <NodeTable node={this.props.sourceNode} label='Source Node' />
+          </>
         )}
         {this.props.targetNode.name && (
-          <NodeTable node={this.props.targetNode} label='Target Node' />
+          <>
+            <div className='small left'>Target Node</div>
+            <NodeTable node={this.props.targetNode} label='Target Node' />
+          </>
         )}
         {!this.props.sourceNode.name && !this.props.targetNode.name && (
           <span className='light'>select a source and target node</span>

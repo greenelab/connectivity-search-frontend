@@ -59,7 +59,13 @@ export class CollapsibleSection extends Component {
             icon={this.state.collapsed ? faAngleUp : faAngleDown}
           />
         </Button>
-        <div className='collapsible_section_content'>{this.props.children}</div>
+        <div
+          className={
+            'collapsible_section_content ' + (this.props.className || '')
+          }
+        >
+          {this.props.children}
+        </div>
       </div>
     );
   }
