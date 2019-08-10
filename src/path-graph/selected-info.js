@@ -3,8 +3,7 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { sortCustom } from 'hetio-frontend-components';
-import { Tooltip } from 'hetio-frontend-components';
-import { DynamicField } from 'hetio-frontend-components';
+import { InfoTable } from 'hetio-frontend-components';
 
 import './selected-info.css';
 
@@ -60,49 +59,25 @@ export class SelectedInfo extends Component {
 
     return fields;
   };
+
   // display component
   render() {
-    let fields = this.getFields();
+    const fields = this.getFields();
 
-    fields = fields.map((field, index) => (
-      <React.Fragment key={index}>
-        <Tooltip text={this.props.tooltipDefinitions[field.firstCol] || ''}>
-          <td className='small light'>{field.firstCol}</td>
-        </Tooltip>
-        <td>
-          <DynamicField value={field.secondCol} className='left small nowrap' />
-        </td>
-      </React.Fragment>
-    ));
-
-    // make rows in groups of two (or one if screen size small)
-    const groups = window.innerWidth >= 640 ? 2 : 1;
-    const rows = new Array(Math.ceil(fields.length / groups))
-      .fill()
-      .map(() => fields.splice(0, groups))
-      .map((field, index) => <tr key={index}>{field}</tr>);
-
-    let display;
-    if (rows.length) {
-      display = (
-        <table id='graph_info_table'>
-          <tbody>{rows}</tbody>
-        </table>
-      );
-    } else {
-      display = (
-        <div id='graph_info_placeholder' className='center light'>
-          Click on or hover over a node or edge
-        </div>
-      );
-    }
+    const bodyContents = fields.map((field) => [
+      field.firstCol,
+      this.props.tooltipDefinitions[field.firstCol],
+      field.secondCol
+    ]);
 
     return (
-      <div
-        id='graph_info_table_container'
-        style={{ alignItems: rows.length ? 'flex-start' : 'center' }}
-      >
-        {display}
+      <div id='graph_info_container'>
+        {bodyContents.length > 0 && <InfoTable bodyContents={bodyContents} />}
+        {!bodyContents.length > 0 && (
+          <div className='center light'>
+            Click on or hover over a node or edge
+          </div>
+        )}
       </div>
     );
   }

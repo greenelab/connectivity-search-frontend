@@ -1,30 +1,14 @@
 import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { faAngleUp } from '@fortawesome/free-solid-svg-icons';
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons';
 
 import { sortCustom } from 'hetio-frontend-components';
 import { shortenUrl } from 'hetio-frontend-components';
-import { NodeRow } from './row.js';
-import { IconButton } from 'hetio-frontend-components';
+import { InfoTable } from 'hetio-frontend-components';
 
 // node results table component
 // displays details about source/target node
 export class NodeTable extends Component {
-  // initialize component
-  constructor() {
-    super();
-
-    this.state = {};
-    this.state.showMore = false;
-  }
-
-  // toggle show/hide extra fields
-  toggleShowMore = () => {
-    this.setState({ showMore: !this.state.showMore });
-  };
-
   // get primary row entries
   getPrimaryRows = () => {
     // list of primary rows
@@ -77,9 +61,7 @@ export class NodeTable extends Component {
 
   // display component
   render() {
-    let rows = this.getPrimaryRows();
-    if (this.state.showMore)
-      rows = rows.concat(this.getExtraRows());
+    let rows = this.getPrimaryRows().concat(this.getExtraRows());
 
     // display fields in custom order
     const order = [
@@ -93,38 +75,14 @@ export class NodeTable extends Component {
     rows = sortCustom(rows, order, 'firstCol');
 
     // make row components from cols
-    rows = rows.map((row, index) => (
-      <NodeRow
-        key={index}
-        firstCol={row.firstCol}
-        secondCol={row.secondCol}
-        tooltipText={this.props.tooltipDefinitions[row.firstCol]}
-      />
-    ));
+    const bodyContents = rows.map((row, index) => [
+      row.firstCol,
+      this.props.tooltipDefinitions[row.firstCol],
+      row.secondCol
+    ]);
 
     return (
-      <table className='node_results_table'>
-        <thead>
-          <tr>
-            <th className='small'>{this.props.label}</th>
-            <th />
-          </tr>
-        </thead>
-        <tbody>{rows}</tbody>
-        <tfoot>
-          <tr>
-            <td className='center' colSpan='2'>
-              <IconButton
-                text={this.state.showMore ? 'show less ' : 'show more '}
-                icon={this.state.showMore ? faAngleUp : faAngleDown}
-                className='link_button small'
-                onClick={this.toggleShowMore}
-                tooltipText='Show more information about the node'
-              />
-            </td>
-          </tr>
-        </tfoot>
-      </table>
+      <InfoTable className='node_results_table' bodyContents={bodyContents} />
     );
   }
 }

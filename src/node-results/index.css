@@ -1,11 +1,10 @@
-.node_results_table th:first-child,
-.node_results_table td:first-child {
+.node_results_content {
   padding-left: 10px;
 }
-.node_results_table th:first-child {
-  width: 100px;
-  text-align: left;
+.node_results_table {
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
-.node_results_table th {
-  height: 25px;
+.node_results_table .info_table_value {
+  height: 20px;
 }
