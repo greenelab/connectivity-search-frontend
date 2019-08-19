@@ -77,12 +77,12 @@ export class Graph extends Component {
 
   // reset view
   resetView = () => {
-    resetView(this.state.viewHandler);
+    resetView(this.state.viewHandler, this.props.width, this.props.height);
   };
 
   // fit view
   fitView = () => {
-    fitView(this.state.viewHandler);
+    fitView(this.state.viewHandler, this.props.width, this.props.height);
   };
 
   // unpin all
