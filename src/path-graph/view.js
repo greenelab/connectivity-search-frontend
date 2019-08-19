@@ -24,16 +24,11 @@ function onViewChange() {
 }
 
 // center view around 0,0 and reset to 100% zoom
-export function resetView(viewHandler) {
-  const container = d3
-    .select('#graph')
-    .node()
-    .getBoundingClientRect();
-
+export function resetView(viewHandler, containerWidth, containerHeight) {
   // determine scale and translate to fit view
   const scale = 1;
-  const translateX = container.width / 2;
-  const translateY = container.height / 2;
+  const translateX = containerWidth / 2;
+  const translateY = containerHeight / 2;
 
   // perform view transform
   d3.select('#graph').call(
@@ -43,34 +38,29 @@ export function resetView(viewHandler) {
 }
 
 // fit view to contents of graph
-export function fitView(viewHandler) {
+export function fitView(viewHandler, containerWidth, containerHeight) {
   const contents = d3
     .select('#graph_contents')
     .node()
     .getBBox();
-  const container = d3
-    .select('#graph')
-    .node()
-    .getBoundingClientRect();
   const padding = nodeRadius;
-
-  // if no contents, exit
-  if (contents.width === 0 || contents.height === 0)
-    return;
 
   // calculate center of contents
   contents.midX = contents.x + contents.width / 2;
   contents.midY = contents.y + contents.height / 2;
 
   // determine scale and translate to fit view
-  const scale =
-    1 /
-    Math.max(
-      contents.width / (container.width - padding),
-      contents.height / (container.height - padding)
-    );
-  const translateX = container.width / 2 - scale * contents.midX;
-  const translateY = container.height / 2 - scale * contents.midY;
+  let scale = 1;
+  if (contents.width && contents.height) {
+    scale =
+      1 /
+      Math.max(
+        contents.width / (containerWidth - padding),
+        contents.height / (containerHeight - padding)
+      );
+  }
+  const translateX = containerWidth / 2 - scale * contents.midX;
+  const translateY = containerHeight / 2 - scale * contents.midY;
 
   // perform view transform
   d3.select('#graph').call(
