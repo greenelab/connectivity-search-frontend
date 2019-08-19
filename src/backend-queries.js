@@ -34,8 +34,10 @@ export async function fetchJson(url, dontCache) {
     let json = {};
     if (response.ok)
       json = await response.json();
-    else
-      console.log(response);
+    else {
+      console.error(response);
+      return;
+    }
 
     // save response to cache
     if (!dontCache)
@@ -43,92 +45,109 @@ export async function fetchJson(url, dontCache) {
 
     return json;
   } catch (error) {
-    console.log(error, url);
-    return {};
+    console.error(error, url);
+    return;
   }
 }
 
 // get metagraph
-export function getMetagraph() {
-  return fetchJson(metagraphUrl);
+export async function getMetagraph() {
+  return (await fetchJson(metagraphUrl)) || {};
 }
 
 // get hetio definitions
-export function getHetioDefinitions() {
-  return fetchJson(hetioDefinitions);
+export async function getHetioDefinitions() {
+  return (await fetchJson(hetioDefinitions)) || {};
 }
 
 // get hetio styles
-export function getHetioStyles() {
-  return fetchJson(hetioStyles);
+export async function getHetioStyles() {
+  return (await fetchJson(hetioStyles)) || {};
 }
 
 // get hetmech definitions
 export function getHetmechDefinitions() {
-  return hetmechDefinitions;
+  return hetmechDefinitions || {};
 }
 
 // lookup node by id
-export function lookupNodeById(id) {
-  if (!id)
-    return null;
+export async function lookupNodeById(id) {
+  if (!id && id !== 0)
+    return {};
   const query = nodeSearchUrl + id;
-  return fetchJson(query);
+  return (await fetchJson(query)) || {};
 }
 
 // search for nodes by string, and with metatype filter list
 // accepts comma-separated list of abbreviations of metatypes to include
-export function searchNodes(searchString, metatypes, otherNode) {
+export async function searchNodes(searchString, metatypes, otherNodeId) {
   const params = new URLSearchParams();
   params.set('search', searchString);
   params.set('limit', '100');
   if (metatypes)
     params.set('metanodes', metatypes);
-  if (otherNode)
-    params.set('count-metapaths-to', otherNode);
+  if (otherNodeId)
+    params.set('count-metapaths-to', otherNodeId);
   const query = nodeSearchUrl + '?' + params.toString();
-  return fetchJson(query).then((response) => {
+  const response = await fetchJson(query);
+  if (response && response.results)
     return response.results;
-  });
+  else
+    return [];
 }
 
 // search for nodes sorted by metapath count
-export function searchNodesMetapaths(otherNode) {
-  const query = nodeSearchMetapathsUrl + otherNode;
-  return fetchJson(query).then((response) => {
+export async function searchNodesMetapaths(otherNodeId) {
+  if (!otherNodeId && otherNodeId !== 0)
+    return [];
+  const query = nodeSearchMetapathsUrl + otherNodeId;
+  const response = await fetchJson(query);
+  if (response && response.results)
     return response.results;
-  });
+  else
+    return [];
 }
 
 // get random source/target node pair that has metapath(s)
-export function getRandomNodePair() {
+export async function getRandomNodePair() {
   const query = randomNodeUrl;
-  return fetchJson(query, true).then((response) => {
-    return response;
-  });
+  const response = await fetchJson(query, true);
+  return response || {};
 }
 
 // search for metapaths by source/target id
-export function searchMetapaths(sourceNodeId, targetNodeId, complete) {
+export async function searchMetapaths(sourceNodeId, targetNodeId, complete) {
+  if (
+    (!sourceNodeId && sourceNodeId !== 0) ||
+    (!targetNodeId && targetNodeId !== 0)
+  )
+    return [];
   const params = new URLSearchParams();
   params.set('source', sourceNodeId);
   params.set('target', targetNodeId);
   if (complete)
     params.set('complete', '');
   const query = metapathSearchUrl + '?' + params.toString();
-  return fetchJson(query).then((response) => {
+  const response = await fetchJson(query);
+  if (response && response.path_counts)
     return response.path_counts;
-  });
+  else
+    return [];
 }
 
 // search for paths by metapaths
-export function searchPaths(sourceNodeId, targetNodeId, metapath) {
+export async function searchPaths(sourceNodeId, targetNodeId, metapath) {
+  if (
+    (!sourceNodeId && sourceNodeId !== 0) ||
+    (!targetNodeId && targetNodeId !== 0) ||
+    !metapath
+  )
+    return [];
   const params = new URLSearchParams();
   params.set('source', sourceNodeId);
   params.set('target', targetNodeId);
   params.set('metapath', metapath);
   const query = pathSearchUrl + '?' + params.toString();
-  return fetchJson(query).then((response) => {
-    return response;
-  });
+  const response = await fetchJson(query);
+  return response || [];
 }

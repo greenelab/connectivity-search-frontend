@@ -24,7 +24,7 @@ export function metapaths(state = [], action) {
       const newMetapaths = state;
 
       if (!action.payload || !action.payload.pathCountInfo)
-        return newMetapaths;
+        return newMetapaths || [];
 
       const pathCountInfo = action.payload.pathCountInfo;
 
@@ -37,7 +37,7 @@ export function metapaths(state = [], action) {
           ...pathCountInfo[key]
         };
       }
-      return newMetapaths;
+      return newMetapaths || [];
 
     default:
       return state;
