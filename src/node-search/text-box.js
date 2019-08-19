@@ -1,6 +1,5 @@
 import React from 'react';
 import { Component } from 'react';
-import TextField from '@material-ui/core/TextField';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
@@ -47,7 +46,7 @@ export class TextBox extends Component {
 
     if (showOverlay) {
       overlay = (
-        <div className='node_search_field_overlay'>
+        <div className='node_search_overlay'>
           <MetanodeChip type={this.props.selectedItem.metanode} />
           <span className='node_search_results_item_name nowrap'>
             {this.props.selectedItem.name}
@@ -55,23 +54,16 @@ export class TextBox extends Component {
         </div>
       );
     }
+
     return (
       <>
-        <TextField
+        <input
+          className='node_search_input'
           {...this.props.getInputProps({
             onChange: this.onInput
           })}
-          inputRef={this.props.inputRef}
+          ref={this.props.inputRef}
           placeholder='name or identifier'
-          classes={{ root: 'node_search_field_container' }}
-          InputProps={{
-            classes: {
-              root: 'node_search_field',
-              input: showOverlay
-                ? 'node_search_input_blank'
-                : 'node_search_input'
-            }
-          }}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
         />

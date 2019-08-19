@@ -1,8 +1,8 @@
 .node_search_form {
   display: block;
   width: 100%;
-  height: 40px !important;
-  margin: 0 auto !important;
+  height: 40px;
+  margin: 0 auto;
   text-align: left;
   position: relative;
 }
