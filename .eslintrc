@@ -25,6 +25,9 @@
     "object-curly-spacing": ["error", "always"],
     "no-invalid-this": ["off"],
     "react/jsx-uses-vars": ["error"],
-    "react/jsx-uses-react": ["error"]
+    "react/jsx-uses-react": ["error"],
+    // temporary fix for upstream eslint bug:
+    // https://github.com/eslint/eslint/issues/12117
+    "no-unused-vars": ["off"]
   }
 }
