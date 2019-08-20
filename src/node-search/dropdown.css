@@ -25,15 +25,16 @@
   cursor: pointer;
 }
 .node_search_name {
+  flex-grow: 1;
   font-weight: 500;
 }
 .node_search_count {
-  margin-left: auto;
   color: var(--gray);
   font-size: 0.75em;
   font-weight: 500;
-  width: 45px;
-  min-width: 45px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  flex-basis: 45px;
   vertical-align: middle;
 }
 .node_search_count svg {
