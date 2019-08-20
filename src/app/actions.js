@@ -11,10 +11,10 @@ import { setPrecomputedMetapathsOnly } from '../metapath-results/actions.js';
 
 // get metagraph, hetio definitions, hetio styles, and hetmech definitions
 export async function fetchDefinitions() {
-  const metagraph = (await getMetagraph()) || {};
-  const hetioStyles = (await getHetioStyles()) || {};
-  const hetioDefinitions = (await getHetioDefinitions()) || {};
-  const hetmechDefinitions = (await getHetmechDefinitions()) || {};
+  const metagraph = await getMetagraph();
+  const hetioStyles = await getHetioStyles();
+  const hetioDefinitions = await getHetioDefinitions();
+  const hetmechDefinitions = await getHetmechDefinitions();
 
   // combine definitions into single convenient tooltipText lookup
   let tooltipDefinitions = {};
@@ -72,8 +72,11 @@ export function loadStateFromUrl() {
 
     const sourceNode = await lookupNodeById(sourceNodeId);
     const targetNode = await lookupNodeById(targetNodeId);
-    const metapaths =
-      (await searchMetapaths(sourceNodeId, targetNodeId, complete)) || [];
+    const metapaths = await searchMetapaths(
+      sourceNodeId,
+      targetNodeId,
+      complete
+    );
 
     // by the time awaits return, url may be different (eg if user
     // clicks back/forward quickly). if different, exit and allow more

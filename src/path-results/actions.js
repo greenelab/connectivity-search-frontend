@@ -75,7 +75,6 @@ export function fetchAndSetPaths({
       updateUrl: updateUrl,
       preserveChecks: preserveChecks
     });
-
     dispatch(setPaths(paths));
   };
 }

@@ -10,8 +10,11 @@ export async function fetchMetapaths({
   updateUrl,
   preserveChecks
 }) {
-  const metapaths =
-    (await searchMetapaths(sourceNodeId, targetNodeId, !precomputedOnly)) || [];
+  const metapaths = await searchMetapaths(
+    sourceNodeId,
+    targetNodeId,
+    !precomputedOnly
+  );
   return {
     metapaths: metapaths,
     updateUrl: updateUrl,
@@ -60,8 +63,7 @@ export async function fetchMetapathMissingData({
   updateUrl,
   preserveChecks
 }) {
-  const query =
-    (await searchPaths(sourceNodeId, targetNodeId, metapathId)) || {};
+  const query = await searchPaths(sourceNodeId, targetNodeId, metapathId);
 
   const newMetapaths = copyObject(metapaths);
 
