@@ -33,6 +33,10 @@ class App extends Component {
 
     // fetch definitions when page first loads
     this.props.dispatch(fetchAndSetDefinitions());
+  }
+
+  // when component mounds
+  componentDidMount() {
     // get parameters from url when page first loads
     this.loadStateFromUrl();
     // listen for back/forward navigation (history)
@@ -87,6 +91,11 @@ class App extends Component {
         })
       );
     }
+  }
+
+  // when component unmounts
+  componentWillUnmount() {
+    window.removeEventListener('popstate', this.loadStateFromUrl);
   }
 
   // load source/target nodes, checked metapaths, etc from url

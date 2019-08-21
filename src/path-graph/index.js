@@ -43,6 +43,11 @@ export class PathGraph extends Component {
     }
   }
 
+  // when component unmounts
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateSectionWidth);
+  }
+
   // set width of graph container
   setWidth = (width) => {
     if (Math.round(width) !== width)
