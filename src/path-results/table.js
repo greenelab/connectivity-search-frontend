@@ -13,12 +13,13 @@ import { setPaths } from './actions.js';
 
 // path table component
 export class PathTable extends Component {
+  // when user makes change to table data (checkboxes)
+  onChange = (newData) => {
+    this.props.dispatch(setPaths({ paths: newData, updateUrl: true }));
+  };
+
   // display component
   render() {
-    const onChange = (newData) => {
-      this.props.dispatch(setPaths({ paths: newData, updateUrl: true }));
-    };
-
     const fields = [
       'checked',
       'highlighted',
@@ -96,7 +97,7 @@ export class PathTable extends Component {
         fields={fields}
         checkboxes={checkboxes}
         sortables={sortables}
-        onChange={onChange}
+        onChange={this.onChange}
         defaultSortField='score'
         defaultSortUp={true}
         headContents={headContents}

@@ -21,14 +21,13 @@ import './table.css';
 
 // metapath table component
 export class MetapathTable extends Component {
+  // when user makes change to table data (checkboxes)
+  onChange = (newData) => {
+    this.props.dispatch(setMetapaths({ metapaths: newData, updateUrl: true }));
+  };
+
   // display component
   render() {
-    const onChange = (newData) => {
-      this.props.dispatch(
-        setMetapaths({ metapaths: newData, updateUrl: true })
-      );
-    };
-
     const sortFunction = (field) => {
       // sort metapaths
       if (field === 'metapath_metaedges') {
@@ -353,7 +352,7 @@ export class MetapathTable extends Component {
         fields={fields}
         checkboxes={checkboxes}
         sortables={sortables}
-        onChange={onChange}
+        onChange={this.onChange}
         sortFunction={sortFunction}
         defaultSortField='adjusted_p_value'
         defaultSortUp={false}
