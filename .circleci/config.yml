@@ -3,7 +3,7 @@ version: 2
 jobs:
   test:
     docker:
-      - image: node:11.10.1
+      - image: circleci/node:latest
     working_directory: ~/hetmech-frontend
     steps:
       - checkout
@@ -21,7 +21,7 @@ jobs:
 
   deploy:
     docker:
-      - image: node:11.10.1
+      - image: circleci/node:latest
     working_directory: ~/hetmech-frontend
     steps:
       - attach_workspace:
