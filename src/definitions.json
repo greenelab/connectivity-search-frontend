@@ -14,5 +14,7 @@
   "path": "The sequence of edges in the network connecting the source node to the target node. Duplicate nodes are not permitted in paths.",
   "score": "A metric of how meaningful the path is in describing the connectivity between the source and target node. The score combines the magnitude of the metapath's p-value with the percent of the DWPC contributed by the path.",
   "percent_of_DWPC": "The contribution of the path to the DWPC for its metapath. This metric compares the importance of all paths of the same metapath from the source node to the target node.",
-  "cypher_query": "Copy, paste, and run this code in the command bar at https://neo4j.het.io/browser/ to recreate the graph of this metapath in the Neo4j browser."
+  "cypher_query": "Copy, paste, and run this code in the command bar at https://neo4j.het.io/browser/ to recreate the graph of this metapath in the Neo4j browser.",
+  "neo4j_browser": "Open a new Neo4j browser",
+  "neo4j_command": "Copy the Neo4j command for the metapath to your clipboard"
 }
