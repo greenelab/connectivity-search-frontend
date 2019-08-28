@@ -2,9 +2,13 @@ import React from 'react';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faExternalLinkAlt } from '@fortawesome/free-solid-svg-icons';
+import { faCopy } from '@fortawesome/free-solid-svg-icons';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
 import { faQuestion } from '@fortawesome/free-solid-svg-icons';
+import copy from 'copy-to-clipboard';
 
+import { IconButton } from 'hetio-frontend-components';
 import { DynamicField } from 'hetio-frontend-components';
 import { Table } from 'hetio-frontend-components';
 import { metapathChips } from '../components/chips.js';
@@ -13,7 +17,6 @@ import { toFixed } from 'hetio-frontend-components';
 import { toExponential } from 'hetio-frontend-components';
 import { toComma } from 'hetio-frontend-components';
 import { toGradient } from 'hetio-frontend-components';
-import { cutString } from 'hetio-frontend-components';
 import { setMetapaths } from './actions.js';
 import { fetchAndSetMetapathMissingData } from './actions.js';
 
@@ -209,14 +212,7 @@ export class MetapathTable extends Component {
           <br />
           &sigma;
         </>,
-        <a
-          href='https://neo4j.het.io/browser/'
-          target='_blank'
-          rel='noopener noreferrer'
-          onClick={(event) => event.stopPropagation()}
-        >
-          neo4j query
-        </a>
+        'Neo4j Actions'
       ]);
     }
 
@@ -312,10 +308,24 @@ export class MetapathTable extends Component {
         />
       ),
       (datum, field, value) => (
-        <DynamicField
-          value={value !== undefined ? cutString(value, 16) : compute(datum)}
-          fullValue={<textarea rows='4' cols='50' value={value} />}
-        />
+        <>
+          <IconButton
+            className='small neo4j_button'
+            icon={faExternalLinkAlt}
+            text='browser'
+            href='https://neo4j.het.io/browser/'
+            tooltipText={this.props.tooltipDefinitions['neo4j_browser']}
+          />
+          <IconButton
+            className='small neo4j_button clipboard_button'
+            icon={faCopy}
+            text='command'
+            onClick={() => copy(value)}
+            flashText='copied'
+            flashIcon={faCheck}
+            tooltipText={this.props.tooltipDefinitions['neo4j_command']}
+          />
+        </>
       )
     ];
     const bodyStyles = [
