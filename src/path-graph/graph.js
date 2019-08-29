@@ -21,7 +21,6 @@ import { createViewHandler } from './view.js';
 import { createNodeDragHandler } from './node-drag.js';
 import { resetView } from './view.js';
 import { fitView } from './view.js';
-import { downloadSvg } from 'hetio-frontend-components';
 
 import './graph.css';
 
@@ -93,12 +92,6 @@ export class Graph extends Component {
   // pin all
   pinAll = () => {
     pinAll(this.props.graph);
-  };
-
-  // download graph
-  downloadGraph = () => {
-    const svg = document.getElementById('graph');
-    downloadSvg(svg);
   };
 
   // when node or edge clicked by user
