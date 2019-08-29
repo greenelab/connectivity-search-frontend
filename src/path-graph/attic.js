@@ -11,6 +11,7 @@ import { faCompressArrowsAlt } from '@fortawesome/free-solid-svg-icons';
 import { faDownload } from '@fortawesome/free-solid-svg-icons';
 
 import { toggleShowGrid } from './actions.js';
+import { download } from './download.js';
 import { IconButton } from 'hetio-frontend-components';
 import { NumberBox } from '../components/number-box.js';
 
@@ -75,8 +76,7 @@ export class GraphAttic extends Component {
             text='.svg'
             icon={faDownload}
             onClick={() => {
-              if (this.props.graphRef.current)
-                this.props.graphRef.current.downloadGraph();
+              download(this.props.sourceNode, this.props.targetNode);
             }}
             tooltipText='Download the graph as an .svg file'
           />
@@ -133,5 +133,7 @@ export class GraphAttic extends Component {
 }
 // connect component to global state
 GraphAttic = connect((state) => ({
+  sourceNode: state.sourceNode,
+  targetNode: state.targetNode,
   graph: state.graph
 }))(GraphAttic);

@@ -23,7 +23,7 @@ export class GraphDefs extends Component {
           {sourceType}) and {targetName} ({targetType}).
           {'\n'}
           {'\n'}
-          Created at {window.location.href}
+          {'<!--'} Created at {window.decodeURI(window.location.href)} {'-->'}
           {'\n'}
           {'\n'}
           This subgraph of Hetionet v1.0 was created from paths between the
