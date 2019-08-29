@@ -21,7 +21,7 @@ jobs:
 
   deploy:
     docker:
-      - image: node:8.15.1-stretch
+      - image: circleci/node:latest
     working_directory: ~/hetmech-frontend
     steps:
       - attach_workspace:
@@ -29,7 +29,7 @@ jobs:
       - run:
           name: Install and configure dependencies
           command: |
-            npm install --global --silent gh-pages@2.0.1
+            sudo npm install --global --silent gh-pages
       - add_ssh_keys:
           fingerprints:
             - "59:f7:cc:2f:9e:bf:97:12:46:a0:16:60:a2:3b:13:2a"
@@ -38,6 +38,8 @@ jobs:
           command: |
             echo -e "Host github.com\n\tStrictHostKeyChecking no\n" >> ~/.ssh/config
             touch build/.nojekyll  # Disable Jekyll processing on GitHub Pages
+            sudo mkdir -p /usr/local/lib/node_modules/gh-pages/.cache/
+            sudo chmod 777 /usr/local/lib/node_modules/gh-pages/.cache/
             gh-pages --dist build \
               --user "CircleCI Deploy Job <ci-build@circleci.com>" \
               --message \
