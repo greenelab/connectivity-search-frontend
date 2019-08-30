@@ -4,18 +4,17 @@
   "private": true,
   "homepage": "./",
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.21",
-    "@fortawesome/free-solid-svg-icons": "^5.10.1",
+    "hetio-frontend-components": "git+https://github.com/hetio/frontend-components.git#build",
+    "@fortawesome/fontawesome-svg-core": "^1.2.22",
+    "@fortawesome/free-solid-svg-icons": "^5.10.2",
     "@fortawesome/react-fontawesome": "^0.1.4",
     "copy-to-clipboard": "^3.2.0",
-    "d3": "^5.10.0",
+    "d3": "^5.11.0",
     "downshift": "^3.2.12",
-    "eslint": "6.1.0",
-    "hetio-frontend-components": "git+https://github.com/hetio/frontend-components.git#build",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
-    "react-redux": "^7.1.0",
-    "react-scripts": "3.1.0",
+    "react-redux": "^7.1.1",
+    "react-scripts": "3.1.1",
     "redux": "^4.0.4",
     "redux-thunk": "^2.3.0",
     "unescape": "^1.0.1"
@@ -35,11 +34,7 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "peerDependencies": {
-    "eslint": "6.1.0"
-  },
   "devDependencies": {
-    "eslint": "6.1.0",
     "eslint-config-google": "^0.13.0",
     "eslint-plugin-html": "^6.0.0",
     "eslint-plugin-react": "^7.14.3",
