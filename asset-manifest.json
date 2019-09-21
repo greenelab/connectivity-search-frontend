@@ -1,12 +1,12 @@
 {
   "files": {
-    "main.css": "./static/css/main.4065ac84.css",
+    "main.css": "./static/css/main.css",
     "main.js": "./static/js/main.js",
     "main.js.map": "./static/js/main.js.map",
     "index.html": "./index.html",
-    "precache-manifest.f04937ed8382fbbdafe7e38e9fb69c16.js": "./precache-manifest.f04937ed8382fbbdafe7e38e9fb69c16.js",
+    "precache-manifest.cc8e35086575421fe44b232fce701664.js": "./precache-manifest.cc8e35086575421fe44b232fce701664.js",
     "service-worker.js": "./service-worker.js",
-    "static/css/main.4065ac84.css.map": "./static/css/main.4065ac84.css.map",
+    "static/css/main.css.map": "./static/css/main.css.map",
     "static/media/arrow-icon-backward.0abb3ee2.svg": "./static/media/arrow-icon-backward.0abb3ee2.svg",
     "static/media/arrow-icon-both.5f01d574.svg": "./static/media/arrow-icon-both.5f01d574.svg",
     "static/media/arrow-icon-forward.2c0b7662.svg": "./static/media/arrow-icon-forward.2c0b7662.svg",
