@@ -58,8 +58,10 @@ export class SearchBox extends Component {
 
   // convert result/selection item to string to display in text box
   itemToString = (item) => {
-    if (item && item.name) return item.name;
-    else return '';
+    if (item && item.name)
+      return item.name;
+    else
+      return '';
   };
 
   // display component
