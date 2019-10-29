@@ -97,10 +97,11 @@ export async function searchNodes(searchString, metatypes, otherNodeId) {
 }
 
 // search for nodes sorted by metapath count
-export async function searchNodesMetapaths(otherNodeId) {
+export async function searchNodesMetapaths(otherNodeId, metatypes) {
   if (!otherNodeId && otherNodeId !== 0)
     return [];
-  const query = nodeSearchMetapathsUrl + otherNodeId;
+  const query =
+    nodeSearchMetapathsUrl + otherNodeId + '?metanodes=' + metatypes;
   const response = await fetchJson(query);
   if (response && response.results)
     return response.results;

@@ -45,8 +45,8 @@ export class SearchBox extends Component {
     // if one node selected and other node search box focused but empty,
     // show list of nodes in order of metapath count
     if (searchString === '' && otherNodeId !== '') {
-      searchNodesMetapaths(otherNodeId).then((results) =>
-        this.setState({ searchResults: results || [] })
+      searchNodesMetapaths(otherNodeId, this.context.filterString).then(
+        (results) => this.setState({ searchResults: results || [] })
       );
     } else {
       // otherwise, show normal search results based on search string
@@ -58,10 +58,8 @@ export class SearchBox extends Component {
 
   // convert result/selection item to string to display in text box
   itemToString = (item) => {
-    if (item && item.name)
-      return item.name;
-    else
-      return '';
+    if (item && item.name) return item.name;
+    else return '';
   };
 
   // display component
