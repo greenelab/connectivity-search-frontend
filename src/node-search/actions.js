@@ -1,5 +1,5 @@
 import { getRandomNodePair } from '../backend-queries.js';
-import { lookupNodeById } from '../backend-queries.js';
+import { lookupNode } from '../backend-queries.js';
 
 // set source and/or target node
 export function setSourceTargetNode({ sourceNode, targetNode, updateUrl }) {
@@ -24,8 +24,8 @@ export function swapSourceTargetNode() {
 export function fetchRandomNodePair() {
   return async function(dispatch) {
     const pair = await getRandomNodePair();
-    const sourceNode = await lookupNodeById(pair.source_id);
-    const targetNode = await lookupNodeById(pair.target_id);
+    const sourceNode = await lookupNode(pair.source_id);
+    const targetNode = await lookupNode(pair.target_id);
 
     dispatch(
       setSourceTargetNode({

@@ -2,7 +2,7 @@ import { getMetagraph } from '../backend-queries.js';
 import { getHetioStyles } from '../backend-queries.js';
 import { getHetioDefinitions } from '../backend-queries.js';
 import { getHetmechDefinitions } from '../backend-queries.js';
-import { lookupNodeById } from '../backend-queries.js';
+import { lookupNode } from '../backend-queries.js';
 import { searchMetapaths } from '../backend-queries.js';
 
 import { setSourceTargetNode } from '../node-search/actions.js';
@@ -70,8 +70,8 @@ export function loadStateFromUrl() {
     let metapathAbbrevs = params.get('metapaths');
     const complete = params.get('complete') === '' ? true : false;
 
-    const sourceNode = await lookupNodeById(sourceNodeId);
-    const targetNode = await lookupNodeById(targetNodeId);
+    const sourceNode = await lookupNode(sourceNodeId);
+    const targetNode = await lookupNode(targetNodeId);
     const metapaths = await searchMetapaths(
       sourceNodeId,
       targetNodeId,

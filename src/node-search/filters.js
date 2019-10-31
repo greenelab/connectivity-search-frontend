@@ -203,7 +203,7 @@ export class Filters extends Component {
       <>
         <div className='node_search_filters'>
           <Tooltip
-            text='Filter the text search by metatype.
+            text='Filter the text search by metanode.
               Ctrl+click to solo.'
           >
             <div className='small light'>Filters</div>
