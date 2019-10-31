@@ -6,9 +6,9 @@ const github =
   'https://raw.githubusercontent.com/hetio/hetionet/6e08d3039abaad8f6dafe26fe3b143773b0d7e51';
 
 // api endpoint/url for production
-// const api = 'https://search-api.het.io/v1/';
+const api = 'https://search-api.het.io/v1/';
 // api endpoint/url for testing
-const api = 'http://localhost:8000/v1';
+// const api = 'http://localhost:8000/v1';
 
 // get resource at url and parse as json
 export async function fetchJson(url, dontCache) {
