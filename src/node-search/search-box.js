@@ -7,7 +7,6 @@ import { Tooltip } from 'hetio-frontend-components';
 import { TextBox } from './text-box.js';
 import { Dropdown } from './dropdown.js';
 import { searchNodes } from '../backend-queries.js';
-import { searchNodesMetapaths } from '../backend-queries.js';
 
 import './search-box.css';
 
@@ -42,18 +41,9 @@ export class SearchBox extends Component {
     if (this.props.otherNode && this.props.otherNode.id !== undefined)
       otherNodeId = this.props.otherNode.id;
 
-    // if one node selected and other node search box focused but empty,
-    // show list of nodes in order of metapath count
-    if (searchString === '' && otherNodeId !== '') {
-      searchNodesMetapaths(otherNodeId, this.context.filterString).then(
-        (results) => this.setState({ searchResults: results || [] })
-      );
-    } else {
-      // otherwise, show normal search results based on search string
-      searchNodes(searchString, this.context.filterString, otherNodeId).then(
-        (results) => this.setState({ searchResults: results || [] })
-      );
-    }
+    searchNodes(searchString, otherNodeId, this.context.filterString).then(
+      (results) => this.setState({ searchResults: results || [] })
+    );
   };
 
   // convert result/selection item to string to display in text box
