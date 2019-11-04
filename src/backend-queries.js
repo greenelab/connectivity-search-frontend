@@ -1,5 +1,5 @@
-// url for hetmech specific definitions (path count, p value, dwpc, etc)
-import hetmechDefinitions from './definitions.json';
+// url for conectivity search specific definitions (p value, dwpc, etc)
+import connectivitySearchDefinitions from './definitions.json';
 
 // url for github data
 const github =
@@ -57,9 +57,9 @@ export async function getHetioStyles() {
   return (await fetchJson(query)) || {};
 }
 
-// get hetmech definitions
-export function getHetmechDefinitions() {
-  return hetmechDefinitions || {};
+// get connectivity search definitions
+export function getConnectivitySearchDefinitions() {
+  return connectivitySearchDefinitions || {};
 }
 
 // lookup node by id

@@ -1,6 +1,6 @@
-# Hetmech frontend
+# Connectivity Search frontend
 
-[![CircleCI](https://circleci.com/gh/greenelab/hetmech-frontend/tree/master.svg?style=svg)](https://circleci.com/gh/greenelab/hetmech-frontend/tree/master)
+[![CircleCI](https://circleci.com/gh/greenelab/connectivity-search-frontend/tree/master.svg?style=svg)](https://circleci.com/gh/greenelab/connectivity-search-frontend/tree/master)
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

@@ -1,7 +1,7 @@
 import { getMetagraph } from '../backend-queries.js';
 import { getHetioStyles } from '../backend-queries.js';
 import { getHetioDefinitions } from '../backend-queries.js';
-import { getHetmechDefinitions } from '../backend-queries.js';
+import { getConnectivitySearchDefinitions } from '../backend-queries.js';
 import { lookupNode } from '../backend-queries.js';
 import { searchMetapaths } from '../backend-queries.js';
 
@@ -9,12 +9,13 @@ import { setSourceTargetNode } from '../node-search/actions.js';
 import { setMetapaths } from '../metapath-results/actions.js';
 import { setPrecomputedMetapathsOnly } from '../metapath-results/actions.js';
 
-// get metagraph, hetio definitions, hetio styles, and hetmech definitions
+// get metagraph, hetio definitions, hetio styles, and connectivity search
+// definitions
 export async function fetchDefinitions() {
   const metagraph = await getMetagraph();
   const hetioStyles = await getHetioStyles();
   const hetioDefinitions = await getHetioDefinitions();
-  const hetmechDefinitions = await getHetmechDefinitions();
+  const connectivitySearchDefinitions = await getConnectivitySearchDefinitions();
 
   // combine definitions into single convenient tooltipText lookup
   let tooltipDefinitions = {};
@@ -31,7 +32,10 @@ export async function fetchDefinitions() {
       ...hetioDefinitions.metanodes
     };
   }
-  tooltipDefinitions = { ...tooltipDefinitions, ...hetmechDefinitions };
+  tooltipDefinitions = {
+    ...tooltipDefinitions,
+    ...connectivitySearchDefinitions
+  };
   tooltipDefinitions['neo4j_id'] = tooltipDefinitions['id'];
 
   return {
