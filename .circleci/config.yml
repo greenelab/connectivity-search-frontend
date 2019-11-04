@@ -4,7 +4,7 @@ jobs:
   test:
     docker:
       - image: circleci/node:latest
-    working_directory: ~/hetmech-frontend
+    working_directory: ~/connectivity-search-frontend
     steps:
       - checkout
       - run:
@@ -23,7 +23,7 @@ jobs:
               exit 1
             fi
       - persist_to_workspace:
-          root: ~/hetmech-frontend
+          root: ~/connectivity-search-frontend
           paths:
             - .git
             - build
@@ -31,10 +31,10 @@ jobs:
   deploy:
     docker:
       - image: circleci/node:latest
-    working_directory: ~/hetmech-frontend
+    working_directory: ~/connectivity-search-frontend
     steps:
       - attach_workspace:
-          at: ~/hetmech-frontend
+          at: ~/connectivity-search-frontend
       - run:
           name: Install and configure dependencies
           command: |
