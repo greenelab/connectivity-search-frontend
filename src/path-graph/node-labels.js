@@ -22,10 +22,8 @@ export class GraphNodeLabels extends Component {
   // get node text color based on type (metanode)
   getTextColor = (type) => {
     const style = this.props.hetioStyles[type];
-    if (style && style.text_color)
-      return style.text_color;
-    else
-      return backgroundColor;
+    if (style && style.text_color) return style.text_color;
+    else return backgroundColor;
   };
 
   // update
@@ -40,7 +38,9 @@ export class GraphNodeLabels extends Component {
       .append('foreignObject')
       .attr('class', 'graph_node_label')
       .append('xhtml:div')
-      .append('xhtml:span');
+      .attr('xmlns', 'http://www.w3.org/1999/xhtml')
+      .append('xhtml:span')
+      .attr('xmlns', 'http://www.w3.org/1999/xhtml');
 
     layer
       .selectAll('.graph_node_label')
