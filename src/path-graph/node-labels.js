@@ -22,8 +22,10 @@ export class GraphNodeLabels extends Component {
   // get node text color based on type (metanode)
   getTextColor = (type) => {
     const style = this.props.hetioStyles[type];
-    if (style && style.text_color) return style.text_color;
-    else return backgroundColor;
+    if (style && style.text_color)
+      return style.text_color;
+    else
+      return backgroundColor;
   };
 
   // update
