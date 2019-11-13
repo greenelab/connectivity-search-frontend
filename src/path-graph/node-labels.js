@@ -40,7 +40,9 @@ export class GraphNodeLabels extends Component {
       .append('foreignObject')
       .attr('class', 'graph_node_label')
       .append('xhtml:div')
-      .append('xhtml:span');
+      .attr('xmlns', 'http://www.w3.org/1999/xhtml')
+      .append('xhtml:span')
+      .attr('xmlns', 'http://www.w3.org/1999/xhtml');
 
     layer
       .selectAll('.graph_node_label')
