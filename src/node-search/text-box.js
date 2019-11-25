@@ -33,6 +33,7 @@ export class TextBox extends Component {
   // when user unfocuses text box
   onBlur = () => {
     this.setState({ focused: false });
+    this.props.closeMenu();
   };
 
   // display component

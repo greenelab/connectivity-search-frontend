@@ -20,7 +20,6 @@ export class SearchBox extends Component {
     this.state.searchResults = [];
 
     this.inputRef = React.createRef();
-    this.formRef = React.createRef();
   }
 
   // when user types into or modifies text in text box
@@ -41,9 +40,11 @@ export class SearchBox extends Component {
     if (this.props.otherNode && this.props.otherNode.id !== undefined)
       otherNodeId = this.props.otherNode.id;
 
-    searchNodes(searchString, otherNodeId, this.context.filterString).then(
-      (results) => this.setState({ searchResults: results || [] })
-    );
+    searchNodes(
+      searchString,
+      otherNodeId,
+      this.context.filterString
+    ).then((results) => this.setState({ searchResults: results || [] }));
   };
 
   // convert result/selection item to string to display in text box
@@ -59,7 +60,6 @@ export class SearchBox extends Component {
     return (
       <Downshift
         onChange={this.props.onChange}
-        onBlur={this.onBlur}
         onInputValueChange={this.onInput}
         itemToString={this.itemToString}
         selectedItem={this.props.node}
@@ -72,9 +72,10 @@ export class SearchBox extends Component {
           selectedItem,
           highlightedIndex,
           clearSelection,
+          closeMenu,
           openMenu
         }) => (
-          <div className='node_search_form' ref={this.formRef}>
+          <div className='node_search_form'>
             <span className='small light node_search_form_label'>
               <Tooltip text={this.props.tooltipText}>
                 {this.props.label}
@@ -86,12 +87,11 @@ export class SearchBox extends Component {
               clearSelection={clearSelection}
               selectedItem={selectedItem}
               onFocus={this.onInput}
+              closeMenu={closeMenu}
               openMenu={openMenu}
             />
             <Dropdown
               isOpen={isOpen}
-              inputRef={this.inputRef}
-              formRef={this.formRef}
               getMenuProps={getMenuProps}
               searchResults={this.state.searchResults}
               showMetapathCount={this.props.otherNode.id !== undefined}
