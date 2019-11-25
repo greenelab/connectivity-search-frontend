@@ -4,7 +4,7 @@
     "main.js": "./static/js/main.js",
     "main.js.map": "./static/js/main.js.map",
     "index.html": "./index.html",
-    "precache-manifest.b6feeb21c4fdc318719922376c0b0da5.js": "./precache-manifest.b6feeb21c4fdc318719922376c0b0da5.js",
+    "precache-manifest.3d212811871b0fdcf8596bee32ade2e2.js": "./precache-manifest.3d212811871b0fdcf8596bee32ade2e2.js",
     "service-worker.js": "./service-worker.js",
     "static/css/main.css.map": "./static/css/main.css.map",
     "static/media/arrow-icon-backward.0abb3ee2.svg": "./static/media/arrow-icon-backward.0abb3ee2.svg",
@@ -22,5 +22,9 @@
     "static/media/chip-side-effect.338871c1.svg": "./static/media/chip-side-effect.338871c1.svg",
     "static/media/chip-symptom.16265afd.svg": "./static/media/chip-symptom.16265afd.svg",
     "static/media/path.1b180159.svg": "./static/media/path.1b180159.svg"
-  }
+  },
+  "entrypoints": [
+    "static/css/main.css",
+    "static/js/main.js"
+  ]
 }
