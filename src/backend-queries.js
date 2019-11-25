@@ -77,10 +77,10 @@ export async function searchNodes(searchString, otherNodeId, metanodes) {
   const params = new URLSearchParams();
   if (searchString)
     params.set('search', searchString);
-  if (metanodes)
-    params.set('metanodes', metanodes);
   if (otherNodeId || otherNodeId === 0)
     params.set('other-node', otherNodeId);
+  if (metanodes)
+    params.set('metanodes', metanodes);
   const query = join(api, 'nodes', '?' + params.toString());
   const response = await fetchJson(query);
   if (response && response.results)
