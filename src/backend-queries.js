@@ -64,6 +64,9 @@ export function getConnectivitySearchDefinitions() {
 
 // lookup node by id
 export async function lookupNode(id) {
+  // if required parameters not specified, exit
+  if (!id && id !== 0)
+    return {};
   const query = join(api, 'node', id);
   return (await fetchJson(query)) || {};
 }
@@ -74,8 +77,10 @@ export async function searchNodes(searchString, otherNodeId, metanodes) {
   const params = new URLSearchParams();
   if (searchString)
     params.set('search', searchString);
-  params.set('metanodes', metanodes || '');
-  params.set('other-node', otherNodeId || '');
+  if (metanodes)
+    params.set('metanodes', metanodes);
+  if (otherNodeId || otherNodeId === 0)
+    params.set('other-node', otherNodeId);
   const query = join(api, 'nodes', '?' + params.toString());
   const response = await fetchJson(query);
   if (response && response.results)
@@ -93,6 +98,13 @@ export async function getRandomNodePair() {
 
 // search for metapaths by source/target node id
 export async function searchMetapaths(sourceNodeId, targetNodeId, complete) {
+  // if required parameters not specified, exit
+  if (
+    (!sourceNodeId && sourceNodeId !== 0) ||
+    (!targetNodeId && targetNodeId !== 0)
+  )
+    return [];
+
   const query = join(
     api,
     'metapaths',
@@ -111,6 +123,14 @@ export async function searchMetapaths(sourceNodeId, targetNodeId, complete) {
 
 // search for paths by source/target node id and metapath
 export async function searchPaths(sourceNodeId, targetNodeId, metapath) {
+  // if required parameters not specified, exit
+  if (
+    (!sourceNodeId && sourceNodeId !== 0) ||
+    (!targetNodeId && targetNodeId !== 0) ||
+    !metapath
+  )
+    return [];
+
   const query = join(
     api,
     'paths',

@@ -18,9 +18,9 @@ export class Dropdown extends Component {
               className={
                 'node_search_item' +
                 (this.props.selectedItem.id === result.id ||
-                this.props.highlightedIndex === index
-                  ? ' node_search_item_selected'
-                  : '')
+                this.props.highlightedIndex === index ?
+                  ' node_search_item_selected' :
+                  '')
               }
               {...this.props.getItemProps({
                 item: result,

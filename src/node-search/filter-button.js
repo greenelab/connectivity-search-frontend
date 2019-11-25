@@ -47,6 +47,11 @@ export class FilterButton extends Component {
     this.setState({ tempActive: null });
   };
 
+  // when user presses key on button
+  onKeyDown = () => {
+    this.props.toggle(this.props.name);
+  }
+
   // display component
   render() {
     let active;
@@ -63,6 +68,7 @@ export class FilterButton extends Component {
         onCtrlClick={() => this.props.solo(this.props.name)}
         onMouseDown={this.onMouseDown}
         onMouseMove={this.onMouseMove}
+        onKeyDown={this.onKeyDown}
       >
         <MetanodeChip type={this.props.name} />
         {this.props.name}
