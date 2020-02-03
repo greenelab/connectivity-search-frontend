@@ -21,10 +21,12 @@ export class NodeTable extends Component {
         );
         return {
           firstCol: field,
-          secondCol: (
+          secondCol: linkUrl ? (
             <a className='nowrap' href={linkUrl}>
               {linkText}
             </a>
+          ) : (
+            linkText
           )
         };
       } else {
