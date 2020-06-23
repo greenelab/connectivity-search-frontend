@@ -196,11 +196,11 @@ export class MetapathTable extends Component {
           <br />
           degree
         </>,
-        "# DWPC's",
+        "# DWPCs",
         <>
           # non-0
           <br />
-          DWPC's
+          DWPCs
         </>,
         <>
           non-0
